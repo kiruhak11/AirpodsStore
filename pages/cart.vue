@@ -1,7 +1,6 @@
 <template>
   <main class="cart-container">
     <h2>Shopping Cart</h2>
-    {{ cartStore.cart.length }}
     <transition-group name="fade" tag="ul" class="cart-list">
       <li
         href="#"
@@ -20,7 +19,7 @@
           class="cart-item-details"
           ><div class="cart-item-details">
             <h3>{{ item.product.name }}</h3>
-            <p>{{ formatPrice(item.product.price * item.quantity) }} руб.</p>
+            <p>{{ formatPrice(item.product.price) }} руб.</p>
           </div></nuxt-link
         >
         <div class="quantity-controls">

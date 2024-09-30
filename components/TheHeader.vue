@@ -46,6 +46,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .header {
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
