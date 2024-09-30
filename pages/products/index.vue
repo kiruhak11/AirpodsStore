@@ -48,12 +48,12 @@ const options = ref([
   {
     id: "asc",
     label: "По возрастанию цены",
-    icon: "i-heroicons-arrow-down-20-solid",
+    icon: "i-heroicons-arrow-up-20-solid",
   },
   {
     id: "desc",
     label: "По убыванию цены",
-    icon: "i-heroicons-arrow-up-20-solid",
+    icon: "i-heroicons-arrow-down-20-solid",
   },
 ]);
 

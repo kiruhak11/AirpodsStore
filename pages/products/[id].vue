@@ -144,6 +144,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .product-description {
+  text-wrap: balance;
   margin: 1rem 0;
 }
 
