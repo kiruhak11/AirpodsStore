@@ -8,7 +8,7 @@
     <nav>
       <ul>
         <li><nuxt-link to="/">Главная</nuxt-link></li>
-        <li><nuxt-link to="/product">Каталог</nuxt-link></li>
+        <li><nuxt-link to="/products">Каталог</nuxt-link></li>
         <li>
           <nuxt-link to="/cart"
             >Корзина ({{ formatPrice(totalPrice) }} руб.)</nuxt-link

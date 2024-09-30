@@ -19,6 +19,13 @@ export default defineComponent({
 <style lang="scss" scoped>
 main {
   text-align: center;
+
+  padding-top: 48px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .telegram-link {

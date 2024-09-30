@@ -1,11 +1,9 @@
 <template>
-  <div class="product-card">
-    <nuxt-link :to="`/products/${product.id}`">
-      <img :src="product.image" alt="Product Image" class="product-image" />
-      <h3>{{ product.name }}</h3>
-      <p>{{ formatPrice(product.price) }} руб.</p></nuxt-link
-    >
-  </div>
+  <nuxt-link class="product-card" :to="`/products/${product.id}`">
+    <img :src="product.image" alt="Product Image" class="product-image" />
+    <h3>{{ product.name }}</h3>
+    <p>{{ formatPrice(product.price) }} руб.</p>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
@@ -53,26 +51,27 @@ export default defineComponent({
 .product-card {
   border: 1px solid $borderColor;
   padding: 1rem;
-  margin: 1rem;
   text-align: center;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   transition: transform 0.3s;
-  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-.product-card:hover {
-  transform: translateY(-5px);
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 .product-image {
   width: 100%;
   height: 150px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 1rem;
+  overflow: hidden;
 }
 .btn {
   padding: 0.5rem 1rem;
@@ -84,11 +83,11 @@ export default defineComponent({
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.btn:hover {
-  background-color: $backgroundColorBtnHover;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  &:hover {
+    background-color: $backgroundColorBtnHover;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
 }
 </style>

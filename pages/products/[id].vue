@@ -14,15 +14,20 @@
         </p>
         <h2>Описание</h2>
         <p class="product-description">{{ product.description }}</p>
-        <div v-if="isInCart">
+        <div v-if="isInCart" class="quantity-controls__wpapper">
           <div class="quantity-controls">
-            <button @click="decreaseQuantity" class="quantity-button">-</button>
+            <button
+              @click="decreaseQuantity"
+              :class="[
+                'quantity-button',
+                { 'quantity-button_red': cartItem?.quantity === 1 },
+              ]"
+            >
+              -
+            </button>
             <span class="quantity">{{ cartItem?.quantity }}</span>
             <button @click="increaseQuantity" class="quantity-button">+</button>
           </div>
-          <button @click="removeFromCart" class="btn remove-btn">
-            Удалить из корзины
-          </button>
         </div>
         <button v-else @click="addToCart" class="btn">
           Добавить в корзину
@@ -41,8 +46,7 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from "vue";
+<script lang="ts" setup>
 import { useRoute } from "vue-router";
 import { useCartStore } from "~/stores/cart";
 import { products } from "~/data/products";
@@ -55,55 +59,40 @@ interface Product {
   description: string;
 }
 
-export default defineComponent({
-  setup() {
-    const route = useRoute();
-    const cartStore = useCartStore();
-    const productId = parseInt(route.params.id as string);
-    const product = computed(
-      () => products.find((p) => p.id === productId) as Product
-    );
-    const cartItem = computed(() =>
-      cartStore.cart.find((item) => item.product.id === productId)
-    );
-    const isInCart = computed(() => !!cartItem.value);
+const route = useRoute();
+const cartStore = useCartStore();
+const productId = parseInt(route.params.id as string);
+const product = computed(
+  () => products.find((p) => p.id === productId) as Product
+);
+const cartItem = computed(() =>
+  cartStore.cart.find((item) => item.product.id === productId)
+);
+const isInCart = computed(() => !!cartItem.value);
 
-    const formatPrice = (price: number) => {
-      return price.toLocaleString("ru-RU", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    };
+const formatPrice = (price: number) => {
+  return price.toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
-    const addToCart = () => {
-      cartStore.addToCart(product.value);
-    };
+const addToCart = () => {
+  cartStore.addToCart(product.value);
+};
 
-    const removeFromCart = () => {
-      cartStore.removeFromCart(productId);
-    };
+const removeFromCart = () => {
+  cartStore.removeFromCart(productId);
+};
 
-    const increaseQuantity = () => {
-      cartStore.increaseQuantity(productId);
-    };
+const increaseQuantity = () => {
+  cartStore.increaseQuantity(productId);
+};
 
-    const decreaseQuantity = () => {
-      cartStore.decreaseQuantity(productId);
-    };
-    const originalPrice = computed(() => product.value.price * 1.15);
-    return {
-      product,
-      addToCart,
-      removeFromCart,
-      increaseQuantity,
-      decreaseQuantity,
-      formatPrice,
-      isInCart,
-      cartItem,
-      originalPrice,
-    };
-  },
-});
+const decreaseQuantity = () => {
+  cartStore.decreaseQuantity(productId);
+};
+const originalPrice = computed(() => product.value.price * 1.15);
 </script>
 
 <style lang="scss" scoped>
@@ -168,26 +157,21 @@ export default defineComponent({
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.btn:hover {
-  background-color: $backgroundColorBtnHover;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.remove-btn {
-  background-color: $backgroundColorBtnRemove;
-}
-
-.remove-btn:hover {
-  background-color: $backgroundColorBtnRemoveHover;
+  &:hover {
+    background-color: $backgroundColorBtnHover;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .quantity-controls {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+
+  &__wpapper {
+    height: 42px;
+  }
 }
 
 .quantity-button {
@@ -198,12 +182,19 @@ export default defineComponent({
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
 
-.quantity-button:hover {
-  background-color: $backgroundColorBtnHover;
-}
+  &:hover {
+    background-color: $backgroundColorBtnHover;
+  }
 
+  &_red {
+    background-color: $backgroundColorBtnRemove;
+
+    &:hover {
+      background-color: $backgroundColorBtnRemoveHover;
+    }
+  }
+}
 .quantity {
   margin: 0 1rem;
   font-size: 1.2rem;

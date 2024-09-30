@@ -1,6 +1,7 @@
 <template>
   <main class="cart-container">
     <h2>Shopping Cart</h2>
+    {{ cartStore.cart.length }}
     <transition-group name="fade" tag="ul" class="cart-list">
       <li
         href="#"
@@ -51,54 +52,42 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
+<script lang="ts" setup>
 import { useCartStore } from "~/stores/cart";
 
-export default defineComponent({
-  name: "CartPage",
-  setup() {
-    const cartStore = useCartStore();
-    const cart = computed(() => cartStore.cart);
-    const totalPrice = computed(() => cartStore.totalPrice);
+const cartStore = useCartStore();
+const cart = computed(() => cartStore.cart);
+const totalPrice = computed(() => cartStore.totalPrice);
 
-    const removeFromCart = (productId: number) => {
-      cartStore.removeFromCart(productId);
-    };
+const removeFromCart = (productId: number) => {
+  cartStore.removeFromCart(productId);
+};
 
-    const clearCart = () => {
-      cartStore.clearCart();
-    };
+const clearCart = () => {
+  cartStore.clearCart();
+};
 
-    const increaseQuantity = (productId: number) => {
-      cartStore.increaseQuantity(productId);
-    };
+const increaseQuantity = (productId: number) => {
+  cartStore.increaseQuantity(productId);
+};
 
-    const decreaseQuantity = (productId: number) => {
-      cartStore.decreaseQuantity(productId);
-    };
+const decreaseQuantity = (productId: number) => {
+  cartStore.decreaseQuantity(productId);
+};
 
-    const formatPrice = (price: number) => {
-      return price.toLocaleString("ru-RU", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    };
+const formatPrice = (price: number) => {
+  return price.toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
-    onMounted(() => {
-      cartStore.loadCart();
-    });
+onMounted(() => {
+  cartStore.loadCart();
 
-    return {
-      cart,
-      totalPrice,
-      removeFromCart,
-      clearCart,
-      increaseQuantity,
-      decreaseQuantity,
-      formatPrice,
-    };
-  },
+  if (cartStore.cart.length === 0) {
+    return navigateTo("/products");
+  }
 });
 </script>
 

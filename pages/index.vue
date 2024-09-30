@@ -20,19 +20,39 @@
           <p>Enjoy the latest technology with AirPods (3rd Generation).</p>
         </div>
       </div>
-      <nuxt-link to="/product" class="btn">Shop Now</nuxt-link>
+      <nuxt-link to="/products" class="btn">Shop Now</nuxt-link>
     </div>
 
     <section class="popular-products-section">
       <h2>Популярные товары</h2>
       <div class="product-carousel">
         <div class="product-list">
-          <ProductCard
-            v-for="product in popularProducts"
-            :key="product.id"
-            :product="product"
-          />
+          <Swiper
+            :modules="[SwiperNavigation, SwiperMousewheel, SwiperPagination]"
+            :mousewheel="{
+              invert: false,
+              forceToAxis: true,
+            }"
+            :slides-per-view="5"
+            :slides-per-group="5"
+            :space-between="20"
+            :navigation="{
+              prevEl: `.arrow_prev_slots`,
+              nextEl: `.arrow_next_slots`,
+            }"
+            :watch-slides-progress="true"
+            :pagination="{
+              clickable: true,
+              el: '.custom-pagination_high-tech',
+            }"
+            class="product-list__swiper"
+          >
+            <SwiperSlide v-for="product in popularProducts" :key="product.id">
+              <ProductCard :product="product" />
+            </SwiperSlide>
+          </Swiper>
         </div>
+        <div class="custom-pagination custom-pagination_high-tech"></div>
       </div>
     </section>
     <section class="about-us">
@@ -63,7 +83,7 @@ export default defineComponent({
     ProductCard,
   },
   setup() {
-    const popularProducts: Product[] = products.slice(0, 5); // Выбираем первые 5 продуктов как популярные
+    const popularProducts: Product[] = products.slice(0, 7); // Выбираем первые 5 продуктов как популярные
 
     return { popularProducts };
   },
@@ -75,7 +95,6 @@ main {
   padding: 2rem;
   text-align: center;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
   max-width: 1200px;
   border-radius: 8px;
@@ -99,15 +118,23 @@ main {
 }
 
 .product-carousel {
-  overflow-x: auto;
   display: flex;
+  flex-direction: column;
   gap: 1rem;
   padding: 1rem 0;
 }
 
 .product-list {
-  display: flex;
-  gap: 1rem;
+  overflow: hidden;
+
+  &__swiper {
+    width: 100%;
+    padding: 10px 0;
+
+    & .swiper-slide {
+      height: auto;
+    }
+  }
 }
 
 .about-us {
