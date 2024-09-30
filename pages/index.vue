@@ -66,8 +66,7 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import ProductCard from "~/components/ProductCard.vue";
 import { products } from "~/data/products";
 interface Product {
@@ -78,16 +77,7 @@ interface Product {
   description: string;
 }
 
-export default defineComponent({
-  components: {
-    ProductCard,
-  },
-  setup() {
-    const popularProducts: Product[] = products.slice(0, 7); // Выбираем первые 5 продуктов как популярные
-
-    return { popularProducts };
-  },
-});
+const popularProducts: Product[] = products.slice(0, 7); // Выбираем первые 5 продуктов как популярные
 </script>
 
 <style lang="scss" scoped>
@@ -144,6 +134,10 @@ main {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  p {
+    text-wrap: balance;
+  }
 }
 .features {
   display: flex;
@@ -151,6 +145,10 @@ main {
   flex-wrap: wrap;
 }
 .feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: $backgroundColorFeature;
   padding: 1rem;
   margin: 1rem;
@@ -158,19 +156,25 @@ main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
   max-width: 300px;
-}
-.feature img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-.feature h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-.feature p {
-  font-size: 1rem;
-  color: #666;
+
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    aspect-ratio: 1;
+    object-fit: contain;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #666;
+    text-wrap: balance;
+  }
 }
 .btn {
   margin: 20px;
@@ -183,11 +187,11 @@ main {
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.btn:hover {
-  background-color: $backgroundColorBtnHover;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  &:hover {
+    background-color: $backgroundColorBtnHover;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
 }
 </style>

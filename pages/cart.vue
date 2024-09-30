@@ -115,9 +115,10 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
-}
-.cart-item:hover {
-  transform: translateY(-5px);
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 .cart-item-image {
   width: 80px;
@@ -142,9 +143,10 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.quantity-button:hover {
-  background-color: $backgroundColorBtnHover;
+
+  &:hover {
+    background-color: $backgroundColorBtnHover;
+  }
 }
 .quantity {
   margin: 0 1rem;
@@ -159,9 +161,10 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.remove-button:hover {
-  background-color: $backgroundColorBtnRemoveHover;
+
+  &:hover {
+    background-color: $backgroundColorBtnRemoveHover;
+  }
 }
 .cart-summary {
   display: flex;
@@ -185,9 +188,10 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.clear-button:hover {
-  background-color: $backgroundColorBtnRemoveHover;
+
+  &:hover {
+    background-color: $backgroundColorBtnRemoveHover;
+  }
 }
 .offer-button {
   padding: 0.75rem 1.5rem;
@@ -197,9 +201,10 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.offer-button:hover {
-  background-color: $backgroundColorBtnOfferHover;
+
+  &:hover {
+    background-color: $backgroundColorBtnOfferHover;
+  }
 }
 .fade-enter-active,
 .fade-leave-active {

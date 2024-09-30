@@ -1,7 +1,7 @@
 <template>
   <nuxt-link class="product-card" :to="`/products/${product.id}`">
     <img :src="product.image" alt="Product Image" class="product-image" />
-    <h3>{{ product.name }}</h3>
+    <span>{{ product.name }}</span>
     <p>{{ formatPrice(product.price) }} руб.</p>
   </nuxt-link>
 </template>
@@ -63,6 +63,17 @@ export default defineComponent({
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #666;
   }
 }
 .product-image {
