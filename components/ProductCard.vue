@@ -60,6 +60,8 @@ export default defineComponent({
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  max-width: 300px;
+  margin: auto;
 
   &:hover {
     transform: translateY(-5px);
@@ -76,6 +78,7 @@ export default defineComponent({
     color: #666;
   }
 }
+
 .product-image {
   width: 100%;
   height: 150px;
@@ -84,6 +87,7 @@ export default defineComponent({
   margin-bottom: 1rem;
   overflow: hidden;
 }
+
 .btn {
   padding: 0.5rem 1rem;
   background-color: $backgroundColorBtn;
@@ -99,6 +103,22 @@ export default defineComponent({
     background-color: $backgroundColorBtnHover;
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@media (max-width: 800px) {
+  .product-card {
+    padding: 0.5rem;
+    span {
+      font-size: 1rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  .product-image {
+    height: 120px;
   }
 }
 </style>

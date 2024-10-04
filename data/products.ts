@@ -20,7 +20,7 @@ export const products: Product[] = [
     name: "AirPods Max",
     price: 54900,
     image:
-      "https://basket-14.wbbasket.ru/vol2122/part212264/212264341/images/big/1.jpg",
+      "https://avatars.mds.yandex.net/i?id=48fef100487ed6fbe2a3d32502e5bbcbd2b62690-5220281-images-thumbs&n=13",
     description: "Погрузитесь в атмосферу высокоточного звука с AirPods Max.",
   },
   {

@@ -4,20 +4,10 @@
       <h2>Welcome to AirPods Store</h2>
       <p>Discover the best AirPods for you.</p>
       <div class="features">
-        <div class="feature">
-          <img src="/images/airpods-pro.png" alt="AirPods Pro" />
-          <h3>AirPods Pro</h3>
-          <p>Experience the best sound quality with AirPods Pro.</p>
-        </div>
-        <div class="feature">
-          <img src="/images/airpods-max.png" alt="AirPods Max" />
-          <h3>AirPods Max</h3>
-          <p>Immerse yourself in high-fidelity sound with AirPods Max.</p>
-        </div>
-        <div class="feature">
-          <img src="/images/airpods-3rd-gen.png" alt="AirPods 3rd Generation" />
-          <h3>AirPods (3rd Generation)</h3>
-          <p>Enjoy the latest technology with AirPods (3rd Generation).</p>
+        <div class="feature" v-for="feature in features" :key="feature.name">
+          <img :src="feature.image" :alt="feature.name" />
+          <h3>{{ feature.name }}</h3>
+          <p>{{ feature.description }}</p>
         </div>
       </div>
       <nuxt-link to="/products" class="btn">Shop Now</nuxt-link>
@@ -29,16 +19,13 @@
         <div class="product-list">
           <Swiper
             :modules="[SwiperNavigation, SwiperMousewheel, SwiperPagination]"
-            :mousewheel="{
-              invert: false,
-              forceToAxis: true,
-            }"
-            :slides-per-view="5"
-            :slides-per-group="5"
+            :mousewheel="{ invert: false, forceToAxis: true }"
+            :slides-per-view="$device.isMobile ? 2 : 4"
+            :slides-per-group="$device.isMobile ? 2 : 4"
             :space-between="20"
             :navigation="{
-              prevEl: `.arrow_prev_slots`,
-              nextEl: `.arrow_next_slots`,
+              prevEl: '.arrow_prev_slots',
+              nextEl: '.arrow_next_slots',
             }"
             :watch-slides-progress="true"
             :pagination="{
@@ -55,6 +42,7 @@
         <div class="custom-pagination custom-pagination_high-tech"></div>
       </div>
     </section>
+
     <section class="about-us">
       <h2>О нас</h2>
       <p>
@@ -69,6 +57,7 @@
 <script lang="ts" setup>
 import ProductCard from "~/components/ProductCard.vue";
 import { products } from "~/data/products";
+
 interface Product {
   id: number;
   name: string;
@@ -77,7 +66,8 @@ interface Product {
   description: string;
 }
 
-const popularProducts: Product[] = products.slice(0, 7); // Выбираем первые 5 продуктов как популярные
+const popularProducts: Product[] = products.slice(0, 8);
+const features: Product[] = products.slice(0, 3);
 </script>
 
 <style lang="scss" scoped>
@@ -139,11 +129,13 @@ main {
     text-wrap: balance;
   }
 }
+
 .features {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
 .feature {
   display: flex;
   flex-direction: column;
@@ -176,6 +168,7 @@ main {
     text-wrap: balance;
   }
 }
+
 .btn {
   margin: 20px;
   padding: 0.75rem 1.5rem;
@@ -192,6 +185,27 @@ main {
     background-color: $backgroundColorBtnHover;
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature {
+    max-width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .hero {
+    padding: 1rem;
+  }
+
+  .btn {
+    width: 100%;
   }
 }
 </style>

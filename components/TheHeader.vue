@@ -5,7 +5,7 @@
         <nuxt-link to="/"><h1>AirPods Store</h1></nuxt-link>
       </li>
     </div>
-    <nav>
+    <nav v-if="!device.isMobile">
       <ul>
         <li><nuxt-link to="/">Главная</nuxt-link></li>
         <li><nuxt-link to="/products">Каталог</nuxt-link></li>
@@ -17,29 +17,37 @@
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
       </ul>
     </nav>
+    <HamburgerMenu v-if="device.isMobile" />
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, onMounted } from "vue";
 import { useCartStore } from "~/stores/cart";
+import HamburgerMenu from "./HamburgerMenu.vue";
 
 export default defineComponent({
   name: "Header",
+  components: {
+    HamburgerMenu,
+  },
   setup() {
     const cartStore = useCartStore();
+    const device = useDevice();
     const totalPrice = computed(() => cartStore.totalPrice);
 
     onMounted(() => {
       cartStore.loadCart();
     });
+
     const formatPrice = (price: number) => {
       return price.toLocaleString("ru-RU", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
     };
-    return { totalPrice, formatPrice };
+
+    return { totalPrice, formatPrice, device };
   },
 });
 </script>
