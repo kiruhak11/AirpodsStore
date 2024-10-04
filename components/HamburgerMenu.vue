@@ -32,15 +32,21 @@ const cartStore = useCartStore();
 const totalPrice = computed(() => cartStore.totalPrice);
 
 const toggleMenu = () => {
+  console.log("хоба!", isOpen.value);
+
   isOpen.value = !isOpen.value;
 };
-watch(isOpen, () => {
-  if (isOpen.value) {
-    document.body.classList.add("no-scroll");
-  } else {
-    document.body.classList.remove("no-scroll");
+
+watch(
+  () => isOpen.value,
+  () => {
+    if (isOpen.value) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
   }
-});
+);
 const formatPrice = (price: number) => {
   return price.toLocaleString("ru-RU", {
     minimumFractionDigits: 2,
