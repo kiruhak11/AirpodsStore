@@ -1,9 +1,9 @@
 <template>
   <header class="header">
     <div class="logo">
-      <li>
-        <nuxt-link to="/"><h1>AirPods Store</h1></nuxt-link>
-      </li>
+      <nuxt-link to="/">
+        <h1>AirPods Store</h1>
+      </nuxt-link>
     </div>
     <nav v-if="!device.isMobile">
       <ul>
@@ -21,35 +21,21 @@
   </header>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
-import { useCartStore } from "~/stores/cart";
-import HamburgerMenu from "./HamburgerMenu.vue";
+<script lang="ts" setup>
+const cartStore = useCartStore();
+const device = useDevice();
+const totalPrice = computed(() => cartStore.totalPrice);
 
-export default defineComponent({
-  name: "Header",
-  components: {
-    HamburgerMenu,
-  },
-  setup() {
-    const cartStore = useCartStore();
-    const device = useDevice();
-    const totalPrice = computed(() => cartStore.totalPrice);
-
-    onMounted(() => {
-      cartStore.loadCart();
-    });
-
-    const formatPrice = (price: number) => {
-      return price.toLocaleString("ru-RU", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    };
-
-    return { totalPrice, formatPrice, device };
-  },
+onMounted(() => {
+  cartStore.loadCart();
 });
+
+const formatPrice = (price: number) => {
+  return price.toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,18 +66,18 @@ nav ul {
 nav li {
   margin: 0 1rem;
 }
-.logo {
-  list-style: none;
-}
+
 nav h1 {
   color: $colorText;
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s;
+
   &:hover {
     color: $backgroundColorBtn;
   }
 }
+
 nav a {
   color: $colorText;
   font-weight: bold;

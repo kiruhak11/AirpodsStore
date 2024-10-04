@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts" setup>
-import ProductCard from "~/components/ProductCard.vue";
 import { products } from "~/data/products";
 
 interface Product {

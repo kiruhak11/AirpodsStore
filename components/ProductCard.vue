@@ -6,10 +6,7 @@
   </nuxt-link>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from "vue";
-import { useCartStore } from "~/stores/cart";
-
+<script lang="ts" setup>
 interface Product {
   id: number;
   name: string;
@@ -17,34 +14,19 @@ interface Product {
   image: string;
   description: string;
 }
+const props = defineProps<{ product: Product }>();
+const cartStore = useCartStore();
+const device = useDevice();
 
-export default defineComponent({
-  name: "ProductCard",
-  props: {
-    product: {
-      type: Object as PropType<Product>,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const cartStore = useCartStore();
-
-    const addToCart = () => {
-      cartStore.addToCart(props.product);
-    };
-    const formatPrice = (price: number) => {
-      return price.toLocaleString("ru-RU", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    };
-    return {
-      addToCart,
-      formatPrice,
-    };
-  },
-});
+const addToCart = () => {
+  cartStore.addToCart(props.product);
+};
+const formatPrice = (price: number) => {
+  return price.toLocaleString("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -60,8 +42,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  max-width: 300px;
-  margin: auto;
 
   &:hover {
     transform: translateY(-5px);
@@ -76,6 +56,19 @@ export default defineComponent({
   p {
     font-size: 1rem;
     color: #666;
+  }
+
+  @media (max-width: 768px) {
+    /* Уменьшаем размеры для мобильных устройств */
+    padding: 0.5rem;
+
+    span {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
   }
 }
 
@@ -103,22 +96,6 @@ export default defineComponent({
     background-color: $backgroundColorBtnHover;
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-  }
-}
-
-@media (max-width: 800px) {
-  .product-card {
-    padding: 0.5rem;
-    span {
-      font-size: 1rem;
-    }
-    p {
-      font-size: 0.9rem;
-    }
-  }
-
-  .product-image {
-    height: 120px;
   }
 }
 </style>

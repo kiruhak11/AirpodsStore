@@ -6,17 +6,17 @@
     <transition name="fade">
       <nav v-if="isOpen" class="mobile-nav">
         <ul>
-          <li><nuxt-link to="/" @click="toggleMenu">Главная</nuxt-link></li>
+          <li><nuxt-link to="/">Главная</nuxt-link></li>
           <li>
-            <nuxt-link to="/products" @click="toggleMenu">Каталог</nuxt-link>
+            <nuxt-link to="/products">Каталог</nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/cart" @click="toggleMenu"
+            <nuxt-link to="/cart"
               >Корзина ({{ formatPrice(totalPrice) }} руб.)</nuxt-link
             >
           </li>
           <li>
-            <nuxt-link to="/contact" @click="toggleMenu">О нас</nuxt-link>
+            <nuxt-link to="/contact">О нас</nuxt-link>
           </li>
         </ul>
       </nav>
@@ -25,28 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import { useCartStore } from "~/stores/cart";
-
 const isOpen = ref(false);
 const cartStore = useCartStore();
 const totalPrice = computed(() => cartStore.totalPrice);
 
 const toggleMenu = () => {
-  console.log("хоба!", isOpen.value);
-
   isOpen.value = !isOpen.value;
 };
-
-watch(
-  () => isOpen.value,
-  () => {
-    if (isOpen.value) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
+watch(isOpen, () => {
+  if (isOpen.value) {
+    document.body.classList.add("no-scroll");
+  } else {
+    document.body.classList.remove("no-scroll");
   }
-);
+});
 const formatPrice = (price: number) => {
   return price.toLocaleString("ru-RU", {
     minimumFractionDigits: 2,
@@ -61,6 +53,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .hamburger-menu {
+  background-color: aquamarine;
   display: flex;
   flex-direction: column;
   cursor: pointer;

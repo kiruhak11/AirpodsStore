@@ -25,6 +25,7 @@
           v-for="product in filteredProducts"
           :key="product.id"
           :product="product"
+          @add-to-cart="addToCart"
         />
       </div>
     </div>
@@ -32,8 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import ProductCard from "~/components/ProductCard.vue";
-import { useCartStore } from "~/stores/cart";
 import { products } from "~/data/products";
 
 interface Product {
@@ -67,26 +66,17 @@ const filteredProducts = computed(() => {
     product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 
-  if (selected.value.id === "asc") {
-    filtered = filtered.sort((a, b) => a.price - b.price);
-  } else {
-    filtered = filtered.sort((a, b) => b.price - a.price);
-  }
+  // Сортировка продуктов по цене
+  filtered.sort((a, b) => {
+    return selected.value.id === "asc" ? a.price - b.price : b.price - a.price;
+  });
 
   return filtered;
 });
 
 const addToCart = (product: Product) => {
   cartStore.addToCart(product);
-  alert(`${product.name} has been added to the cart!`);
-};
-
-const sortByPriceAsc = () => {
-  sortOrder.value = "asc";
-};
-
-const sortByPriceDesc = () => {
-  sortOrder.value = "desc";
+  alert(`${product.name} добавлен в корзину!`);
 };
 
 onMounted(() => {
@@ -105,27 +95,12 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 
-.filter-buttons {
-  margin-bottom: 1rem;
-}
-
-.filter-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-}
-
 .product-list {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); /* Адаптивное количество колонок */
   justify-content: center;
   gap: 1rem;
   padding-bottom: 24px;

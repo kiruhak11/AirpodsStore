@@ -14,7 +14,7 @@
         </p>
         <h2>Описание</h2>
         <p class="product-description">{{ product.description }}</p>
-        <div v-if="isInCart" class="quantity-controls__wpapper">
+        <div v-if="isInCart" class="quantity-controls__wrapper">
           <div class="quantity-controls">
             <button
               @click="decreaseQuantity"
@@ -36,19 +36,17 @@
     </div>
     <div v-else>
       <div class="not-found">
-        <h2>Product not found</h2>
-        <p>Sorry, we couldn't find the product you were looking for.</p>
-        <p>Please check the URL and try again.</p>
-        <p>Product not found.</p>
-        <nuxt-link :to="`/product`" class="btn">Назад</nuxt-link>
+        <h2>Товар не найден</h2>
+        <p>Извините, мы не смогли найти запрашиваемый вами товар.</p>
+        <p>Пожалуйста, проверьте URL и попробуйте снова.</p>
+        <p>Товар не найден.</p>
+        <nuxt-link :to="`/products`" class="btn">Назад</nuxt-link>
       </div>
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
-import { useCartStore } from "~/stores/cart";
 import { products } from "~/data/products";
 
 interface Product {
@@ -61,6 +59,7 @@ interface Product {
 
 const route = useRoute();
 const cartStore = useCartStore();
+const device = useDevice(); // Получите информацию об устройстве
 const productId = parseInt(route.params.id as string);
 const product = computed(
   () => products.find((p) => p.id === productId) as Product
@@ -98,6 +97,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 <style lang="scss" scoped>
 .product-details {
   display: flex;
+  flex-direction: column; /* Изменено для мобильных устройств */
   align-items: center;
   justify-content: space-between;
   background-color: white;
@@ -107,15 +107,19 @@ const originalPrice = computed(() => product.value.price * 1.15);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 1290px;
   margin: 50px auto;
+
+  @media (min-width: 768px) {
+    flex-direction: row; /* Для десктопов */
+  }
 }
 
 .product-image {
-  max-width: 50%;
+  max-width: 100%; /* Изменено для мобильных устройств */
   border-radius: 8px;
 }
 
 .product-info {
-  max-width: 45%;
+  max-width: 100%; /* Изменено для мобильных устройств */
 }
 
 .product-price {
@@ -170,7 +174,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
   display: flex;
   align-items: center;
 
-  &__wpapper {
+  &__wrapper {
     height: 42px;
   }
 }
@@ -196,6 +200,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
     }
   }
 }
+
 .quantity {
   margin: 0 1rem;
   font-size: 1.2rem;

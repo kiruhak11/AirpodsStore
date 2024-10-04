@@ -1,27 +1,24 @@
 <template>
   <main class="cart-container">
-    <h2>Shopping Cart</h2>
+    <h2>Корзина</h2>
     <transition-group name="fade" tag="ul" class="cart-list">
-      <li
-        href="#"
-        v-for="item in cart"
-        :key="item.product.id"
-        class="cart-item"
-      >
-        <nuxt-link :to="`/products/${item.product.id}`"
-          ><img
+      <li v-for="item in cart" :key="item.product.id" class="cart-item">
+        <nuxt-link :to="`/products/${item.product.id}`" class="item-link">
+          <img
             :src="item.product.image"
             alt="Product Image"
             class="cart-item-image"
-        /></nuxt-link>
+          />
+        </nuxt-link>
         <nuxt-link
           :to="`/products/${item.product.id}`"
           class="cart-item-details"
-          ><div class="cart-item-details">
+        >
+          <div>
             <h3>{{ item.product.name }}</h3>
             <p>{{ formatPrice(item.product.price) }} руб.</p>
-          </div></nuxt-link
-        >
+          </div>
+        </nuxt-link>
         <div class="quantity-controls">
           <button
             @click="decreaseQuantity(item.product.id)"
@@ -44,17 +41,20 @@
     </transition-group>
     <div class="cart-summary">
       <p class="total-price">Итого: {{ formatPrice(totalPrice) }} руб.</p>
-      <button @click="clearCart" class="clear-button">Очистить корзину</button>
-
-      <button @click="" class="offer-button">Оформить заказ</button>
+      <div class="summary-buttons">
+        <button @click="clearCart" class="clear-button">
+          Очистить корзину
+        </button>
+        <button @click="checkout" class="offer-button">Оформить заказ</button>
+      </div>
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import { useCartStore } from "~/stores/cart";
-
 const cartStore = useCartStore();
+const device = useDevice();
+const router = useRouter();
 const cart = computed(() => cartStore.cart);
 const totalPrice = computed(() => cartStore.totalPrice);
 
@@ -81,11 +81,14 @@ const formatPrice = (price: number) => {
   });
 };
 
+const checkout = () => {
+  alert("Функция оформления заказа пока недоступна.");
+};
+
 onMounted(() => {
   cartStore.loadCart();
-
   if (cartStore.cart.length === 0) {
-    return navigateTo("/products");
+    router.push("/products");
   }
 });
 </script>
@@ -100,14 +103,15 @@ onMounted(() => {
   border-radius: 8px;
   font-family: "Arial", sans-serif;
 }
+
 .cart-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .cart-item {
   display: flex;
-  align-items: center;
   margin: 1rem 0;
   padding: 1rem;
   background-color: white;
@@ -119,6 +123,7 @@ onMounted(() => {
     transform: translateY(-5px);
   }
 }
+
 .cart-item-image {
   width: 80px;
   height: 80px;
@@ -126,14 +131,20 @@ onMounted(() => {
   border-radius: 8px;
   margin-right: 1rem;
 }
+
 .cart-item-details {
   flex-grow: 1;
+}
+.price {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 .quantity-controls {
   display: flex;
   align-items: center;
   padding-right: 10px;
 }
+
 .quantity-button {
   padding: 0.5rem;
   background-color: $backgroundColorBtn;
@@ -147,11 +158,13 @@ onMounted(() => {
     background-color: $backgroundColorBtnHover;
   }
 }
+
 .quantity {
   margin: 0 1rem;
   font-size: 1.2rem;
   font-weight: bold;
 }
+
 .remove-button {
   padding: 0.5rem 1rem;
   background-color: $backgroundColorBtnRemove;
@@ -165,6 +178,7 @@ onMounted(() => {
     background-color: $backgroundColorBtnRemoveHover;
   }
 }
+
 .cart-summary {
   display: flex;
   justify-content: space-between;
@@ -175,41 +189,106 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .total-price {
   font-size: 1.5rem;
   font-weight: bold;
 }
-.clear-button {
+
+.summary-buttons {
+  display: flex;
+  gap: 1rem; /* Расстояние между кнопками */
+}
+
+.clear-button,
+.offer-button {
   padding: 0.75rem 1.5rem;
-  background-color: $backgroundColorBtnRemove;
-  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+.clear-button {
+  background-color: $backgroundColorBtnRemove;
+  color: white;
 
   &:hover {
     background-color: $backgroundColorBtnRemoveHover;
   }
 }
+
 .offer-button {
-  padding: 0.75rem 1.5rem;
   background-color: $backgroundColorBtnOffer;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 
   &:hover {
     background-color: $backgroundColorBtnOfferHover;
   }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
+}
+@media (max-width: 768px) {
+  .cart-container {
+    padding: 1rem;
+  }
+  .cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .cart-item-image {
+    width: 100px;
+    height: 100px;
+  }
+  .cart-summary {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cart-item {
+    flex-direction: column;
+    margin: 0.5rem 0;
+    align-items: stretch;
+  }
+
+  .cart-item-image {
+    margin-bottom: 1rem;
+    display: flex;
+  }
+  .quantity-button {
+    min-width: 40px; /* Увеличиваем минимальную ширину кнопок */
+  }
+  .quantity {
+    font-size: 1.5rem; /* Увеличиваем размер текста для количества */
+  }
+  .quantity-controls {
+    justify-content: center; /* Центрируем кнопки */
+    margin: 0.5rem 0; /* Увеличиваем отступы для улучшения читаемости */
+  }
+  .clear-button,
+  .offer-button {
+    padding: 0.75rem 1rem; /* Увеличиваем размер кнопок */
+    font-size: 1.2rem; /* Увеличиваем размер шрифта для кнопок */
+  }
+  .item-link {
+    display: flex;
+    align-items: center; /* Центрируем элементы в строке */
+    justify-content: center;
+  }
+  .cart-item-details {
+    text-align: center;
+  }
+  .summary-buttons {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
 }
 </style>
