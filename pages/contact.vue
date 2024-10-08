@@ -22,7 +22,7 @@ main {
 
 .telegram-link {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   background-color: $backgroundColorBtn;
   color: white;
   border-radius: 4px;

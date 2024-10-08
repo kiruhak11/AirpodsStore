@@ -32,7 +32,7 @@ const formatPrice = (price: number) => {
 <style lang="scss" scoped>
 .product-card {
   border: 1px solid $borderColor;
-  padding: 1rem;
+  padding: 16px;
   text-align: center;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -48,26 +48,25 @@ const formatPrice = (price: number) => {
   }
 
   span {
-    font-size: 1.2rem;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
   }
 
   p {
-    font-size: 1rem;
+    font-size: 16px;
     color: #666;
   }
 
   @media (max-width: 768px) {
-    /* Уменьшаем размеры для мобильных устройств */
-    padding: 0.5rem;
+    padding: 8px;
 
     span {
-      font-size: 1rem;
+      font-size: 16px;
     }
 
     p {
-      font-size: 0.9rem;
+      font-size: 15px;
     }
   }
 }
@@ -77,12 +76,12 @@ const formatPrice = (price: number) => {
   height: 150px;
   object-fit: contain;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   overflow: hidden;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   background-color: $backgroundColorBtn;
   color: white;
   border: none;

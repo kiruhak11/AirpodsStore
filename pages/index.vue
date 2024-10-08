@@ -71,10 +71,10 @@ const features: Product[] = products.slice(0, 3);
 
 <style lang="scss" scoped>
 main {
-  padding: 2rem;
+  padding: 32px;
   text-align: center;
   background-color: #fff;
-  margin: 2rem auto;
+  margin: 32px auto;
   max-width: 1200px;
   border-radius: 8px;
 }
@@ -86,21 +86,21 @@ main {
   text-align: center;
   background-color: white;
   color: #333;
-  padding: 2rem;
+  padding: 32px;
   border-radius: 8px;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .popular-products-section {
-  margin: 2rem 0;
+  margin: 32px 0;
 }
 
 .product-carousel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: 16px;
+  padding: 16px 0;
 }
 
 .product-list {
@@ -118,8 +118,8 @@ main {
 
 .about-us {
   text-align: center;
-  margin: 2rem 0;
-  padding: 2rem;
+  margin: 32px 0;
+  padding: 32px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -141,8 +141,8 @@ main {
   align-items: center;
   justify-content: center;
   background-color: $backgroundColorFeature;
-  padding: 1rem;
-  margin: 1rem;
+  padding: 16px;
+  margin: 16px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -151,18 +151,18 @@ main {
   img {
     max-width: 100%;
     border-radius: 8px;
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
     aspect-ratio: 1;
     object-fit: contain;
   }
 
   h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 24px;
+    margin-bottom: 8px;
   }
 
   p {
-    font-size: 1rem;
+    font-size: 16px;
     color: #666;
     text-wrap: balance;
   }
@@ -170,7 +170,7 @@ main {
 
 .btn {
   margin: 20px;
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   background-color: $backgroundColorBtn;
   color: #fff;
   border: none;
@@ -196,11 +196,11 @@ main {
 
   .feature {
     max-width: 100%;
-    margin: 0.5rem 0;
+    margin: 8px 0;
   }
 
   .hero {
-    padding: 1rem;
+    padding: 16px;
   }
 
   .btn {

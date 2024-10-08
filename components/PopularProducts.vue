@@ -29,18 +29,18 @@ const popularProducts: Product[] = products.slice(0, 5); // Выбираем п�
 
 <style lang="scss" scoped>
 .popular-products {
-  margin: 2rem 0;
+  margin: 32px 0;
 }
 
 .product-carousel {
   overflow-x: auto;
   display: flex;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: 16px;
+  padding: 16px 0;
 }
 
 .product-list {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
 }
 </style>

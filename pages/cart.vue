@@ -95,10 +95,10 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .cart-container {
-  padding: 2rem;
+  padding: 32px;
   background-color: $cartBackgroundColor;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 2rem auto;
+  margin: 32px auto;
   max-width: 800px;
   border-radius: 8px;
   font-family: "Arial", sans-serif;
@@ -112,8 +112,8 @@ onMounted(() => {
 
 .cart-item {
   display: flex;
-  margin: 1rem 0;
-  padding: 1rem;
+  margin: 16px 0;
+  padding: 16px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -129,14 +129,14 @@ onMounted(() => {
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  margin-right: 1rem;
+  margin-right: 16px;
 }
 
 .cart-item-details {
   flex-grow: 1;
 }
 .price {
-  font-size: 1.2rem;
+  font-size: 20px;
   font-weight: bold;
 }
 .quantity-controls {
@@ -146,7 +146,7 @@ onMounted(() => {
 }
 
 .quantity-button {
-  padding: 0.5rem;
+  padding: 8px;
   background-color: $backgroundColorBtn;
   color: white;
   border: none;
@@ -160,13 +160,13 @@ onMounted(() => {
 }
 
 .quantity {
-  margin: 0 1rem;
-  font-size: 1.2rem;
+  margin: 0 16px;
+  font-size: 19px;
   font-weight: bold;
 }
 
 .remove-button {
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   background-color: $backgroundColorBtnRemove;
   color: white;
   border: none;
@@ -183,26 +183,26 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2rem;
-  padding: 1rem;
+  margin-top: 32px;
+  padding: 16px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .total-price {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: bold;
 }
 
 .summary-buttons {
   display: flex;
-  gap: 1rem; /* Расстояние между кнопками */
+  gap: 16px; /* Расстояние между кнопками */
 }
 
 .clear-button,
 .offer-button {
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -237,7 +237,7 @@ onMounted(() => {
 }
 @media (max-width: 768px) {
   .cart-container {
-    padding: 1rem;
+    padding: 16px;
   }
   .cart-list {
     list-style: none;
@@ -254,28 +254,28 @@ onMounted(() => {
   }
   .cart-item {
     flex-direction: column;
-    margin: 0.5rem 0;
+    margin: 8px 0;
     align-items: stretch;
   }
 
   .cart-item-image {
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
     display: flex;
   }
   .quantity-button {
     min-width: 40px; /* Увеличиваем минимальную ширину кнопок */
   }
   .quantity {
-    font-size: 1.5rem; /* Увеличиваем размер текста для количества */
+    font-size: 24px; /* Увеличиваем размер текста для количества */
   }
   .quantity-controls {
     justify-content: center; /* Центрируем кнопки */
-    margin: 0.5rem 0; /* Увеличиваем отступы для улучшения читаемости */
+    margin: 8px 0; /* Увеличиваем отступы для улучшения читаемости */
   }
   .clear-button,
   .offer-button {
-    padding: 0.75rem 1rem; /* Увеличиваем размер кнопок */
-    font-size: 1.2rem; /* Увеличиваем размер шрифта для кнопок */
+    padding: 12px 16px; /* Увеличиваем размер кнопок */
+    font-size: 19px; /* Увеличиваем размер шрифта для кнопок */
   }
   .item-link {
     display: flex;
@@ -288,7 +288,7 @@ onMounted(() => {
   .summary-buttons {
     flex-direction: column;
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 16px;
   }
 }
 </style>

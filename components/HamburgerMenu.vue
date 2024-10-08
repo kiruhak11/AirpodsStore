@@ -101,7 +101,7 @@ onBeforeUnmount(() => {
 }
 
 .mobile-nav li {
-  margin: 1rem 0;
-  font-size: 2rem; /* Увеличиваем размер шрифта для лучшей видимости */
+  margin: 16px 0;
+  font-size: 32px; /* Увеличиваем размер шрифта для лучшей видимости */
 }
 </style>

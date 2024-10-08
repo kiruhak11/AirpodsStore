@@ -92,7 +92,7 @@ onMounted(() => {
   padding-top: 10px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .product-list {
@@ -102,7 +102,7 @@ onMounted(() => {
     minmax(200px, 1fr)
   ); /* Адаптивное количество колонок */
   justify-content: center;
-  gap: 1rem;
+  gap: 16px;
   padding-bottom: 24px;
 }
 </style>

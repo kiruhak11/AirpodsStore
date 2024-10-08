@@ -123,27 +123,27 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .product-price {
-  font-size: 2rem;
+  font-size: 24px;
   font-weight: bold;
   display: flex;
   width: 300px;
   border-radius: 8px;
   flex-direction: column;
   background-color: $priceBackgroundColor;
-  margin: 1rem 0;
+  margin: 16px 0;
   position: relative;
 }
 
 .original-price {
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   text-decoration: line-through;
   color: $originalPriceColor;
-  font-size: 1rem;
+  font-size: 16px;
 }
 
 .discounted-price {
   color: $discountedPriceColor;
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   display: inline-block;
 }
 
@@ -153,7 +153,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   background-color: $backgroundColorBtn;
   color: white;
   border: none;
@@ -180,7 +180,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .quantity-button {
-  padding: 0.5rem;
+  padding: 8px;
   background-color: $backgroundColorBtn;
   color: white;
   border: none;
@@ -202,8 +202,8 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .quantity {
-  margin: 0 1rem;
-  font-size: 1.2rem;
+  margin: 0 16px;
+  font-size: 20px;
   font-weight: bold;
 }
 </style>
