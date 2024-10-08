@@ -10,9 +10,7 @@
         <li><nuxt-link to="/">Главная</nuxt-link></li>
         <li><nuxt-link to="/products">Каталог</nuxt-link></li>
         <li>
-          <nuxt-link to="/cart"
-            >Корзина ({{ formatPrice(totalPrice) }} руб.)</nuxt-link
-          >
+          <nuxt-link to="/cart">Корзина ({{ formatPrice(cartStore.totalPrice) }} руб.)</nuxt-link>
         </li>
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
       </ul>
@@ -24,14 +22,9 @@
 <script lang="ts" setup>
 const cartStore = useCartStore();
 const device = useDevice();
-const totalPrice = computed(() => cartStore.totalPrice);
-
-onMounted(() => {
-  cartStore.loadCart();
-});
 
 const formatPrice = (price: number) => {
-  return price.toLocaleString("ru-RU", {
+  return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -52,40 +45,32 @@ const formatPrice = (price: number) => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.logo h1 {
-  margin: 0;
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav li {
-  margin: 0 16px;
-}
-
-nav h1 {
-  color: $colorText;
-  font-weight: bold;
-  text-decoration: none;
-  transition: color 0.3s;
-
-  &:hover {
-    color: $backgroundColorBtn;
+.logo {
+  h1 {
+    margin: 0;
   }
 }
 
-nav a {
-  color: $colorText;
-  font-weight: bold;
-  text-decoration: none;
-  transition: color 0.3s;
+nav {
+  ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    margin: 0 16px;
+  }
 
-  &:hover {
-    color: $backgroundColorBtn;
+  a {
+    color: $colorText;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $backgroundColorBtn;
+    }
   }
 }
 </style>

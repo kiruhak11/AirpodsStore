@@ -11,9 +11,7 @@
             <nuxt-link to="/products">Каталог</nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/cart"
-              >Корзина ({{ formatPrice(totalPrice) }} руб.)</nuxt-link
-            >
+            <nuxt-link to="/cart">Корзина ({{ formatPrice(totalPrice) }} руб.)</nuxt-link>
           </li>
           <li>
             <nuxt-link to="/contact">О нас</nuxt-link>
@@ -34,24 +32,24 @@ const toggleMenu = () => {
 };
 watch(isOpen, () => {
   if (isOpen.value) {
-    document.body.classList.add("no-scroll");
+    document.body.classList.add('no-scroll');
   } else {
-    document.body.classList.remove("no-scroll");
+    document.body.classList.remove('no-scroll');
   }
 });
 const formatPrice = (price: number) => {
-  return price.toLocaleString("ru-RU", {
+  return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
 
 onBeforeUnmount(() => {
-  document.body.classList.remove("no-scroll");
+  document.body.classList.remove('no-scroll');
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .hamburger-menu {
   background-color: aquamarine;
   display: flex;

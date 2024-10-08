@@ -1,37 +1,23 @@
 <template>
   <main>
-    <div class="product-details" v-if="product">
+    <div class="product-details container" v-if="product">
       <img :src="product.image" alt="Product Image" class="product-image" />
       <div class="product-info">
         <h1>{{ product.name }}</h1>
         <p class="product-price">
-          <span class="original-price"
-            >{{ formatPrice(originalPrice) }} руб.</span
-          >
-          <span class="discounted-price"
-            >{{ formatPrice(product.price) }} руб.</span
-          >
+          <span class="original-price">{{ formatPrice(originalPrice) }} руб.</span>
+          <span class="discounted-price">{{ formatPrice(product.price) }} руб.</span>
         </p>
         <h2>Описание</h2>
         <p class="product-description">{{ product.description }}</p>
         <div v-if="isInCart" class="quantity-controls__wrapper">
           <div class="quantity-controls">
-            <button
-              @click="decreaseQuantity"
-              :class="[
-                'quantity-button',
-                { 'quantity-button_red': cartItem?.quantity === 1 },
-              ]"
-            >
-              -
-            </button>
+            <button @click="decreaseQuantity" :class="['quantity-button', { 'quantity-button_red': cartItem?.quantity === 1 }]">-</button>
             <span class="quantity">{{ cartItem?.quantity }}</span>
             <button @click="increaseQuantity" class="quantity-button">+</button>
           </div>
         </div>
-        <button v-else @click="addToCart" class="btn">
-          Добавить в корзину
-        </button>
+        <button v-else @click="addToCart" class="btn">Добавить в корзину</button>
       </div>
     </div>
     <div v-else>
@@ -59,14 +45,9 @@ interface Product {
 
 const route = useRoute();
 const cartStore = useCartStore();
-const device = useDevice(); // Получите информацию об устройстве
 const productId = parseInt(route.params.id as string);
-const product = computed(
-  () => products.find((p) => p.id === productId) as Product
-);
-const cartItem = computed(() =>
-  cartStore.cart.find((item) => item.product.id === productId)
-);
+const product = computed(() => products.find((p) => p.id === productId) as Product);
+const cartItem = computed(() => cartStore.cart.find((item) => item.product.id === productId));
 const isInCart = computed(() => !!cartItem.value);
 
 const formatPrice = (price: number) => {
@@ -96,8 +77,9 @@ const originalPrice = computed(() => product.value.price * 1.15);
 
 <style lang="scss" scoped>
 .product-details {
-  display: flex;
-  flex-direction: column; /* Изменено для мобильных устройств */
+  // комп
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   align-items: center;
   justify-content: space-between;
   background-color: white;
@@ -108,8 +90,10 @@ const originalPrice = computed(() => product.value.price * 1.15);
   max-width: 1290px;
   margin: 50px auto;
 
-  @media (min-width: 768px) {
-    flex-direction: row; /* Для десктопов */
+  // мобилка
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
   }
 }
 

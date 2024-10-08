@@ -4,47 +4,26 @@
     <transition-group name="fade" tag="ul" class="cart-list">
       <li v-for="item in cart" :key="item.product.id" class="cart-item">
         <nuxt-link :to="`/products/${item.product.id}`" class="item-link">
-          <img
-            :src="item.product.image"
-            alt="Product Image"
-            class="cart-item-image"
-          />
+          <img :src="item.product.image" alt="Product Image" class="cart-item-image" />
         </nuxt-link>
-        <nuxt-link
-          :to="`/products/${item.product.id}`"
-          class="cart-item-details"
-        >
+        <nuxt-link :to="`/products/${item.product.id}`" class="cart-item-details">
           <div>
             <h3>{{ item.product.name }}</h3>
             <p>{{ formatPrice(item.product.price) }} руб.</p>
           </div>
         </nuxt-link>
         <div class="quantity-controls">
-          <button
-            @click="decreaseQuantity(item.product.id)"
-            class="quantity-button"
-          >
-            -
-          </button>
+          <button @click="decreaseQuantity(item.product.id)" class="quantity-button">-</button>
           <span class="quantity">{{ item.quantity }}</span>
-          <button
-            @click="increaseQuantity(item.product.id)"
-            class="quantity-button"
-          >
-            +
-          </button>
+          <button @click="increaseQuantity(item.product.id)" class="quantity-button">+</button>
         </div>
-        <button @click="removeFromCart(item.product.id)" class="remove-button">
-          Удалить
-        </button>
+        <button @click="removeFromCart(item.product.id)" class="remove-button">Удалить</button>
       </li>
     </transition-group>
     <div class="cart-summary">
       <p class="total-price">Итого: {{ formatPrice(totalPrice) }} руб.</p>
       <div class="summary-buttons">
-        <button @click="clearCart" class="clear-button">
-          Очистить корзину
-        </button>
+        <button @click="clearCart" class="clear-button">Очистить корзину</button>
         <button @click="checkout" class="offer-button">Оформить заказ</button>
       </div>
     </div>
@@ -53,7 +32,6 @@
 
 <script lang="ts" setup>
 const cartStore = useCartStore();
-const device = useDevice();
 const router = useRouter();
 const cart = computed(() => cartStore.cart);
 const totalPrice = computed(() => cartStore.totalPrice);
@@ -75,20 +53,19 @@ const decreaseQuantity = (productId: number) => {
 };
 
 const formatPrice = (price: number) => {
-  return price.toLocaleString("ru-RU", {
+  return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
 
 const checkout = () => {
-  alert("Функция оформления заказа пока недоступна.");
+  alert('Функция оформления заказа пока недоступна.');
 };
 
 onMounted(() => {
-  cartStore.loadCart();
   if (cartStore.cart.length === 0) {
-    router.push("/products");
+    router.push('/products');
   }
 });
 </script>
@@ -101,7 +78,7 @@ onMounted(() => {
   margin: 32px auto;
   max-width: 800px;
   border-radius: 8px;
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
 }
 
 .cart-list {

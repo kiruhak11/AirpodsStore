@@ -14,15 +14,10 @@ interface Product {
   image: string;
   description: string;
 }
-const props = defineProps<{ product: Product }>();
-const cartStore = useCartStore();
-const device = useDevice();
+defineProps<{ product: Product }>();
 
-const addToCart = () => {
-  cartStore.addToCart(props.product);
-};
 const formatPrice = (price: number) => {
-  return price.toLocaleString("ru-RU", {
+  return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -42,6 +37,7 @@ const formatPrice = (price: number) => {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  transform: translateY(0);
 
   &:hover {
     transform: translateY(-5px);

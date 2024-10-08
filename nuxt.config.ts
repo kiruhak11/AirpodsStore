@@ -1,24 +1,17 @@
-import { defineNuxtConfig } from "nuxt/config";
+import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: [
-    "@nuxtjs/device",
-    "@pinia/nuxt",
-    "@pinia-plugin-persistedstate/nuxt",
-    "@nuxt/ui",
-    "nuxt-swiper",
-    "@nuxtjs/device",
-  ],
+  modules: ['@nuxtjs/device', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@nuxt/ui', 'nuxt-swiper', '@nuxtjs/device'],
   colorMode: {
-    preference: "light",
+    preference: 'light',
   },
   piniaPersistedstate: {
     cookieOptions: {
-      sameSite: "strict",
+      sameSite: 'strict',
     },
-    storage: "localStorage",
+    storage: 'localStorage',
   },
   vite: {
     css: {

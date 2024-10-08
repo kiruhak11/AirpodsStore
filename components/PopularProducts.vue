@@ -3,18 +3,14 @@
     <h2>Популярные товары</h2>
     <div class="product-carousel">
       <div class="product-list">
-        <ProductCard
-          v-for="product in popularProducts"
-          :key="product.id"
-          :product="product"
-        />
+        <ProductCard v-for="product in popularProducts" :key="product.id" :product="product" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { products } from "~/data/products";
+import { products } from '~/data/products';
 
 interface Product {
   id: number;
