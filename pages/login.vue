@@ -1,29 +1,26 @@
-<template>
-  <form @submit.prevent="signIn">
-    <input v-model="email" type="email" placeholder="Email" required />
-    <input v-model="password" type="password" placeholder="Password" required />
-    <button type="submit">Sign In</button>
-  </form>
-</template>
-
-<script setup>
-import { ref } from "vue";
-
+<script setup lang="ts">
+const supabase = useSupabaseClient();
 const email = ref("");
-const password = ref("");
 
-const signIn = async () => {
-  const { $supabase } = useNuxtApp(); // Подключаем Supabase через Nuxt контекст
-
-  const { data, error } = await $supabase.auth.signInWithPassword({
+const signInWithOtp = async () => {
+  const { error } = await supabase.auth.signInWithOtp({
     email: email.value,
-    password: password.value,
+    options: {
+      emailRedirectTo: "http://localhost:3000/confirm",
+    },
   });
-
-  if (error) {
-    console.error("Ошибка входа:", error.message);
-  } else {
-    console.log("Пользователь успешно вошел:", data);
-  }
+  if (error) console.log(error);
 };
 </script>
+<template>
+  <div>
+    <button @click="signInWithOtp">Sign In with E-Mail</button>
+    <input v-model="email" type="email" />
+  </div>
+</template>
+
+<style lang="scss">
+input {
+  border: 1px solid $borderColor;
+}
+</style>
