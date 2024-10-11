@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@nuxtjs/device",
     "@nuxtjs/supabase",
+
   ],
   colorMode: {
     preference: 'light',
