@@ -14,7 +14,7 @@
         </li>
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
         <li v-if="user">
-          <button @click="logout" class="logout-btn">{{ user.email }} Выйти</button>
+          <button class="logout-btn" @click="logout">{{ user.email }} Выйти</button>
         </li>
       </ul>
     </nav>
