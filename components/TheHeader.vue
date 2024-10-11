@@ -13,6 +13,9 @@
           <nuxt-link to="/cart">Корзина ({{ formatPrice(cartStore.totalPrice) }} руб.)</nuxt-link>
         </li>
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
+        <li v-if="user">
+          <button @click="logout" class="logout-btn">{{ user.email }} Выйти</button>
+        </li>
       </ul>
     </nav>
     <HamburgerMenu v-if="device.isMobile" />
@@ -22,12 +25,20 @@
 <script lang="ts" setup>
 const cartStore = useCartStore();
 const device = useDevice();
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
 const formatPrice = (price: number) => {
   return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+};
+
+// Функция выхода
+const logout = async () => {
+  await supabase.auth.signOut();
+  useRouter().push('/login');
 };
 </script>
 
@@ -66,6 +77,19 @@ nav {
     color: $colorText;
     font-weight: bold;
     text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $backgroundColorBtn;
+    }
+  }
+
+  .logout-btn {
+    background: none;
+    border: none;
+    color: $colorText;
+    font-weight: bold;
+    cursor: pointer;
     transition: color 0.3s;
 
     &:hover {

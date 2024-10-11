@@ -7,27 +7,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const email = ref('')
-const password = ref('')
+const email = ref('');
+const password = ref('');
+const router = useRouter();
 
 const signIn = async () => {
-  const client = useSupabaseClient()  // Используем функцию для получения клиента Supabase
+  const client = useSupabaseClient(); // Используем функцию для получения клиента Supabase
 
   try {
-    const { data, error } = await client.auth.signInWithPassword({
+    const { error } = await client.auth.signInWithPassword({
       email: email.value,
-      password: password.value
-    })
+      password: password.value,
+    });
 
     if (error) {
-      console.error('Ошибка входа:', error.message)
+      console.error('Ошибка входа:', error.message);
     } else {
-      console.log('Пользователь успешно вошел:', data)
+      router.push('/');
     }
   } catch (err) {
-    console.error('Ошибка при попытке входа:', err)
+    console.error('Ошибка при попытке входа:', err);
   }
-}
+};
 </script>
