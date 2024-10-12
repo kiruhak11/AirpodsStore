@@ -30,10 +30,11 @@
 
 <script lang="ts" setup>
 import { MagnifyingGlassIcon } from '@radix-icons/vue';
+// @ts-ignore
+import debounce from 'lodash/debounce';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { Database } from '~/types/database.types';
-import debounce from 'lodash/debounce';
 
 const client = useSupabaseClient<Database>();
 
