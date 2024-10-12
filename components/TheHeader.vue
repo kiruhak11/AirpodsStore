@@ -25,7 +25,6 @@
 <script lang="ts" setup>
 const cartStore = useCartStore();
 const device = useDevice();
-// const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 const formatPrice = (price: number) => {

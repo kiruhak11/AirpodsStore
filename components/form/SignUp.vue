@@ -33,6 +33,7 @@ const { toast } = useToast();
 const signUpSchema = z
   .object({
     username: z.string({ required_error: 'Username is required.' }).describe('Username'),
+    email: z.string({ required_error: 'Email is required.' }).email({ message: 'Please enter a valid email address.' }).describe('Email'),
     password: z.string({ required_error: 'Password is required.' }).describe('Password'),
     confirm: z.string({ required_error: 'Password confirm is required.' }).describe('Confirm password'),
   })
