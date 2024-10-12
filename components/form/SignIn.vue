@@ -50,6 +50,11 @@ const signIn = async (values: Record<string, any>) => {
       });
     }
 
+    toast({
+      title: 'Success!',
+      description: 'You are is logged in!',
+    });
+
     return navigateTo('/');
   } catch (err) {
     toast({

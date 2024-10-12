@@ -66,6 +66,11 @@ const signUp = async (values: Record<string, any>) => {
         description: error.message,
       });
     } else {
+      toast({
+        title: 'Success!',
+        description: 'You are is logged in!',
+      });
+
       return navigateTo('/');
     }
   } catch (err) {
