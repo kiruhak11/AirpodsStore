@@ -14,7 +14,7 @@
         </li>
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
         <li v-if="user">
-          <button class="logout-btn" @click="logout">{{ user.email }} Выйти</button>
+          <nuxt-link to="/profile" class="logout-btn">{{ user.user_metadata.username }}</nuxt-link>
         </li>
       </ul>
     </nav>
@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 const cartStore = useCartStore();
 const device = useDevice();
-const supabase = useSupabaseClient();
+// const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 const formatPrice = (price: number) => {
@@ -35,11 +35,11 @@ const formatPrice = (price: number) => {
   });
 };
 
-// Функция выхода
-const logout = async () => {
-  await supabase.auth.signOut();
-  useRouter().push('/login');
-};
+// // Функция выхода
+// const logout = async () => {
+//   await supabase.auth.signOut();
+//   useRouter().push('/login');
+// };
 </script>
 
 <style lang="scss" scoped>

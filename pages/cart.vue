@@ -33,9 +33,11 @@
 <script lang="ts" setup>
 const cartStore = useCartStore();
 const router = useRouter();
+
+const client = useSupabaseClient();
 const cart = computed(() => cartStore.cart);
 const totalPrice = computed(() => cartStore.totalPrice);
-
+const user = useSupabaseUser();
 const removeFromCart = (productId: number) => {
   cartStore.removeFromCart(productId);
 };
@@ -59,8 +61,24 @@ const formatPrice = (price: number) => {
   });
 };
 
-const checkout = () => {
-  alert('Функция оформления заказа пока недоступна.');
+const checkout = async () => {
+  try {
+    const userId = user.value?.id;
+    const total = totalPrice.value;
+
+    const { error } = await client.from('orders').insert([{ user_id: userId, total_price: total }]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    clearCart();
+    alert('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.');
+    router.push('/products');
+  } catch (err) {
+    console.error('Ошибка при оформлении заказа:', err);
+    alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
+  }
 };
 
 onMounted(() => {
@@ -240,23 +258,23 @@ onMounted(() => {
     display: flex;
   }
   .quantity-button {
-    min-width: 40px; /* Увеличиваем минимальную ширину кнопок */
+    min-width: 40px;
   }
   .quantity {
-    font-size: 24px; /* Увеличиваем размер текста для количества */
+    font-size: 24px;
   }
   .quantity-controls {
-    justify-content: center; /* Центрируем кнопки */
-    margin: 8px 0; /* Увеличиваем отступы для улучшения читаемости */
+    justify-content: center;
+    margin: 8px 0;
   }
   .clear-button,
   .offer-button {
-    padding: 12px 16px; /* Увеличиваем размер кнопок */
-    font-size: 19px; /* Увеличиваем размер шрифта для кнопок */
+    padding: 12px 16px;
+    font-size: 19px;
   }
   .item-link {
     display: flex;
-    align-items: center; /* Центрируем элементы в строке */
+    align-items: center;
     justify-content: center;
   }
   .cart-item-details {
