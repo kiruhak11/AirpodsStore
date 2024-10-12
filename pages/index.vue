@@ -56,23 +56,17 @@
 </template>
 
 <script lang="ts" setup>
-const client = useSupabaseClient();
+import type { Database } from '~/types/database.types';
+const client = useSupabaseClient<Database>();
 
 const { data: products } = await useAsyncData('products', async () => {
-  const { data } = await client.from('products').select('id, name, price, image, description').order('created_at');
+  const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
 
-  return data;
+  return data ?? [];
 });
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
 
-const popularProducts: Product[] = products.slice(0, 8);
-const features: Product[] = products.slice(0, 3);
+const popularProducts: Database['public']['Tables']['products']['Row'][] = products.value?.slice(0, 8) ?? [];
+const features: Database['public']['Tables']['products']['Row'][] = products.value?.slice(0, 3) ?? [];
 </script>
 
 <style lang="scss" scoped>

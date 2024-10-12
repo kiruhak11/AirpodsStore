@@ -32,7 +32,10 @@
 import { MagnifyingGlassIcon } from '@radix-icons/vue';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { products } from '~/data/products';
+import type { Database } from '~/types/database.types';
+import debounce from 'lodash/debounce';
+
+const client = useSupabaseClient<Database>();
 
 interface Product {
   id: number;
@@ -58,21 +61,35 @@ const selected = ref<string>(options.value[0].id);
 const cartStore = useCartStore();
 const searchQuery = ref('');
 
-const filteredProducts = computed(() => {
-  const filtered = products.filter((product) => product.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+const { data: filteredProducts, refresh: refreshProducts } = await useAsyncData(
+  'products',
+  async () => {
+    const { data } = await client
+      .from('products')
+      .select('created_at, description, id, image, name, price')
+      .ilike('name', `%${searchQuery.value}%`)
+      .order('price', { ascending: selected.value === 'asc' });
 
-  // Сортировка продуктов по цене
-  filtered.sort((a, b) => {
-    return selected.value === 'asc' ? a.price - b.price : b.price - a.price;
-  });
-
-  return filtered;
-});
+    return data ?? [];
+  },
+  {
+    watch: [selected],
+  },
+);
 
 const addToCart = (product: Product) => {
   cartStore.addToCart(product);
   alert(`${product.name} добавлен в корзину!`);
 };
+
+const debouncedSearch = debounce(() => {
+  refreshProducts();
+}, 500);
+
+watch(
+  () => searchQuery.value,
+  () => debouncedSearch(),
+);
 </script>
 
 <style scoped>

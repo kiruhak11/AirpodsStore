@@ -35,8 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { products } from '~/data/products';
-
 interface Product {
   id: number;
   name: string;

@@ -7,7 +7,9 @@
     "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "login": "supabase login",
+    "generate:types": "supabase gen types typescript --project-id moopmsouryuirjeuykde > types/database.types.ts"
   },
   "dependencies": {
     "@morev/vue-transitions": "^3.0.2",
@@ -26,6 +28,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "frog-modal": "^1.0.12",
+    "lodash.debounce": "^4.0.8",
     "lucide-vue-next": "^0.451.0",
     "maska": "^2.1.11",
     "nuxt": "^3.11.2",
@@ -62,6 +65,7 @@
     "stylelint-config-rational-order-fix": "^0.1.9",
     "stylelint-config-recommended-vue": "latest",
     "stylelint-config-standard-scss": "^13.1.0",
-    "stylelint-order": "^6.0.4"
+    "stylelint-order": "^6.0.4",
+    "supabase": "^1.204.3"
   }
 }

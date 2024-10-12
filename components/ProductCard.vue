@@ -7,14 +7,9 @@
 </template>
 
 <script lang="ts" setup>
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
-defineProps<{ product: Product }>();
+import type { Database } from '~/types/database.types';
+
+defineProps<{ product: Database['public']['Tables']['products']['Row'] }>();
 
 const formatPrice = (price: number) => {
   return price.toLocaleString('ru-RU', {
