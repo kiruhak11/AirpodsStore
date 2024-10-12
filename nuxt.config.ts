@@ -7,10 +7,11 @@ export default defineNuxtConfig({
     '@nuxtjs/device',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    '@nuxt/ui',
     'nuxt-swiper',
     '@nuxtjs/device',
     '@nuxtjs/supabase',
+    'shadcn-nuxt',
+    '@nuxtjs/tailwindcss',
   ],
   colorMode: {
     preference: 'light',
@@ -39,6 +40,18 @@ export default defineNuxtConfig({
     },
   },
 
+  shadcn: {
+    /**
+     * Prefix for all the imported component
+     */
+    prefix: '',
+    /**
+     * Directory that the component lives in.
+     * @default "./components/ui"
+     */
+    componentDir: './components/ui',
+  },
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -46,6 +59,7 @@ export default defineNuxtConfig({
           additionalData: '@import "@/assets/styles/collection/index.scss";',
         },
       },
+      additionalData: '@import "@/assets/css/tailwind.css";',
     },
   },
 });

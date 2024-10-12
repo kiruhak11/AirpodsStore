@@ -2,19 +2,22 @@
   <main>
     <div class="container">
       <div class="search-container">
-        <UInput
-          v-model="searchQuery"
-          icon="i-heroicons-magnifying-glass-20-solid"
-          size="sm"
-          color="white"
-          :trailing="false"
-          placeholder="Поиск продуктов..."
-        />
-        <USelectMenu v-model="selected" :options="options">
-          <template #leading>
-            <UIcon v-if="selected?.icon" :name="(selected.icon as string)" class="w-5 h-5" />
-          </template>
-        </USelectMenu>
+        <div class="relative w-full max-w-sm items-center">
+          <Input id="search" v-model="searchQuery" type="text" placeholder="Поиск продуктов..." class="pl-10" />
+          <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+            <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
+          </span>
+        </div>
+        <Select v-model="selected">
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Сортировать" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem v-for="option in options" :key="option.id" :value="option.id">{{ option.label }}</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <div class="product-list">
         <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" @add-to-cart="addToCart" />
@@ -24,6 +27,9 @@
 </template>
 
 <script lang="ts" setup>
+import { MagnifyingGlassIcon } from '@radix-icons/vue';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { products } from '~/data/products';
 
 interface Product {
@@ -38,12 +44,10 @@ const options = ref([
   {
     id: 'asc',
     label: 'По возрастанию цены',
-    icon: 'i-heroicons-arrow-up-20-solid',
   },
   {
     id: 'desc',
     label: 'По убыванию цены',
-    icon: 'i-heroicons-arrow-down-20-solid',
   },
 ]);
 

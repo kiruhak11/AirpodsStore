@@ -1,33 +1,35 @@
 <template>
-  <main class="cart-container">
-    <h2>Корзина</h2>
-    <transition-group name="fade" tag="ul" class="cart-list">
-      <li v-for="item in cart" :key="item.product.id" class="cart-item">
-        <nuxt-link :to="`/products/${item.product.id}`" class="item-link">
-          <img :src="item.product.image" alt="Product Image" class="cart-item-image" />
-        </nuxt-link>
-        <nuxt-link :to="`/products/${item.product.id}`" class="cart-item-details">
-          <div>
-            <h3>{{ item.product.name }}</h3>
-            <p>{{ formatPrice(item.product.price) }} руб.</p>
+  <NuxtLayout>
+    <main class="cart-container">
+      <h2>Корзина</h2>
+      <transition-group name="fade" tag="ul" class="cart-list">
+        <li v-for="item in cart" :key="item.product.id" class="cart-item">
+          <nuxt-link :to="`/products/${item.product.id}`" class="item-link">
+            <img :src="item.product.image" alt="Product Image" class="cart-item-image" />
+          </nuxt-link>
+          <nuxt-link :to="`/products/${item.product.id}`" class="cart-item-details">
+            <div>
+              <h3>{{ item.product.name }}</h3>
+              <p>{{ formatPrice(item.product.price) }} руб.</p>
+            </div>
+          </nuxt-link>
+          <div class="quantity-controls">
+            <button class="quantity-button" @click="decreaseQuantity(item.product.id)">-</button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button class="quantity-button" @click="increaseQuantity(item.product.id)">+</button>
           </div>
-        </nuxt-link>
-        <div class="quantity-controls">
-          <button @click="decreaseQuantity(item.product.id)" class="quantity-button">-</button>
-          <span class="quantity">{{ item.quantity }}</span>
-          <button @click="increaseQuantity(item.product.id)" class="quantity-button">+</button>
+          <button class="remove-button" @click="removeFromCart(item.product.id)">Удалить</button>
+        </li>
+      </transition-group>
+      <div class="cart-summary">
+        <p class="total-price">Итого: {{ formatPrice(totalPrice) }} руб.</p>
+        <div class="summary-buttons">
+          <button class="clear-button" @click="clearCart">Очистить корзину</button>
+          <button class="offer-button" @click="checkout">Оформить заказ</button>
         </div>
-        <button @click="removeFromCart(item.product.id)" class="remove-button">Удалить</button>
-      </li>
-    </transition-group>
-    <div class="cart-summary">
-      <p class="total-price">Итого: {{ formatPrice(totalPrice) }} руб.</p>
-      <div class="summary-buttons">
-        <button @click="clearCart" class="clear-button">Очистить корзину</button>
-        <button @click="checkout" class="offer-button">Оформить заказ</button>
       </div>
-    </div>
-  </main>
+    </main>
+  </NuxtLayout>
 </template>
 
 <script lang="ts" setup>

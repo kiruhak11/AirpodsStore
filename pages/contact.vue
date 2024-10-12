@@ -1,11 +1,11 @@
 <template>
-  <main>
-    <h2>Contact Us</h2>
-    <p>Все новинки можно увидеть в нашем телеграмм канале!</p>
-    <a href="https://t.me/kiruhak11" target="_blank" class="telegram-link"
-      >Мы в телеграмм</a
-    >
-  </main>
+  <NuxtLayout>
+    <main>
+      <h2>Contact Us</h2>
+      <p>Все новинки можно увидеть в нашем телеграмм канале!</p>
+      <a href="https://t.me/kiruhak11" target="_blank" class="telegram-link">Мы в телеграмм</a>
+    </main>
+  </NuxtLayout>
 </template>
 
 <style lang="scss" scoped>

@@ -1,61 +1,62 @@
 <template>
-  <main>
-    <div class="hero">
-      <h2>Welcome to AirPods Store</h2>
-      <p>Discover the best AirPods for you.</p>
-      <div class="features">
-        <div class="feature" v-for="feature in features" :key="feature.name">
-          <img :src="feature.image" :alt="feature.name" />
-          <h3>{{ feature.name }}</h3>
-          <p>{{ feature.description }}</p>
+  <NuxtLayout>
+    <main>
+      <div class="hero">
+        <h2>Welcome to AirPods Store</h2>
+        <p>Discover the best AirPods for you.</p>
+        <div class="features">
+          <div v-for="feature in features" :key="feature.name" class="feature">
+            <img :src="feature.image" :alt="feature.name" />
+            <h3>{{ feature.name }}</h3>
+            <p>{{ feature.description }}</p>
+          </div>
         </div>
+        <nuxt-link to="/products" class="btn">Shop Now</nuxt-link>
       </div>
-      <nuxt-link to="/products" class="btn">Shop Now</nuxt-link>
-    </div>
 
-    <section class="popular-products-section">
-      <h2>Популярные товары</h2>
-      <div class="product-carousel">
-        <div class="product-list">
-          <Swiper
-            :modules="[SwiperNavigation, SwiperMousewheel, SwiperPagination]"
-            :mousewheel="{ invert: false, forceToAxis: true }"
-            :slides-per-view="$device.isMobile ? 2 : 4"
-            :slides-per-group="$device.isMobile ? 2 : 4"
-            :space-between="20"
-            :navigation="{
-              prevEl: '.arrow_prev_slots',
-              nextEl: '.arrow_next_slots',
-            }"
-            :watch-slides-progress="true"
-            :pagination="{
-              clickable: true,
-              el: '.custom-pagination_high-tech',
-            }"
-            class="product-list__swiper"
-          >
-            <SwiperSlide v-for="product in popularProducts" :key="product.id">
-              <ProductCard :product="product" />
-            </SwiperSlide>
-          </Swiper>
+      <section class="popular-products-section">
+        <h2>Популярные товары</h2>
+        <div class="product-carousel">
+          <div class="product-list">
+            <Swiper
+              :modules="[SwiperNavigation, SwiperMousewheel, SwiperPagination]"
+              :mousewheel="{ invert: false, forceToAxis: true }"
+              :slides-per-view="$device.isMobile ? 2 : 4"
+              :slides-per-group="$device.isMobile ? 2 : 4"
+              :space-between="20"
+              :navigation="{
+                prevEl: '.arrow_prev_slots',
+                nextEl: '.arrow_next_slots',
+              }"
+              :watch-slides-progress="true"
+              :pagination="{
+                clickable: true,
+                el: '.custom-pagination_high-tech',
+              }"
+              class="product-list__swiper"
+            >
+              <SwiperSlide v-for="product in popularProducts" :key="product.id">
+                <ProductCard :product="product" />
+              </SwiperSlide>
+            </Swiper>
+          </div>
+          <div class="custom-pagination custom-pagination_high-tech"></div>
         </div>
-        <div class="custom-pagination custom-pagination_high-tech"></div>
-      </div>
-    </section>
+      </section>
 
-    <section class="about-us">
-      <h2>О нас</h2>
-      <p>
-        Мы предлагаем широкий ассортимент высококачественной продукции, которая
-        удовлетворит все ваши потребности. Наша миссия - обеспечить лучший опыт
-        покупок для наших клиентов.
-      </p>
-    </section>
-  </main>
+      <section class="about-us">
+        <h2>О нас</h2>
+        <p>
+          Мы предлагаем широкий ассортимент высококачественной продукции, которая удовлетворит все ваши потребности. Наша миссия -
+          обеспечить лучший опыт покупок для наших клиентов.
+        </p>
+      </section>
+    </main>
+  </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
-import { products } from "~/data/products";
+import { products } from '~/data/products';
 
 interface Product {
   id: number;
