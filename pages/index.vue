@@ -56,8 +56,13 @@
 </template>
 
 <script lang="ts" setup>
-import { products } from '~/data/products';
+const client = useSupabaseClient();
 
+const { data: products } = await useAsyncData('products', async () => {
+  const { data } = await client.from('products').select('id, name, price, image, description').order('created_at');
+
+  return data;
+});
 interface Product {
   id: number;
   name: string;

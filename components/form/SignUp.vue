@@ -76,7 +76,7 @@ const signUp = async (values: Record<string, any>) => {
   } catch (err) {
     toast({
       title: 'Connection error',
-      description: err,
+      description: `${err}`,
     });
   }
 };

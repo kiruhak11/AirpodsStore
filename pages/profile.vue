@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container">
+  <div class="container">
     <h1>Профиль пользователя</h1>
 
     <div class="user-info">
@@ -26,7 +26,7 @@
 
     <button @click="deleteAccount" class="delete-button">Удалить аккаунт</button>
 
-    <button @click="signOut" class="signout-button">Выйти из аккаунта</button>
+    <Button class="w-full mt-6" @click="signOut">Выйти</Button>
   </div>
 </template>
 
@@ -58,12 +58,6 @@ const fetchTotalSpent = async () => {
     console.error('Ошибка при попытке получить данные покупок:', err);
   }
 };
-
-onMounted(() => {
-  if (user.value) {
-    fetchTotalSpent();
-  }
-});
 
 const verifyCurrentPassword = async (): Promise<boolean> => {
   const currentUser = user.value;
@@ -162,16 +156,24 @@ const signOut = async () => {
     console.error('Ошибка при попытке выйти из аккаунта:', err);
   }
 };
+
+onMounted(() => {
+  if (user.value) {
+    fetchTotalSpent();
+  }
+});
 </script>
 
 <style lang="scss" scoped>
-.profile-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: #f9f9f9;
   min-height: 100vh;
+  background-color: $cartBackgroundColor;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 h1 {

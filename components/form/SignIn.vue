@@ -48,8 +48,8 @@ const signIn = async (values: Record<string, any>) => {
         title: 'Sign in error',
         description: error.message,
       });
+      return;
     }
-
     toast({
       title: 'Success!',
       description: 'You are is logged in!',
@@ -59,7 +59,7 @@ const signIn = async (values: Record<string, any>) => {
   } catch (err) {
     toast({
       title: 'Connection error',
-      description: err,
+      description: `${err}`,
     });
   }
 };

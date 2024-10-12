@@ -1,39 +1,41 @@
 <template>
-  <main>
-    <div class="product-details container" v-if="product">
-      <img :src="product.image" alt="Product Image" class="product-image" />
-      <div class="product-info">
-        <h1>{{ product.name }}</h1>
-        <p class="product-price">
-          <span class="original-price">{{ formatPrice(originalPrice) }} руб.</span>
-          <span class="discounted-price">{{ formatPrice(product.price) }} руб.</span>
-        </p>
-        <h2>Описание</h2>
-        <p class="product-description">{{ product.description }}</p>
-        <div v-if="isInCart" class="quantity-controls__wrapper">
-          <div class="quantity-controls">
-            <button @click="decreaseQuantity" :class="['quantity-button', { 'quantity-button_red': cartItem?.quantity === 1 }]">-</button>
-            <span class="quantity">{{ cartItem?.quantity }}</span>
-            <button @click="increaseQuantity" class="quantity-button">+</button>
+  <NuxtLayout name="default">
+    <main>
+      <div class="product-details container" v-if="product">
+        <img :src="product.image" alt="Product Image" class="product-image" />
+        <div class="product-info">
+          <h1>{{ product.name }}</h1>
+          <p class="product-price">
+            <span class="original-price">{{ formatPrice(originalPrice) }} руб.</span>
+            <span class="discounted-price">{{ formatPrice(product.price) }} руб.</span>
+          </p>
+          <h2>Описание</h2>
+          <p class="product-description">{{ product.description }}</p>
+          <div v-if="isInCart" class="quantity-controls__wrapper">
+            <div class="quantity-controls">
+              <button @click="decreaseQuantity" :class="['quantity-button', { 'quantity-button_red': cartItem?.quantity === 1 }]">-</button>
+              <span class="quantity">{{ cartItem?.quantity }}</span>
+              <button @click="increaseQuantity" class="quantity-button">+</button>
+            </div>
           </div>
+          <button v-else @click="addToCart" class="btn">Добавить в корзину</button>
         </div>
-        <button v-else @click="addToCart" class="btn">Добавить в корзину</button>
       </div>
-    </div>
-    <div v-else>
-      <div class="not-found">
-        <h2>Товар не найден</h2>
-        <p>Извините, мы не смогли найти запрашиваемый вами товар.</p>
-        <p>Пожалуйста, проверьте URL и попробуйте снова.</p>
-        <p>Товар не найден.</p>
-        <nuxt-link :to="`/products`" class="btn">Назад</nuxt-link>
+      <div v-else>
+        <div class="not-found">
+          <h2>Товар не найден</h2>
+          <p>Извините, мы не смогли найти запрашиваемый вами товар.</p>
+          <p>Пожалуйста, проверьте URL и попробуйте снова.</p>
+          <p>Товар не найден.</p>
+          <nuxt-link :to="`/products`" class="btn">Назад</nuxt-link>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
-import { products } from "~/data/products";
+import { products } from '~/data/products';
 
 interface Product {
   id: number;
@@ -51,7 +53,7 @@ const cartItem = computed(() => cartStore.cart.find((item) => item.product.id ==
 const isInCart = computed(() => !!cartItem.value);
 
 const formatPrice = (price: number) => {
-  return price.toLocaleString("ru-RU", {
+  return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -59,10 +61,6 @@ const formatPrice = (price: number) => {
 
 const addToCart = () => {
   cartStore.addToCart(product.value);
-};
-
-const removeFromCart = () => {
-  cartStore.removeFromCart(productId);
 };
 
 const increaseQuantity = () => {

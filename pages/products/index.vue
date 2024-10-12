@@ -1,29 +1,31 @@
 <template>
-  <main>
-    <div class="container">
-      <div class="search-container">
-        <div class="relative w-full max-w-sm items-center">
-          <Input id="search" v-model="searchQuery" type="text" placeholder="Поиск продуктов..." class="pl-10" />
-          <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-            <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
-          </span>
+  <NuxtLayout name="default">
+    <main>
+      <div class="container">
+        <div class="search-container">
+          <div class="relative w-full max-w-sm items-center">
+            <Input id="search" v-model="searchQuery" type="text" placeholder="Поиск продуктов..." class="pl-10" />
+            <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+              <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
+            </span>
+          </div>
+          <Select v-model="selected">
+            <SelectTrigger class="w-[180px]">
+              <SelectValue placeholder="Сортировать" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem v-for="option in options" :key="option.id" :value="option.id">{{ option.label }}</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
-        <Select v-model="selected">
-          <SelectTrigger class="w-[180px]">
-            <SelectValue placeholder="Сортировать" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="option in options" :key="option.id" :value="option.id">{{ option.label }}</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div class="product-list">
+          <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" @add-to-cart="addToCart" />
+        </div>
       </div>
-      <div class="product-list">
-        <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" @add-to-cart="addToCart" />
-      </div>
-    </div>
-  </main>
+    </main>
+  </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
@@ -51,7 +53,7 @@ const options = ref([
   },
 ]);
 
-const selected = ref(options.value[0]);
+const selected = ref<string>(options.value[0].id);
 
 const cartStore = useCartStore();
 const searchQuery = ref('');
@@ -61,7 +63,7 @@ const filteredProducts = computed(() => {
 
   // Сортировка продуктов по цене
   filtered.sort((a, b) => {
-    return selected.value.id === 'asc' ? a.price - b.price : b.price - a.price;
+    return selected.value === 'asc' ? a.price - b.price : b.price - a.price;
   });
 
   return filtered;
