@@ -10,17 +10,16 @@
 </template>
 
 <script lang="ts" setup>
-import { products } from '~/data/products';
+import type { Database } from '~/types/database.types';
+const client = useSupabaseClient<Database>();
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
+const { data: products } = await useAsyncData('products', async () => {
+  const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
 
-const popularProducts: Product[] = products.slice(0, 5); // Выбираем первые 5 продуктов как популярные
+  return data ?? [];
+});
+
+const popularProducts: Database['public']['Tables']['products']['Row'][] = products.value?.slice(0, 8) ?? [];
 </script>
 
 <style lang="scss" scoped>

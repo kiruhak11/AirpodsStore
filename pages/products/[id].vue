@@ -35,6 +35,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Database } from '~/types/database.types';
 interface Product {
   id: number;
   name: string;
@@ -42,11 +43,17 @@ interface Product {
   price: number;
   description: string;
 }
+const client = useSupabaseClient<Database>();
 
+const { data: products } = await useAsyncData('products', async () => {
+  const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
+
+  return data ?? [];
+});
 const route = useRoute();
 const cartStore = useCartStore();
 const productId = parseInt(route.params.id as string);
-const product = computed(() => products.find((p) => p.id === productId) as Product);
+const product = computed(() => products.value?.find((p) => p.id === productId) as Product);
 const cartItem = computed(() => cartStore.cart.find((item) => item.product.id === productId));
 const isInCart = computed(() => !!cartItem.value);
 
