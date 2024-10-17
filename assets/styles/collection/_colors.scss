@@ -1,14 +1,33 @@
-$backgroundColor: #f6f6f6;
-$backgroundColorFeature: #f9f9f9;
-$backgroundColorBtn: #007bff;
-$backgroundColorBtnHover: #0069d9;
-$backgroundColorBtnRemove: #ff4d4d;
-$backgroundColorBtnRemoveHover: #e60000;
-$backgroundColorBtnOffer: #07ad2b;
-$backgroundColorBtnOfferHover: #04831f;
-$borderColor: #ccc;
-$colorText: #333;
-$cartBackgroundColor: #f9f9f9;
-$originalPriceColor: #b0b0b0;
-$discountedPriceColor: #ff5722;
-$priceBackgroundColor: #fff3e0;
+:root {
+  --background-color: #f6f6f6;
+  --background-color-feature: #f9f9f9;
+  --background-color-btn: #007bff;
+  --background-color-btn-hover: #0069d9;
+  --background-color-btn-remove: #ff4d4d;
+  --background-color-btn-remove-hover: #e60000;
+  --background-color-btn-offer: #07ad2b;
+  --background-color-btn-offer-hover: #04831f;
+  --border-color: #ccc;
+  --color-text: #333;
+  --background-color-cart: #f9f9f9;
+  --original-price-color: #b0b0b0;
+  --discounted-price-color: #ff5722;
+  --background-color-price: #fff3e0;
+}
+
+.dark {
+  --background-color: #121212; // Темный фон
+  --background-color-feature: #1e1e1e; // Темный фон для функций
+  --background-color-btn: #007bff; // Можно оставить прежним или сделать темнее
+  --background-color-btn-hover: #0069d9; // Можно оставить прежним или сделать темнее
+  --background-color-btn-remove: #ff4d4d; // Можно оставить прежним
+  --background-color-btn-remove-hover: #e60000; // Можно оставить прежним
+  --background-color-btn-offer: #07ad2b; // Можно оставить прежним
+  --background-color-btn-offer-hover: #04831f; // Можно оставить прежним
+  --border-color: #444; // Темный цвет границы
+  --color-text: #e0e0e0; // Светлый текст
+  --background-color-cart: #1e1e1e; // Темный фон для корзины
+  --original-price-color: #a0a0a0; // Светлый цвет для оригинальной цены
+  --discounted-price-color: #ff5722; // Можно оставить прежним
+  --background-color-prices: #3c3c3c; // Темный фон для цен
+}

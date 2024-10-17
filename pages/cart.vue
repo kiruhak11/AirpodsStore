@@ -93,7 +93,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .cart-container {
   padding: 32px;
-  background-color: $cartBackgroundColor;
+  background-color: var(--background-color-cart);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 32px auto;
   max-width: 800px;
@@ -111,7 +111,7 @@ onMounted(() => {
   display: flex;
   margin: 16px 0;
   padding: 16px;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
@@ -144,15 +144,15 @@ onMounted(() => {
 
 .quantity-button {
   padding: 8px;
-  background-color: $backgroundColorBtn;
-  color: white;
+  background-color: var(--background-color-btn);
+  color: var(--text-color)
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: $backgroundColorBtnHover;
+    background-color: var(--background-color-btn-hover);
   }
 }
 
@@ -164,7 +164,7 @@ onMounted(() => {
 
 .remove-button {
   padding: 8px 16px;
-  background-color: $backgroundColorBtnRemove;
+  background-color: var(--background-color-btn-remove);
   color: white;
   border: none;
   border-radius: 4px;
@@ -172,7 +172,7 @@ onMounted(() => {
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: $backgroundColorBtnRemoveHover;
+    background-color: var(--background-color-btn-remove-hover);
   }
 }
 
@@ -182,7 +182,7 @@ onMounted(() => {
   align-items: center;
   margin-top: 32px;
   padding: 16px;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -207,20 +207,20 @@ onMounted(() => {
 }
 
 .clear-button {
-  background-color: $backgroundColorBtnRemove;
-  color: white;
+  background-color: var(--background-color-btn-remove);
+  color: var(--text-color);
 
   &:hover {
-    background-color: $backgroundColorBtnRemoveHover;
+    background-color: var(--background-color-btn-remove-hover);
   }
 }
 
 .offer-button {
-  background-color: $backgroundColorBtnOffer;
+  background-color: var(--background-color-btn-offer);
   color: white;
 
   &:hover {
-    background-color: $backgroundColorBtnOfferHover;
+    background-color: var(--background-color-btn-offer-hover);
   }
 }
 

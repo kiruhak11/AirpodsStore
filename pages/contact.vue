@@ -23,14 +23,14 @@ main {
 .telegram-link {
   display: inline-block;
   padding: 12px 24px;
-  background-color: $backgroundColorBtn;
-  color: white;
+  background-color: var(--background-color-btn);
+  color: var(--text-color);
   border-radius: 4px;
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: $backgroundColorBtnHover;
+    background-color: var(--background-color-btn-hover);
     transform: translateY(-2px);
   }
 }

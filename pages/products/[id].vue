@@ -11,14 +11,17 @@
           </p>
           <h2>Описание</h2>
           <p class="product-description">{{ product.description }}</p>
+
           <div v-if="isInCart" class="quantity-controls__wrapper">
             <div class="quantity-controls">
               <button @click="decreaseQuantity" :class="['quantity-button', { 'quantity-button_red': cartItem?.quantity === 1 }]">-</button>
               <span class="quantity">{{ cartItem?.quantity }}</span>
               <button @click="increaseQuantity" class="quantity-button">+</button>
             </div>
+            <nuxt-link :to="`/cart`" class="btn-cart">Перейти в корзину</nuxt-link>
           </div>
-          <button v-else @click="addToCart" class="btn">Добавить в корзину</button>
+
+          <button v-if="!isInCart" class="btn-add" :class="{ compressed: buttonCompressed }" @click="addToCart">Добавить в корзину</button>
         </div>
       </div>
       <div v-else>
@@ -35,7 +38,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import type { Database } from '~/types/database.types';
+
 interface Product {
   id: number;
   name: string;
@@ -43,13 +48,13 @@ interface Product {
   price: number;
   description: string;
 }
-const client = useSupabaseClient<Database>();
 
+const client = useSupabaseClient<Database>();
 const { data: products } = await useAsyncData('products', async () => {
   const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
-
   return data ?? [];
 });
+
 const route = useRoute();
 const cartStore = useCartStore();
 const productId = parseInt(route.params.id as string);
@@ -64,8 +69,14 @@ const formatPrice = (price: number) => {
   });
 };
 
+// Локальная переменная для отслеживания сжатия кнопки
+const buttonCompressed = ref(false);
+
 const addToCart = () => {
-  cartStore.addToCart(product.value);
+  buttonCompressed.value = true;
+  setTimeout(() => {
+    cartStore.addToCart(product.value);
+  }, 400); // Задержка анимации
 };
 
 const increaseQuantity = () => {
@@ -75,25 +86,24 @@ const increaseQuantity = () => {
 const decreaseQuantity = () => {
   cartStore.decreaseQuantity(productId);
 };
+
 const originalPrice = computed(() => product.value.price * 1.15);
 </script>
 
 <style lang="scss" scoped>
 .product-details {
-  // комп
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 2fr;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  color: $colorText;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 1290px;
   margin: 50px auto;
 
-  // мобилка
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;
@@ -101,12 +111,22 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .product-image {
-  max-width: 100%; /* Изменено для мобильных устройств */
   border-radius: 8px;
 }
 
 .product-info {
-  max-width: 100%; /* Изменено для мобильных устройств */
+  padding-left: 40px;
+  max-width: 100%;
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
 }
 
 .product-price {
@@ -116,7 +136,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
   width: 300px;
   border-radius: 8px;
   flex-direction: column;
-  background-color: $priceBackgroundColor;
+  background-color: var(--background-color-price);
   margin: 16px 0;
   position: relative;
 }
@@ -124,12 +144,12 @@ const originalPrice = computed(() => product.value.price * 1.15);
 .original-price {
   padding: 8px 16px;
   text-decoration: line-through;
-  color: $originalPriceColor;
+  color: var(--original-price-color);
   font-size: 16px;
 }
 
 .discounted-price {
-  color: $discountedPriceColor;
+  color: var(--discounted-price-color);
   padding: 8px 16px;
   display: inline-block;
 }
@@ -140,57 +160,75 @@ const originalPrice = computed(() => product.value.price * 1.15);
 }
 
 .btn {
-  padding: 12px 24px;
-  background-color: $backgroundColorBtn;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  &-add {
+    padding: 12px 24px;
+    background-color: var(--background-color-btn);
+    color: var(--text-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; // Ширина на 100%
 
-  &:hover {
-    background-color: $backgroundColorBtnHover;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    &:hover {
+      background-color: var(--background-color-btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
   }
+
+  &-cart {
+    padding: 12px 24px;
+    background-color: var(--background-color-btn);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.quantity-controls__wrapper {
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .quantity-controls {
   display: flex;
   align-items: center;
 
-  &__wrapper {
-    height: 42px;
-  }
-}
-
-.quantity-button {
-  padding: 8px;
-  background-color: $backgroundColorBtn;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: $backgroundColorBtnHover;
-  }
-
-  &_red {
-    background-color: $backgroundColorBtnRemove;
+  .quantity-button {
+    padding: 8px;
+    background-color: var(--background-color-btn);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 
     &:hover {
-      background-color: $backgroundColorBtnRemoveHover;
+      background-color: var(--background-color-btn-hover);
+    }
+
+    &_red {
+      background-color: var(--background-color-btn-remove);
+
+      &:hover {
+        background-color: var(--background-color-btn-remove-hover);
+      }
     }
   }
-}
 
-.quantity {
-  margin: 0 16px;
-  font-size: 20px;
-  font-weight: bold;
+  .quantity {
+    margin: 0 16px;
+    font-size: 20px;
+    font-weight: bold;
+  }
 }
 </style>

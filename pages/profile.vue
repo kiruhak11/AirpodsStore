@@ -16,7 +16,11 @@
         <label for="new-password">Новый пароль</label>
         <input v-model="newPassword" type="password" id="new-password" class="input-field" />
 
-        <button @click="updatePassword" class="profile-button">Изменить пароль</button>
+        <button class="profile-button" @click="updatePassword">Изменить пароль</button>
+
+        <Button class="" variant="destructive" @click="deleteAccount">Удалить аккаунт</Button>
+
+        <Button class="mt-6" @click="signOut">Выйти</Button>
       </div>
 
       <div class="total-spent">
@@ -24,10 +28,6 @@
           Вы потратили на покупки: <strong>{{ totalSpent }} руб.</strong>
         </p>
       </div>
-
-      <button @click="deleteAccount" class="delete-button">Удалить аккаунт</button>
-
-      <Button class="w-full mt-6" @click="signOut">Выйти</Button>
     </div>
   </nuxt-layout>
 </template>
@@ -208,7 +208,6 @@ label {
 }
 
 .profile-button,
-.delete-button,
 .signout-button {
   width: 100%;
   padding: 0.75rem;
