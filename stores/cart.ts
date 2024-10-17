@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 interface Product {
   id: number;
@@ -14,7 +14,7 @@ interface CartItem {
 }
 
 export const useCartStore = defineStore(
-  "cart",
+  'cart',
   () => {
     const cart = ref<CartItem[]>([]);
     const totalPrice = computed(() => {

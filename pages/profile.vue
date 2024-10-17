@@ -1,33 +1,35 @@
 <template>
-  <div class="container">
-    <h1>Профиль пользователя</h1>
+  <nuxt-layout>
+    <div class="container">
+      <h1>Профиль пользователя</h1>
 
-    <div class="user-info">
-      <label for="username">Имя пользователя</label>
-      <input v-model="username" type="text" id="username" class="input-field" />
-      <button @click="updateUsername" class="profile-button">Обновить имя</button>
+      <div class="user-info">
+        <label for="username">Имя пользователя</label>
+        <input v-model="username" type="text" id="username" class="input-field" />
+        <button @click="updateUsername" class="profile-button">Обновить имя</button>
+      </div>
+
+      <div class="password-change">
+        <label for="current-password">Текущий пароль</label>
+        <input v-model="currentPassword" type="password" id="current-password" class="input-field" />
+
+        <label for="new-password">Новый пароль</label>
+        <input v-model="newPassword" type="password" id="new-password" class="input-field" />
+
+        <button @click="updatePassword" class="profile-button">Изменить пароль</button>
+      </div>
+
+      <div class="total-spent">
+        <p>
+          Вы потратили на покупки: <strong>{{ totalSpent }} руб.</strong>
+        </p>
+      </div>
+
+      <button @click="deleteAccount" class="delete-button">Удалить аккаунт</button>
+
+      <Button class="w-full mt-6" @click="signOut">Выйти</Button>
     </div>
-
-    <div class="password-change">
-      <label for="current-password">Текущий пароль</label>
-      <input v-model="currentPassword" type="password" id="current-password" class="input-field" />
-
-      <label for="new-password">Новый пароль</label>
-      <input v-model="newPassword" type="password" id="new-password" class="input-field" />
-
-      <button @click="updatePassword" class="profile-button">Изменить пароль</button>
-    </div>
-
-    <div class="total-spent">
-      <p>
-        Вы потратили на покупки: <strong>{{ totalSpent }} руб.</strong>
-      </p>
-    </div>
-
-    <button @click="deleteAccount" class="delete-button">Удалить аккаунт</button>
-
-    <Button class="w-full mt-6" @click="signOut">Выйти</Button>
-  </div>
+  </nuxt-layout>
 </template>
 
 <script lang="ts" setup>
