@@ -78,7 +78,7 @@ const formatPrice = (price: number) => {
   align-items: center;
   padding: 16px 32px;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--color-text);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .logo {
@@ -99,7 +99,7 @@ nav {
   }
 
   a {
-    color: var(--text-color);
+    color: var(--color-text);
     font-weight: bold;
     text-decoration: none;
     transition: color 0.3s;
@@ -112,7 +112,7 @@ nav {
   .logout-btn {
     background: none;
     border: none;
-    color: var(--text-color);
+    color: var(--color-text);
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s;
@@ -125,14 +125,14 @@ nav {
 .btn-back {
   margin-right: auto;
   background-color: transparent;
-  color: var(--text-color); // Основной цвет текста на сайте
-  border: 2px solid var(--text-color); // Цвет, который уже используется для кнопок
+  color: var(--color-text); // Основной цвет текста на сайте
+  border: 2px solid var(--color-text); // Цвет, который уже используется для кнопок
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: var(--text-color); // Инверсия
+    background-color: var(--color-text); // Инверсия
     color: var(--background-color); // Белый текст
   }
 }

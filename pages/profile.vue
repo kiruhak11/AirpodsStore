@@ -173,7 +173,7 @@ onMounted(() => {
   align-items: center;
   padding: 2rem;
   min-height: 100vh;
-  background-color: $cartBackgroundColor;
+  background-color: var(--background-color-cart);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }

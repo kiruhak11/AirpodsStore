@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
 .bar {
   width: 25px;
   height: 3px;
-  background-color: var(--text-color); /* Замените на ваш основной цвет */
+  background-color: var(--color-text); /* Замените на ваш основной цвет */
   margin: 4px;
   transition: all 0.3s ease;
 }

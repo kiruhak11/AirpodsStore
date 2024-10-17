@@ -24,7 +24,7 @@ main {
   display: inline-block;
   padding: 12px 24px;
   background-color: var(--background-color-btn);
-  color: var(--text-color);
+  color: var(--color-text);
   border-radius: 4px;
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s;

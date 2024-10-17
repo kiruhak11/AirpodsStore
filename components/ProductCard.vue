@@ -22,12 +22,12 @@ const formatPrice = (price: number) => {
 <style lang="scss" scoped>
 .product-card {
   border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
   padding: 16px;
   text-align: center;
-  background-color: white;
+  background-color: var(--background-color-card);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  transition: transform 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -36,8 +36,7 @@ const formatPrice = (price: number) => {
 
   &:hover {
     transform: translateY(-5px);
-
-    border: 2px solid var(--text-color);
+    border: 1px solid var(--color-text);
   }
 
   span {
@@ -76,7 +75,7 @@ const formatPrice = (price: number) => {
 .btn {
   padding: 8px 16px;
   background-color: var(--background-color-btn);
-  color: var(--text-color);
+  color: var(--color-text);
   border: none;
   border-radius: 4px;
   cursor: pointer;

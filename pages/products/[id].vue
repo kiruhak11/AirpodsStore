@@ -97,7 +97,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
   align-items: center;
   justify-content: space-between;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--color-text);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -163,7 +163,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
   &-add {
     padding: 12px 24px;
     background-color: var(--background-color-btn);
-    color: var(--text-color);
+    color: var(--color-text);
     border: none;
     border-radius: 4px;
     cursor: pointer;

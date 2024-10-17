@@ -85,7 +85,7 @@ main {
   align-items: center;
   text-align: center;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--color-text);
   padding: 32px;
   border-radius: 8px;
   margin-bottom: 32px;
@@ -172,7 +172,7 @@ main {
   margin: 20px;
   padding: 12px 24px;
   background-color: var(--background-color-btn);
-  color: var(--text-color);
+  color: var(--color-text);
   border: none;
   border-radius: 4px;
   cursor: pointer;

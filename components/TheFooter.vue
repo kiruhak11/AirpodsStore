@@ -9,7 +9,7 @@
   text-align: center;
   padding: 16px 32px;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--color-text);
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   display: flex;

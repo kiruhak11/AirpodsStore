@@ -95,6 +95,7 @@ onMounted(() => {
   padding: 32px;
   background-color: var(--background-color-cart);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--color-text);
   margin: 32px auto;
   max-width: 800px;
   border-radius: 8px;
@@ -145,7 +146,7 @@ onMounted(() => {
 .quantity-button {
   padding: 8px;
   background-color: var(--background-color-btn);
-  color: var(--text-color)
+  color: var(--color-text);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -208,7 +209,7 @@ onMounted(() => {
 
 .clear-button {
   background-color: var(--background-color-btn-remove);
-  color: var(--text-color);
+  color: var(--color-text);
 
   &:hover {
     background-color: var(--background-color-btn-remove-hover);
