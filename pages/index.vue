@@ -73,7 +73,7 @@ const features: Database['public']['Tables']['products']['Row'][] = products.val
 main {
   padding: 32px;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--background-color);
   margin: 32px auto;
   max-width: 1200px;
   border-radius: 8px;
@@ -84,8 +84,8 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: white;
-  color: #333;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 32px;
   border-radius: 8px;
   margin-bottom: 32px;
@@ -120,7 +120,7 @@ main {
   text-align: center;
   margin: 32px 0;
   padding: 32px;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
@@ -140,7 +140,7 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: $backgroundColorFeature;
+  background-color: var(--background-color-feature);
   padding: 16px;
   margin: 16px;
   border-radius: 8px;
@@ -171,8 +171,8 @@ main {
 .btn {
   margin: 20px;
   padding: 12px 24px;
-  background-color: $backgroundColorBtn;
-  color: #fff;
+  background-color: var(--background-color-btn);
+  color: var(--text-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -181,7 +181,7 @@ main {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: $backgroundColorBtnHover;
+    background-color: var(--background-color-btn-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   }

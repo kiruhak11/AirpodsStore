@@ -11,7 +11,7 @@
   flex-grow: 1;
 }
 body {
-  background-color: $backgroundColor;
+  background-color: var(--background-color);
 }
 .app {
   display: flex;

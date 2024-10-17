@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
 .bar {
   width: 25px;
   height: 3px;
-  background-color: $colorText; /* Замените на ваш основной цвет */
+  background-color: var(--text-color); /* Замените на ваш основной цвет */
   margin: 4px;
   transition: all 0.3s ease;
 }
@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
   position: fixed; /* Изменено на fixed для охвата всего экрана */
   top: 0;
   left: 0;
-  background-color: white; /* Полупрозрачный фон */
+  background-color: var(--background-color); /* Полупрозрачный фон */
   width: 100vw; /* Занимает всю ширину */
   height: 100vh; /* Занимает всю высоту */
   display: flex;

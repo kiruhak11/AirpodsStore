@@ -96,8 +96,8 @@ const originalPrice = computed(() => product.value.price * 1.15);
   grid-template-columns: 1fr 2fr;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  color: $colorText;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -136,7 +136,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
   width: 300px;
   border-radius: 8px;
   flex-direction: column;
-  background-color: $priceBackgroundColor;
+  background-color: var(--background-color-price);
   margin: 16px 0;
   position: relative;
 }
@@ -144,12 +144,12 @@ const originalPrice = computed(() => product.value.price * 1.15);
 .original-price {
   padding: 8px 16px;
   text-decoration: line-through;
-  color: $originalPriceColor;
+  color: var(--original-price-color);
   font-size: 16px;
 }
 
 .discounted-price {
-  color: $discountedPriceColor;
+  color: var(--discounted-price-color);
   padding: 8px 16px;
   display: inline-block;
 }
@@ -162,8 +162,8 @@ const originalPrice = computed(() => product.value.price * 1.15);
 .btn {
   &-add {
     padding: 12px 24px;
-    background-color: $backgroundColorBtn;
-    color: white;
+    background-color: var(--background-color-btn);
+    color: var(--text-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -173,7 +173,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
     width: 100%; // Ширина на 100%
 
     &:hover {
-      background-color: $backgroundColorBtnHover;
+      background-color: var(--background-color-btn-hover);
       transform: translateY(-2px);
       box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     }
@@ -181,7 +181,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 
   &-cart {
     padding: 12px 24px;
-    background-color: $backgroundColorBtn;
+    background-color: var(--background-color-btn);
     color: white;
     border: none;
     border-radius: 4px;
@@ -205,7 +205,7 @@ const originalPrice = computed(() => product.value.price * 1.15);
 
   .quantity-button {
     padding: 8px;
-    background-color: $backgroundColorBtn;
+    background-color: var(--background-color-btn);
     color: white;
     border: none;
     border-radius: 4px;
@@ -213,14 +213,14 @@ const originalPrice = computed(() => product.value.price * 1.15);
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: $backgroundColorBtnHover;
+      background-color: var(--background-color-btn-hover);
     }
 
     &_red {
-      background-color: $backgroundColorBtnRemove;
+      background-color: var(--background-color-btn-remove);
 
       &:hover {
-        background-color: $backgroundColorBtnRemoveHover;
+        background-color: var(--background-color-btn-remove-hover);
       }
     }
   }
