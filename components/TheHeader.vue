@@ -1,10 +1,12 @@
 <template>
   <header class="header">
-    <div class="logo">
+    <Button v-if="isProductPage" class="btn-back" @click="$router.back()">Назад</Button>
+    <div v-if="!isProductPage" class="logo">
       <nuxt-link to="/">
         <h1>AirPods Store</h1>
       </nuxt-link>
     </div>
+
     <nav v-if="!device.isMobile">
       <ul>
         <li><nuxt-link to="/">Главная</nuxt-link></li>
@@ -26,7 +28,10 @@
 const cartStore = useCartStore();
 const device = useDevice();
 const user = useSupabaseUser();
-
+const route = useRoute();
+const isProductPage = computed(() => {
+  return route.path.match(/^\/products\/\d+$/) !== null; // Проверка на наличие числового id в URL
+});
 const formatPrice = (price: number) => {
   return price.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
@@ -54,7 +59,6 @@ const formatPrice = (price: number) => {
   color: $colorText;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .logo {
   h1 {
     margin: 0;
@@ -94,6 +98,20 @@ nav {
     &:hover {
       color: $backgroundColorBtn;
     }
+  }
+}
+.btn-back {
+  margin-right: auto;
+  background-color: transparent;
+  color: $colorText; // Основной цвет текста на сайте
+  border: 2px solid $colorText; // Цвет, который уже используется для кнопок
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $colorText; // Инверсия
+    color: white; // Белый текст
   }
 }
 </style>

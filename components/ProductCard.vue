@@ -36,6 +36,8 @@ const formatPrice = (price: number) => {
 
   &:hover {
     transform: translateY(-5px);
+
+    border: 2px solid black;
   }
 
   span {
