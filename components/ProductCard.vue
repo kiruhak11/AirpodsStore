@@ -22,10 +22,11 @@ const formatPrice = (price: number) => {
 <style lang="scss" scoped>
 .product-card {
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.87, 0, 0.36, 1.58);
   padding: 16px;
   text-align: center;
   background-color: var(--background-color-card);
+  color: var(--color-text);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   display: flex;
@@ -47,7 +48,7 @@ const formatPrice = (price: number) => {
 
   p {
     font-size: 16px;
-    color: #666;
+    color: var(--price-color);
   }
 
   @media (max-width: 768px) {
@@ -66,7 +67,7 @@ const formatPrice = (price: number) => {
 .product-image {
   width: 100%;
   height: 150px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;

@@ -195,7 +195,7 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 16px;
-  color: #333;
+  color: var(--color-text);
 }
 
 .input-field {

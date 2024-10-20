@@ -18,6 +18,9 @@
         <li v-if="user">
           <nuxt-link to="/profile" class="logout-btn">{{ user.user_metadata.username }}</nuxt-link>
         </li>
+        <li v-else>
+          <nuxt-link to="/login" class="logout-btn">Login</nuxt-link>
+        </li>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline">
@@ -93,6 +96,7 @@ nav {
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
   }
   li {
     margin: 0 16px;
