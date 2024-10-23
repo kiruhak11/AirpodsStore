@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "login": "supabase login",
-    "generate:types": "supabase gen types typescript --project-id moopmsouryuirjeuykde > types/database.types.ts"
+    "generate:types": "supabase gen types typescript --project-id moopmsouryuirjeuykde > types/database.types.ts",
+    "deploy": "scp -r .output/* j53779400@c64869e17b97.hosting.myjino.ru:~/domains/airpodsstore.kiruhak11.ru/ && ssh j53779400@c64869e17b97.hosting.myjino.ru \"mkdir -p ~/domains/airpodsstore.kiruhak11.ru/tmp && touch ~/domains/airpodsstore.kiruhak11.ru/tmp/restart.txt\""
   },
   "dependencies": {
     "@morev/vue-transitions": "^3.0.2",

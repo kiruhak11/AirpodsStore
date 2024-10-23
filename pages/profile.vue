@@ -153,7 +153,7 @@ const deleteAccount = async () => {
 const signOut = async () => {
   try {
     await client.auth.signOut();
-    router.push('/login');
+    router.push('/');
   } catch (err) {
     console.error('Ошибка при попытке выйти из аккаунта:', err);
   }
