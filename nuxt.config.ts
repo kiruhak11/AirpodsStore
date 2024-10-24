@@ -10,10 +10,10 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     'nuxt-swiper',
-    '@nuxtjs/device',
     '@nuxtjs/supabase',
     'shadcn-nuxt',
     '@nuxtjs/tailwindcss',
+    '@prisma/nuxt',
   ],
   colorMode: {
     preference: 'system', // default value of $colorMode.preference
