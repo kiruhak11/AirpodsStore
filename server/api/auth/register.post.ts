@@ -65,11 +65,14 @@ export default defineEventHandler(async (event) => {
 
   // Можно вернуть что-то вроде JWT токена для сессии, но пока вернем нового пользователя
   return {
-    access_token: token,
-    user: {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
+    message: 'Успех!',
+    data: {
+      access_token: token,
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      },
     },
   };
 });

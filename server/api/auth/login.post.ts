@@ -47,11 +47,14 @@ export default defineEventHandler(async (event) => {
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
 
   return {
-    token,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+    message: 'Успех!',
+    data: {
+      access_token: token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     },
   };
 });

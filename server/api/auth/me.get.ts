@@ -20,9 +20,12 @@ export default defineEventHandler(async (event) => {
     }
 
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      message: 'Успех!',
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     };
   } catch (error) {
     throw createError({ statusCode: 401, statusMessage: 'Invalid token' });
