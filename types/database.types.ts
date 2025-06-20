@@ -76,7 +76,7 @@ export type Database = {
           created_at: string;
           description: string;
           id: number;
-          image: string;
+          image_url: string;
           name: string;
           price: number;
         };
@@ -84,7 +84,7 @@ export type Database = {
           created_at?: string;
           description: string;
           id?: number;
-          image: string;
+          image_url: string;
           name: string;
           price: number;
         };
@@ -92,7 +92,7 @@ export type Database = {
           created_at?: string;
           description?: string;
           id?: number;
-          image?: string;
+          image_url?: string;
           name?: string;
           price?: number;
         };

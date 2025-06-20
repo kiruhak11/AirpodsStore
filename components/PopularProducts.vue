@@ -14,7 +14,7 @@ import type { Database } from '~/types/database.types';
 const client = useSupabaseClient<Database>();
 
 const { data: products } = await useAsyncData('products', async () => {
-  const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
+  const { data } = await client.from('products').select('created_at, description, id, image_url, name, price').order('created_at');
 
   return data ?? [];
 });

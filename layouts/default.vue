@@ -1,75 +1,74 @@
 <template>
-  <div class="app">
-    <the-header />
-    <div class="content"><slot></slot></div>
-    <button :class="['button-go-top', { 'button-go-top_active': isActive }]" @click="goTop">
-      <IconGoTop />
-    </button>
-    <the-footer />
+  <div class="apple-layout">
+    <header class="apple-header">
+      <NuxtLink to="/" class="apple-logo"> AirPods Store</NuxtLink>
+      <nav class="apple-nav">
+        <NuxtLink to="/products">Магазин</NuxtLink>
+        <NuxtLink to="/cart">Корзина</NuxtLink>
+        <NuxtLink to="/contact">О нас</NuxtLink>
+        <NuxtLink to="/admin">Админка</NuxtLink>
+      </nav>
+    </header>
+    <main class="apple-main">
+      <slot />
+    </main>
+    <footer class="apple-footer">
+      <div>© 2024 AirPods Store. Inspired by apple.com</div>
+    </footer>
   </div>
 </template>
 
-<script setup lang="ts">
-const goTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-const isActive = ref<boolean>(false);
-const scrollListener = () => {
-  if (window.scrollY >= 400) {
-    isActive.value = true;
-    return;
-  }
-  isActive.value = false;
-};
-onMounted(() => {
-  window.addEventListener('scroll', scrollListener);
-});
-onUnmounted(() => {
-  window.removeEventListener('scroll', scrollListener);
-});
-</script>
-
 <style scoped lang="scss">
-.content {
-  flex-grow: 1;
-}
-body {
-  background-color: var(--background-color);
-}
-.app {
+.apple-layout {
+  min-height: 100vh;
   display: flex;
-  position: relative;
   flex-direction: column;
-  min-height: 100dvh;
+  background: #fff;
 }
-.button-go-top {
-  background-color: var(--color-text);
-  color: var(--background-color);
-  padding: 12px;
-  border-radius: 100%;
-  position: fixed;
-  right: 32px;
-  bottom: 32px;
-  z-index: 2;
-  opacity: 0;
-  cursor: pointer;
-  visibility: hidden;
-  border: 1px solid var(--color-text);
-  transition: all 0.3s cubic-bezier(0.27, 0.09, 0.42, 1.53);
-
-  &_active {
-    opacity: 1;
-    visibility: visible;
+.apple-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  font-size: 20px;
+  font-weight: 500;
+}
+.apple-logo {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #111;
+  text-decoration: none;
+}
+.apple-nav {
+  display: flex;
+  gap: 32px;
+  a {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    &:hover {
+      color: #0071e3;
+    }
   }
-  &:hover {
-    background-color: var(--background-color-hover);
-    color: var(--color-text-hover);
-    border: 1px solid var(--color-text);
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
+}
+.apple-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 16px 32px 16px;
+  background: #fff;
+}
+.apple-footer {
+  text-align: center;
+  padding: 32px 0 16px 0;
+  color: #888;
+  font-size: 16px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
 }
 </style>

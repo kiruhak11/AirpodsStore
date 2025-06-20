@@ -1,210 +1,94 @@
 <template>
-  <NuxtLayout>
-    <main>
-      <div class="hero">
-        <h2>Welcome to AirPods Store</h2>
-        <p>Discover the best AirPods for you.</p>
-        <div class="features">
-          <div v-for="feature in features" :key="feature.name" class="feature">
-            <img :src="feature.image" :alt="feature.name" />
-            <h3>{{ feature.name }}</h3>
-            <p>{{ feature.description }}</p>
-          </div>
-        </div>
-        <nuxt-link to="/products" class="btn">Shop Now</nuxt-link>
+  <NuxtLayout name="default">
+    <section class="hero">
+      <img src="/images/airpods-pro.png" alt="AirPods Pro" class="hero-img" />
+      <h1 class="hero-title">AirPods Pro</h1>
+      <p class="hero-desc">Погрузитесь в звук нового поколения. Ощутите магию Apple в каждом моменте.</p>
+      <NuxtLink to="/products" class="hero-btn">В магазин</NuxtLink>
+    </section>
+    <section class="features">
+      <div class="feature">
+        <h2>Оригинальные товары</h2>
+        <p>Только официальная продукция Apple с гарантией.</p>
       </div>
-
-      <section class="popular-products-section">
-        <h2>Популярные товары</h2>
-        <div class="product-carousel">
-          <div class="product-list">
-            <Swiper
-              :modules="[SwiperNavigation, SwiperMousewheel, SwiperPagination]"
-              :mousewheel="{ invert: false, forceToAxis: true }"
-              :slides-per-view="$device.isMobile ? 2 : 4"
-              :slides-per-group="$device.isMobile ? 2 : 4"
-              :space-between="20"
-              :navigation="{
-                prevEl: '.arrow_prev_slots',
-                nextEl: '.arrow_next_slots',
-              }"
-              :watch-slides-progress="true"
-              :pagination="{
-                clickable: true,
-                el: '.custom-pagination_high-tech',
-              }"
-              class="product-list__swiper"
-            >
-              <SwiperSlide v-for="product in popularProducts" :key="product.id">
-                <ProductCard :product="product" />
-              </SwiperSlide>
-            </Swiper>
-          </div>
-          <div class="custom-pagination custom-pagination_high-tech"></div>
-        </div>
-      </section>
-
-      <section class="about-us">
-        <h2>О нас</h2>
-        <p>
-          Мы предлагаем широкий ассортимент высококачественной продукции, которая удовлетворит все ваши потребности. Наша миссия -
-          обеспечить лучший опыт покупок для наших клиентов.
-        </p>
-      </section>
-    </main>
+      <div class="feature">
+        <h2>Быстрая доставка</h2>
+        <p>Доставим ваш заказ в кратчайшие сроки по всей России.</p>
+      </div>
+      <div class="feature">
+        <h2>Поддержка 24/7</h2>
+        <p>Всегда готовы помочь вам с любым вопросом.</p>
+      </div>
+    </section>
   </NuxtLayout>
 </template>
 
-<script lang="ts" setup>
-import type { Database } from '~/types/database.types';
-const client = useSupabaseClient<Database>();
-
-const { data: products } = await useAsyncData('products', async () => {
-  const { data } = await client.from('products').select('created_at, description, id, image, name, price').order('created_at');
-
-  return data ?? [];
-});
-
-const popularProducts: Database['public']['Tables']['products']['Row'][] = products.value?.slice(0, 8) ?? [];
-const features: Database['public']['Tables']['products']['Row'][] = products.value?.slice(0, 3) ?? [];
-</script>
-
-<style lang="scss" scoped>
-main {
-  padding: 32px;
-  text-align: center;
-  background-color: var(--background-color);
-  margin: 32px auto;
-  max-width: 1200px;
-  border-radius: 8px;
-}
-
+<style scoped>
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  background-color: var(--background-color);
-  color: var(--color-text);
-  padding: 32px;
-  border-radius: 8px;
+  justify-content: center;
+  padding: 64px 0 48px 0;
+  background: #fff;
+}
+.hero-img {
+  width: 340px;
+  max-width: 90vw;
   margin-bottom: 32px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.08));
 }
-
-.popular-products-section {
-  margin: 32px 0;
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111;
 }
-
-.product-carousel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px 0;
-}
-
-.product-list {
-  overflow: hidden;
-
-  &__swiper {
-    width: 100%;
-    padding: 10px 0;
-
-    & .swiper-slide {
-      height: auto;
-    }
-  }
-}
-
-.about-us {
+.hero-desc {
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 32px;
+  max-width: 600px;
   text-align: center;
-  margin: 32px 0;
-  padding: 32px;
-  background-color: var(--background-color);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  p {
-    text-wrap: balance;
-  }
 }
-
+.hero-btn {
+  background: #0071e3;
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 16px 40px;
+  border-radius: 32px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.hero-btn:hover {
+  background: #005bb5;
+}
 .features {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 48px;
+  margin: 64px 0 0 0;
   flex-wrap: wrap;
 }
-
 .feature {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background-color-feature);
-  padding: 16px;
-  margin: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #fafafa;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 32px 40px;
+  min-width: 260px;
+  max-width: 340px;
   text-align: center;
-  max-width: 300px;
-
-  img {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    aspect-ratio: 1;
-    object-fit: contain;
-  }
-
-  h3 {
-    font-size: 24px;
-    margin-bottom: 8px;
-  }
-
-  p {
-    font-size: 16px;
-    color: #666;
-    text-wrap: balance;
-  }
 }
-
-.btn {
-  margin: 20px;
-  padding: 12px 24px;
-  background-color: var(--background-color-btn);
-  color: var(--color-text);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: var(--background-color-btn-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-  }
+.feature h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #222;
 }
-
-/* Media Queries for Mobile Responsiveness */
-@media (max-width: 768px) {
-  .features {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .feature {
-    max-width: 100%;
-    margin: 8px 0;
-  }
-
-  .hero {
-    padding: 16px;
-  }
-
-  .btn {
-    width: 100%;
-  }
+.feature p {
+  color: #666;
+  font-size: 1.1rem;
 }
 </style>

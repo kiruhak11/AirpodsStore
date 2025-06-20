@@ -1,114 +1,134 @@
 <template>
   <NuxtLayout name="default">
-    <main>
-      <div class="container">
-        <div class="search-container">
-          <div class="relative w-full max-w-sm items-center">
-            <Input id="search" v-model="searchQuery" type="text" placeholder="Поиск продуктов..." class="pl-10" />
-            <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-              <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
-            </span>
-          </div>
-          <Select v-model="selected">
-            <SelectTrigger class="w-[180px]">
-              <SelectValue placeholder="Сортировать" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem v-for="option in options" :key="option.id" :value="option.id">{{ option.label }}</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <div class="product-list">
-          <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" @add-to-cart="addToCart" />
+    <section class="catalog">
+      <h1 class="catalog-title">Каталог AirPods</h1>
+      <div class="catalog-grid">
+        <div v-for="product in products" :key="product.id" class="product-card">
+          <NuxtLink :to="`/products/${product.id}`" class="product-link">
+            <img :src="product.image_url" :alt="product.name" class="product-img" />
+            <div class="product-info">
+              <h2 class="product-name">{{ product.name }}</h2>
+              <p class="product-desc">{{ product.description }}</p>
+              <div class="product-bottom">
+                <span class="product-price">{{ product.price.toLocaleString('ru-RU') }} ₽</span>
+              </div>
+            </div>
+          </NuxtLink>
+          <button class="add-btn" @click="addToCart(product)">В корзину</button>
         </div>
       </div>
-    </main>
+    </section>
   </NuxtLayout>
 </template>
 
-<script lang="ts" setup>
-import { MagnifyingGlassIcon } from '@radix-icons/vue';
-// @ts-ignore
-import debounce from 'lodash/debounce';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+<script setup lang="ts">
+// import { ref } from 'vue';
+import { useCartStore } from '@/stores/cart';
 import type { Database } from '~/types/database.types';
-
 const client = useSupabaseClient<Database>();
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
-
-const options = ref([
-  {
-    id: 'asc',
-    label: 'По возрастанию цены',
-  },
-  {
-    id: 'desc',
-    label: 'По убыванию цены',
-  },
-]);
-
-const selected = ref<string>(options.value[0].id);
+const { data: products } = await useAsyncData('products', async () => {
+  const { data } = await client.from('products').select('id, name, price, image_url, description').order('created_at');
+  return data ?? [];
+});
 
 const cartStore = useCartStore();
-const searchQuery = ref('');
-
-const { data: filteredProducts, refresh: refreshProducts } = await useAsyncData(
-  'products',
-  async () => {
-    const { data } = await client
-      .from('products')
-      .select('created_at, description, id, image, name, price')
-      .ilike('name', `%${searchQuery.value}%`)
-      .order('price', { ascending: selected.value === 'asc' });
-
-    return data ?? [];
-  },
-  {
-    watch: [selected],
-  },
-);
-
-const addToCart = (product: Product) => {
+const addToCart = (product: any) => {
   cartStore.addToCart(product);
-  alert(`${product.name} добавлен в корзину!`);
 };
-
-const debouncedSearch = debounce(() => {
-  refreshProducts();
-}, 500);
-
-watch(
-  () => searchQuery.value,
-  () => debouncedSearch(),
-);
 </script>
 
 <style scoped>
-.search-container {
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  gap: 14px;
-  padding-top: 10px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
+.catalog {
+  padding: 32px 0 0;
 }
-
-.product-list {
+.catalog-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  color: #111;
+}
+.catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Адаптивное количество колонок */
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.product-card {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 24px 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.product-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 113, 227, 0.1);
+  transform: translateY(-4px) scale(1.02);
+}
+.product-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08));
+}
+.product-info {
+  width: 100%;
+  text-align: center;
+}
+.product-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #222;
+}
+.product-desc {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 18px;
+  min-height: 40px;
+}
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  padding-bottom: 24px;
+  margin-top: 12px;
+}
+.product-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0071e3;
+}
+.product-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+.add-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2;
+  background: #0071e3;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-btn:hover {
+  background: #005bb5;
 }
 </style>

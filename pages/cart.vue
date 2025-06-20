@@ -33,12 +33,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useSupabaseClient } from '#imports';
+
 const cartStore = useCartStore();
 const router = useRouter();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const client = useSupabaseClient();
 const cart = computed(() => cartStore.cart);
 const totalPrice = computed(() => cartStore.totalPrice);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const user = useSupabaseUser();
 const removeFromCart = (productId: number) => {
   cartStore.removeFromCart(productId);
@@ -65,20 +69,36 @@ const formatPrice = (price: number) => {
 
 const checkout = async () => {
   try {
-    const userId = user.value?.id;
-    const total = totalPrice.value;
+    // Собираем данные заказа
+    const orderData = {
+      name: '123', // Можно добавить форму для имени
+      phone: '123', // Можно добавить форму для телефона
+      address: '123', // Можно добавить форму для адреса
+      email: '123', // Можно добавить форму для email
+      cart: cart.value.map((item) => ({
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+      })),
+    };
 
-    const { error } = await client.from('orders').insert([{ user_id: userId, total_price: total }]);
+    // Отправляем заказ на сервер
+    const res = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData),
+    });
+    const data = await res.json();
 
-    if (error) {
-      throw new Error(error.message);
+    if (data.status !== 'ok') {
+      alert('Ошибка оформления заказа: ' + (data.detail ? JSON.stringify(data.detail) : data.message));
+      return;
     }
 
     clearCart();
     alert('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.');
     router.push('/products');
   } catch (err) {
-    console.error('Ошибка при оформлении заказа:', err);
     alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
   }
 };

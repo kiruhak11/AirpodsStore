@@ -1,6 +1,6 @@
 <template>
   <nuxt-link class="product-card" :to="`/products/${product.id}`">
-    <img :src="product.image" alt="Product Image" class="product-image" />
+    <img :src="product.image_url" alt="Product Image" class="product-image" />
     <span>{{ product.name }}</span>
     <p>{{ formatPrice(product.price) }} руб.</p>
   </nuxt-link>
