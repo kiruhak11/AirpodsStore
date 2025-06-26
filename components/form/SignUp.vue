@@ -47,37 +47,6 @@ const signUpForm = useForm({
 });
 
 const signUp = async (values: Record<string, any>) => {
-  const client = useSupabaseClient();
-
-  try {
-    const { error } = await client.auth.signUp({
-      email: values.email,
-      password: values.password,
-      options: {
-        data: {
-          username: values.username,
-        },
-      },
-    });
-
-    if (error) {
-      toast({
-        title: 'Sign up error',
-        description: error.message,
-      });
-    } else {
-      toast({
-        title: 'Success!',
-        description: 'You are is logged in!',
-      });
-
-      return navigateTo('/');
-    }
-  } catch (err) {
-    toast({
-      title: 'Connection error',
-      description: `${err}`,
-    });
-  }
+  // ... existing code ...
 };
 </script>

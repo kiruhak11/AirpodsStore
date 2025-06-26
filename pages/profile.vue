@@ -33,11 +33,9 @@
 </template>
 
 <script lang="ts" setup>
-const client = useSupabaseClient();
-const user = useSupabaseUser();
 const router = useRouter();
 
-const username = ref<string>(user?.value?.user_metadata?.username || '');
+const username = ref<string>('');
 const currentPassword = ref<string>('');
 const newPassword = ref<string>('');
 const totalSpent = ref<number>(0);

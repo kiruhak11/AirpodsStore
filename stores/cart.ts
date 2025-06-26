@@ -1,69 +1,130 @@
 import { defineStore } from 'pinia';
+import type { Product } from '~/composables/useProducts'
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
+export interface CartItem {
+  id: string
+  productId: string
+  quantity: number
+  product: Product
+  addedAt: Date
 }
 
-interface CartItem {
-  product: Product;
-  quantity: number;
+export interface CartState {
+  items: CartItem[]
+  isOpen: boolean
 }
 
-export const useCartStore = defineStore(
-  'cart',
-  () => {
-    const cart = ref<CartItem[]>([]);
-    const totalPrice = computed(() => {
-      return cart.value.reduce((total, item) => total + item.product.price * item.quantity, 0);
-    });
+export const useCartStore = defineStore('cart', () => {
+  // Состояние
+  const items = ref<CartItem[]>([])
+  const isOpen = ref(false)
 
-    const addToCart = (product: Product) => {
-      const existingItem = cart.value.find((item) => item.product.id === product.id);
-      if (existingItem) {
-        existingItem.quantity++;
+  // Computed свойства
+  const totalItems = computed(() => 
+    items.value.reduce((sum, item) => sum + item.quantity, 0)
+  )
+
+  const subtotal = computed(() => 
+    items.value.reduce((sum, item) => {
+      const price = item.product.price
+      return sum + (price * item.quantity)
+    }, 0)
+  )
+
+  const total = computed(() => {
+    // Здесь можно добавить логику скидок и доставки
+    return subtotal.value
+  })
+
+  const isEmpty = computed(() => items.value.length === 0)
+
+  // Методы
+  const addItem = (item: { productId: string; quantity: number; product: Product }) => {
+    const existingItem = items.value.find(i => i.productId === item.productId)
+    
+    if (existingItem) {
+      existingItem.quantity += item.quantity
+    } else {
+      items.value.push({
+        id: `${item.productId}-${Date.now()}`,
+        productId: item.productId,
+        quantity: item.quantity,
+        product: item.product,
+        addedAt: new Date()
+      })
+    }
+  }
+
+  const updateQuantity = (itemId: string, quantity: number) => {
+    const item = items.value.find(i => i.id === itemId)
+    if (item) {
+      if (quantity <= 0) {
+        removeItem(itemId)
       } else {
-        cart.value.push({ product, quantity: 1 });
+        item.quantity = quantity
       }
-    };
+    }
+  }
 
-    const removeFromCart = (productId: number) => {
-      const itemIndex = cart.value.findIndex((item) => item.product.id === productId);
-      if (itemIndex !== -1) {
-        if (cart.value[itemIndex].quantity > 1) {
-          cart.value[itemIndex].quantity = 0;
-          cart.value.splice(itemIndex, 1);
-        } else {
-          cart.value.splice(itemIndex, 1);
-        }
-      }
-    };
+  const removeItem = (itemId: string) => {
+    const index = items.value.findIndex(i => i.id === itemId)
+    if (index > -1) {
+      items.value.splice(index, 1)
+    }
+  }
 
-    const clearCart = () => {
-      cart.value = [];
-    };
+  const clearCart = () => {
+    items.value = []
+  }
 
-    const increaseQuantity = (productId: number) => {
-      const item = cart.value.find((item) => item.product.id === productId);
-      if (item) {
-        item.quantity++;
-      }
-    };
+  const openCart = () => {
+    isOpen.value = true
+  }
 
-    const decreaseQuantity = (productId: number) => {
-      const item = cart.value.find((item) => item.product.id === productId);
-      if (item && item.quantity > 1) {
-        item.quantity--;
-      } else if (item) {
-        const itemIndex = cart.value.findIndex((item) => item.product.id === productId);
-        cart.value.splice(itemIndex, 1);
-      }
-    };
+  const closeCart = () => {
+    isOpen.value = false
+  }
 
-    return { cart, totalPrice, addToCart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity };
-  },
-  { persist: true },
-);
+  const toggleCart = () => {
+    isOpen.value = !isOpen.value
+  }
+
+  // Проверка наличия товара в корзине
+  const isInCart = (productId: string) => {
+    return items.value.some(item => item.productId === productId)
+  }
+
+  // Получение количества товара в корзине
+  const getItemQuantity = (productId: string) => {
+    const item = items.value.find(i => i.productId === productId)
+    return item ? item.quantity : 0
+  }
+
+  return {
+    // Состояние
+    items: readonly(items),
+    isOpen: readonly(isOpen),
+    
+    // Computed
+    totalItems,
+    subtotal,
+    total,
+    isEmpty,
+    
+    // Методы
+    addItem,
+    updateQuantity,
+    removeItem,
+    clearCart,
+    openCart,
+    closeCart,
+    toggleCart,
+    isInCart,
+    getItemQuantity
+  }
+}, {
+  persist: {
+    storage: persistedState.localStorage,
+    paths: ['items']
+  }
+})

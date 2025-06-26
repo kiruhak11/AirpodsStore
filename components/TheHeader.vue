@@ -3,7 +3,7 @@
     <Button v-if="isProductPage" class="btn-back" @click="$router.back()">Назад</Button>
     <div v-if="!isProductPage" class="logo">
       <nuxt-link to="/">
-        <h1>AirPods Store</h1>
+        <h1>LexidShop</h1>
       </nuxt-link>
     </div>
 
@@ -12,34 +12,18 @@
         <li><nuxt-link to="/">Главная</nuxt-link></li>
         <li><nuxt-link to="/products">Каталог</nuxt-link></li>
         <li>
-          <nuxt-link to="/cart">Корзина ({{ formatPrice(cartStore.totalPrice) }} руб.)</nuxt-link>
+          <nuxt-link to="/cart">Корзина ({{ formatPrice(cartStore.total) }} руб.)</nuxt-link>
         </li>
         <li><nuxt-link to="/contact">О нас</nuxt-link></li>
         <li v-if="user">
-          <nuxt-link to="/profile" class="logout-btn">{{ user.user_metadata.username }}</nuxt-link>
+          <nuxt-link to="/profile" class="logout-btn">{{ user.value.user_metadata.username }}</nuxt-link>
         </li>
         <li v-else>
           <nuxt-link to="/login" class="logout-btn">Login</nuxt-link>
         </li>
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Button variant="outline">
-              <Icon icon="radix-icons:moon" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Icon
-                icon="radix-icons:sun"
-                class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-              />
-              <span class="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem @click="colorMode.preference = 'light'"> Light </DropdownMenuItem>
-            <DropdownMenuItem @click="colorMode.preference = 'dark'"> Dark </DropdownMenuItem>
-            <DropdownMenuItem @click="colorMode.preference = 'system'"> System </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </ul>
     </nav>
+    <ThemeSwitcher class="ml-6" />
     <HamburgerMenu v-if="device.isMobile" />
   </header>
 </template>
@@ -48,12 +32,15 @@
 import { Icon } from '@iconify/vue';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const colorMode = useColorMode();
 const cartStore = useCartStore();
 const device = useDevice();
-const user = useSupabaseUser();
 const route = useRoute();
+const authStore = useAuthStore()
+const user = computed(() => authStore.user)
 const isProductPage = computed(() => {
   return route.path.match(/^\/products\/\d+$/) !== null; // Проверка на наличие числового id в URL
 });
@@ -63,12 +50,6 @@ const formatPrice = (price: number) => {
     maximumFractionDigits: 2,
   });
 };
-
-// // Функция выхода
-// const logout = async () => {
-//   await supabase.auth.signOut();
-//   useRouter().push('/login');
-// };
 </script>
 
 <style lang="scss" scoped>

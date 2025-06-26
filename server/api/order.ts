@@ -1,57 +1,47 @@
-import { defineEventHandler, readBody } from 'h3';
-import { $fetch } from 'ofetch';
+import { prisma } from '../utils/prisma'
+import { defineEventHandler, readBody, getHeader, createError } from 'h3'
+import jwt from 'jsonwebtoken'
 
-const TELEGRAM_BOT_TOKEN = '7813684314:AAGkfwukYo4dUIAac2Sh2sz0xfGG78rZHlA';
-const TELEGRAM_CHAT_IDS = ['641028028', '502773482'];
+const JWT_SECRET = process.env.JWT_SECRET || 'devsecret'
 
 export default defineEventHandler(async (event) => {
-  if (event.method !== 'POST') {
-    return { status: 'error', message: 'Method not allowed' };
+  if (event.method === 'POST') {
+    const body = await readBody(event)
+    const order = await prisma.order.create({
+      data: {
+        userId: body.userId,
+        totalAmount: body.totalAmount,
+        status: 'pending',
+        deliveryAddress: body.deliveryAddress,
+        items: {
+          create: body.items.map((item: any) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      },
+      include: { items: true },
+    })
+    return order
   }
-  const body = await readBody(event);
-  const { name, phone, address, email, cart } = body;
-
-  if (!name || !phone || !address || !email || !cart || !Array.isArray(cart)) {
-    return { status: 'error', message: 'Некорректные данные заказа' };
-  }
-
-  const productsList = cart.map((item: any) => `• ${item.name} x${item.quantity} — ${item.price}₽`).join('\n');
-  const total = cart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-
-  const text = `🛒 Новый заказ с сайта AirPods Store\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📧 Email: ${email}\n🏠 Адрес: ${address}\n\nТовары:\n${productsList}\n\n💰 Сумма: ${total}₽`;
-
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-  try {
-    const results = [];
-    // eslint-disable-next-line camelcase
-    for (const chat_id of TELEGRAM_CHAT_IDS) {
-      const payload = {
-        // eslint-disable-next-line camelcase
-        chat_id,
-        text,
-        parse_mode: 'Markdown',
-      };
-      try {
-        const response = await $fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        // eslint-disable-next-line camelcase
-        results.push({ chat_id, ok: true, response });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Ошибка отправки в Telegram:', err);
-        // eslint-disable-next-line camelcase
-        results.push({ chat_id, ok: false, error: String(err) });
-      }
+  if (event.method === 'GET') {
+    const auth = getHeader(event, 'authorization')
+    if (!auth) throw createError({ statusCode: 401, statusMessage: 'No token' })
+    const token = auth.replace('Bearer ', '')
+    let payload
+    try {
+      payload = jwt.verify(token, JWT_SECRET)
+    } catch {
+      throw createError({ statusCode: 401, statusMessage: 'Invalid token' })
     }
-    const allOk = results.every((r) => r.ok);
-    return { status: allOk ? 'ok' : 'error', detail: results };
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('Ошибка отправки в Telegram:', e);
-    return { status: 'error', message: 'Ошибка сервера', error: String(e) };
+    const role = (payload as jwt.JwtPayload)['role']
+    if (role !== 'admin') throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
+    const orders = await prisma.order.findMany({
+      include: { items: { include: { product: true } }, user: true },
+      orderBy: { createdAt: 'desc' },
+    })
+    return orders
   }
-});
+  throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
+})

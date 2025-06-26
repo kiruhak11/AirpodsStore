@@ -16,6 +16,19 @@
   --discounted-price-color: #ff5722;
   --background-color-price: #fff3e0;
   --price-color: #666;
+  --color-bg: #f8f9fb;
+  --color-bg-secondary: #fff;
+  --color-text-secondary: #5a5a5a;
+  --color-primary: #6c47ff;
+  --color-primary-hover: #4d2ed6;
+  --color-accent: #38f9d7;
+  --color-border: #e5e7eb;
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e42;
+  --color-card: #fff;
+  --color-shadow: 0 2px 8px rgba(80, 80, 120, 0.06);
+  --transition-main: 0.25s cubic-bezier(.4,0,.2,1);
 }
 
 .dark {
@@ -36,4 +49,18 @@
   --discounted-price-color: #ff5722; // Можно оставить прежним
   --background-color-prices: #3c3c3c; // Темный фон для цен
   --price-color: #b1b1b1;
+  --color-bg: #181a1b;
+  --color-bg-secondary: #23272f;
+  --color-text: #f3f4f6;
+  --color-text-secondary: #b0b0b0;
+  --color-primary: #a78bfa;
+  --color-primary-hover: #6c47ff;
+  --color-accent: #38f9d7;
+  --color-border: #23272f;
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e42;
+  --color-card: #23272f;
+  --color-shadow: 0 2px 8px rgba(30, 30, 60, 0.18);
+  --transition-main: 0.25s cubic-bezier(.4,0,.2,1);
 }

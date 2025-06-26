@@ -3,6 +3,22 @@ import { defineNuxtConfig } from 'nuxt/config';
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  css: ["@/assets/styles/global/index.scss"],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // перед каждым scss-файлом (включая <style> в компонентах)
+          // будут автоматически подключаться эти модули
+          additionalData: `
+            @use "@/assets/styles/collection/functions" as *;
+            @use "@/assets/styles/collection/colors" as *;
+            @use "@/assets/styles/collection/fonts" as *;
+          `,
+        },
+      },
+    },
+  },
   modules: [
     '@nuxtjs/color-mode',
     '@nuxt/ui',
@@ -11,9 +27,12 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     'nuxt-swiper',
     '@nuxtjs/device',
-    '@nuxtjs/supabase',
     'shadcn-nuxt',
     '@nuxtjs/tailwindcss',
+    '@nuxt/image',
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap',
   ],
   colorMode: {
     preference: 'system', // default value of $colorMode.preference
@@ -35,20 +54,12 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      sb_url: process.env.SUPABASE_URL ?? '',
-      sb_key: process.env.SUPABASE_KEY ?? '',
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY ?? '',
+      paypalClientId: process.env.PAYPAL_CLIENT_ID ?? '',
     },
-  },
-  supabase: {
-    url: process.env.SUPABASE_URL ?? '',
-    key: process.env.SUPABASE_KEY ?? '',
-    redirectOptions: {
-      login: '/',
-      callback: '/',
-      include: undefined,
-      exclude: ['/', '/contact', '/products', '/login', '/products/[\\d]+'],
-      cookieRedirect: false,
-    },
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
+    paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET ?? '',
+    databaseUrl: process.env.DATABASE_URL ?? '',
   },
 
   shadcn: {
@@ -63,13 +74,36 @@ export default defineNuxtConfig({
     componentDir: './components/ui',
   },
 
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "@/assets/styles/collection/index.scss";',
-        },
-      },
+  googleFonts: {
+    families: {
+      'Inter': [300, 400, 500, 600, 700],
+      'Poppins': [300, 400, 500, 600, 700],
     },
+    display: 'swap',
   },
+
+  app: {
+    head: {
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' }
+      ]
+    }
+  },
+
+  sitemap: {
+    siteUrl: process.env.SITE_URL || 'https://lexidshop.com',
+    dynamicRoutes: async () => []
+  },
+
+  robots: {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin', '/api']
+      }
+    ]
+  },
+
+  
 });

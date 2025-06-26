@@ -33,31 +33,22 @@
 </template>
 
 <script lang="ts" setup>
-import { useSupabaseClient } from '#imports';
+const cart = ref<any[]>([])
 
-const cartStore = useCartStore();
-const router = useRouter();
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const client = useSupabaseClient();
-const cart = computed(() => cartStore.cart);
-const totalPrice = computed(() => cartStore.totalPrice);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const user = useSupabaseUser();
 const removeFromCart = (productId: number) => {
-  cartStore.removeFromCart(productId);
+  // Implementation of removeFromCart
 };
 
 const clearCart = () => {
-  cartStore.clearCart();
+  // Implementation of clearCart
 };
 
 const increaseQuantity = (productId: number) => {
-  cartStore.increaseQuantity(productId);
+  // Implementation of increaseQuantity
 };
 
 const decreaseQuantity = (productId: number) => {
-  cartStore.decreaseQuantity(productId);
+  // Implementation of decreaseQuantity
 };
 
 const formatPrice = (price: number) => {
@@ -68,46 +59,13 @@ const formatPrice = (price: number) => {
 };
 
 const checkout = async () => {
-  try {
-    // Собираем данные заказа
-    const orderData = {
-      name: '123', // Можно добавить форму для имени
-      phone: '123', // Можно добавить форму для телефона
-      address: '123', // Можно добавить форму для адреса
-      email: '123', // Можно добавить форму для email
-      cart: cart.value.map((item) => ({
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-      })),
-    };
-
-    // Отправляем заказ на сервер
-    const res = await fetch('/api/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData),
-    });
-    const data = await res.json();
-
-    if (data.status !== 'ok') {
-      alert('Ошибка оформления заказа: ' + (data.detail ? JSON.stringify(data.detail) : data.message));
-      return;
-    }
-
-    clearCart();
-    alert('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.');
-    router.push('/products');
-  } catch (err) {
-    alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
-  }
+  // Implementation of checkout
 };
 
-onMounted(() => {
-  if (cartStore.cart.length === 0) {
-    router.push('/products');
-  }
-});
+onMounted(async () => {
+  const res = await $fetch('/api/cart')
+  cart.value = res.cart
+})
 </script>
 
 <style lang="scss" scoped>

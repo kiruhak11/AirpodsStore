@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <p>© 2024 AirPods Store</p>
+    <p>© 2024 LexidShop</p>
   </footer>
 </template>
 

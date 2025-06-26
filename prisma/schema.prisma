@@ -1,0 +1,71 @@
+generator client {
+  provider        = "prisma-client-js"
+  engineType      = "binary"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Пользователи
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  fullName     String?
+  phone        String?
+  role         String   @default("customer")
+  createdAt    DateTime @default(now())
+  orders       Order[]
+}
+
+// Категории товаров
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  image       String?
+  products    Product[]
+}
+
+// Товары
+model Product {
+  id                Int      @id @default(autoincrement())
+  name              String
+  description       String?
+  price             Decimal  @db.Decimal(10,2)
+  image             String?
+  additionalImages  Json
+  categoryId        Int?
+  color             String?
+  model             String?
+  inStock           Boolean  @default(true)
+  specs             Json     // массив объектов характеристик
+  createdAt         DateTime @default(now())
+  category          Category? @relation(fields: [categoryId], references: [id])
+  orderItems        OrderItem[]
+}
+
+// Заказы
+model Order {
+  id              Int        @id @default(autoincrement())
+  userId          Int?
+  totalAmount     Decimal    @db.Decimal(10,2)
+  status          String     @default("pending")
+  deliveryAddress String?
+  createdAt       DateTime   @default(now())
+  user            User?      @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+}
+
+// Элементы заказа
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Decimal  @db.Decimal(10,2)
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
