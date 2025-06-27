@@ -7,7 +7,7 @@ services:
     image: airpodsstore-node
     restart: always
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-3010}:3010"
     environment:
       DATABASE_URL: "mysql://user:password@db/airpodsstore" # Обновите учетные данные
     depends_on:

@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
   openssl \
   libssl-dev
 
-ARG PORT=3000
+ARG PORT=3010
 
 ENV NODE_ENV=production
 
