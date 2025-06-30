@@ -18,6 +18,8 @@ services:
   db:
     image: mysql:8.0
     container_name: airpodsstore-mysql
+    ports:
+      - "3306:3306"  # Проброс порта для внешнего доступа
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: airpodsstore

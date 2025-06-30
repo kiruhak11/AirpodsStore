@@ -1,0 +1,12 @@
+# Database connection for remote Docker hosting with improved stability
+DATABASE_URL="mysql://username:password@lexid.kiruhak11.ru:3306/airpodsstore?connection_limit=5&socket_timeout=3&connect_timeout=10"
+
+# Alternative connection strings to try:
+# DATABASE_URL="mysql://username:password@lexid.kiruhak11.ru:3306/airpodsstore?ssl-mode=REQUIRED"
+# DATABASE_URL="mysql://username:password@lexid.kiruhak11.ru:3306/airpodsstore?connection_limit=1&pool_timeout=20"
+
+# Replace 'username' and 'password' with your actual database credentials
+# The parameters help with connection stability:
+# - connection_limit: limits concurrent connections
+# - socket_timeout: sets socket timeout
+# - connect_timeout: sets connection timeout 

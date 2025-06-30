@@ -15,7 +15,9 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "tsx scripts/migrate-to-prisma.ts"
+    "db:seed": "tsx scripts/migrate-to-prisma.ts",
+    "db:init": "tsx scripts/init-database.ts",
+    "db:test": "tsx scripts/test-connection.ts"
   },
   "dependencies": {
     "@morev/vue-transitions": "^3.0.2",

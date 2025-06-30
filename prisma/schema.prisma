@@ -1,6 +1,6 @@
 generator client {
-  provider        = "prisma-client-js"
-  engineType      = "binary"
+  provider   = "prisma-client-js"
+  engineType = "binary"
 }
 
 datasource db {
@@ -8,63 +8,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Пользователи
-model User {
+model category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  image       String?
+  product     product[]
+}
+
+model order {
+  id              Int         @id @default(autoincrement())
+  userId          Int?
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  status          String      @default("pending")
+  deliveryAddress String?
+  createdAt       DateTime    @default(now())
+  user            user?       @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+  orderitem       orderitem[]
+
+  @@index([userId], map: "Order_userId_fkey")
+}
+
+model orderitem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  order     order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
+  product   product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
+
+  @@index([orderId], map: "OrderItem_orderId_fkey")
+  @@index([productId], map: "OrderItem_productId_fkey")
+}
+
+model product {
+  id               Int         @id @default(autoincrement())
+  name             String
+  description      String?
+  price            Decimal     @db.Decimal(10, 2)
+  image            String?
+  additionalImages Json
+  categoryId       Int?
+  color            String?
+  model            String?
+  inStock          Boolean     @default(true)
+  specs            Json
+  createdAt        DateTime    @default(now())
+  orderitem        orderitem[]
+  category         category?   @relation(fields: [categoryId], references: [id], map: "Product_categoryId_fkey")
+
+  @@index([categoryId], map: "Product_categoryId_fkey")
+}
+
+model user {
   id           Int      @id @default(autoincrement())
-  email        String   @unique
+  email        String   @unique(map: "User_email_key")
   passwordHash String
   fullName     String?
   phone        String?
   role         String   @default("customer")
   createdAt    DateTime @default(now())
-  orders       Order[]
-}
-
-// Категории товаров
-model Category {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  image       String?
-  products    Product[]
-}
-
-// Товары
-model Product {
-  id                Int      @id @default(autoincrement())
-  name              String
-  description       String?
-  price             Decimal  @db.Decimal(10,2)
-  image             String?
-  additionalImages  Json
-  categoryId        Int?
-  color             String?
-  model             String?
-  inStock           Boolean  @default(true)
-  specs             Json     // массив объектов характеристик
-  createdAt         DateTime @default(now())
-  category          Category? @relation(fields: [categoryId], references: [id])
-  orderItems        OrderItem[]
-}
-
-// Заказы
-model Order {
-  id              Int        @id @default(autoincrement())
-  userId          Int?
-  totalAmount     Decimal    @db.Decimal(10,2)
-  status          String     @default("pending")
-  deliveryAddress String?
-  createdAt       DateTime   @default(now())
-  user            User?      @relation(fields: [userId], references: [id])
-  items           OrderItem[]
-}
-
-model OrderItem {
-  id        Int      @id @default(autoincrement())
-  orderId   Int
-  productId Int
-  quantity  Int
-  price     Decimal  @db.Decimal(10,2)
-  order     Order    @relation(fields: [orderId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  order        order[]
 }

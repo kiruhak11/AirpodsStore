@@ -1,0 +1,25 @@
+# Database connection for Docker hosting
+# Данные получены из контейнера airpodsstore-mysql (ID: 29e728a49dd3)
+
+# Основное подключение для приложения
+DATABASE_URL="mysql://user:password@YOUR_DOCKER_HOST:3306/airpodsstore"
+
+# Подключение для root пользователя (административные задачи)
+DATABASE_ROOT_URL="mysql://root:rootpassword@YOUR_DOCKER_HOST:3306/airpodsstore"
+
+# Данные подключения:
+# - Пользователь: user
+# - Пароль: password
+# - Root пароль: rootpassword
+# - База данных: airpodsstore
+# - Порт: 3306 (стандартный MySQL порт)
+
+# Замените YOUR_DOCKER_HOST на:
+# - IP адрес вашего Docker хостинга
+# - Домен вашего Docker хостинга
+# - localhost (если подключаетесь локально)
+
+# Примеры:
+# DATABASE_URL="mysql://user:password@192.168.1.100:3306/airpodsstore"
+# DATABASE_URL="mysql://user:password@your-server.com:3306/airpodsstore"
+# DATABASE_URL="mysql://user:password@localhost:3306/airpodsstore" 
