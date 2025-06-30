@@ -34,4 +34,4 @@ ENV PORT=$PORT
 COPY --from=build /app /app
 
 # Применение миграций при запуске контейнера
-CMD ["sh", "-c", "npx prisma migrate deploy && node .output/server/index.mjs"]
+CMD ["sh", "-c", "node .output/server/index.mjs"]
