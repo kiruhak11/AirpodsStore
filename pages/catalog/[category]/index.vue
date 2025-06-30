@@ -22,7 +22,6 @@
           v-for="product in filteredProducts"
           :key="product.id"
           :product="product"
-          v-motion-fade-visible
         />
       </div>
     </main>
@@ -50,7 +49,13 @@ const onlyInStock = ref(false)
 
 const filteredProducts = computed(() => {
   if (!productsData.value) return []
-  return productsData.value.filter(
+  
+  // Проверяем структуру данных - может быть массив или объект с полем products
+  const products = Array.isArray(productsData.value) 
+    ? productsData.value 
+    : productsData.value?.products || []
+    
+  return products.filter(
     (p: Product) => p.price <= price.value && (!onlyInStock.value || p.stockQuantity > 0)
   )
 })

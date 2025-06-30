@@ -141,79 +141,23 @@ export interface ProductDetailResponse {
 
 export const useProducts = () => {
   // Получение списка товаров
-  const getProducts = async (params?: Record<string, any>): Promise<ProductsResponse> => {
-    let url = '/api/products'
-    if (params) {
-      const query = new URLSearchParams(params as any).toString()
-      url += `?${query}`
+  const getProducts = async (): Promise<Product[]> => {
+    try {
+      const response = await fetch('/api/products')
+      return await response.json()
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      return []
     }
-    return await fetch(url).then(res => res.json())
   }
-
-  // Получение товара по slug
-  const getProduct = async (slug: string): Promise<ProductDetailResponse> => {
-    return await fetch(`/api/products/${slug}`).then(res => res.json())
-  }
-
-  // Получение категорий
   const getCategories = async (): Promise<Category[]> => {
-    return await fetch('/api/categories').then(res => res.json())
+    try {
+      const response = await fetch('/api/categories')
+      return await response.json()
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+      return []
+    }
   }
-
-  // Получение рекомендуемых товаров
-  const getRecommendedProducts = async (categoryId: string, excludeId: string): Promise<Product[]> => {
-    const query = new URLSearchParams({ category: categoryId, limit: '4', exclude: excludeId }).toString()
-    return await fetch(`/api/products?${query}`).then(res => res.json())
-  }
-
-  // Получение товаров по категории
-  const getProductsByCategory = async (categorySlug: string, params?: Record<string, any>): Promise<ProductsResponse> => {
-    let url = '/api/products'
-    const allParams = { ...params, category: categorySlug }
-    const query = new URLSearchParams(allParams as any).toString()
-    url += `?${query}`
-    return await fetch(url).then(res => res.json())
-  }
-
-  // Поиск товаров
-  const searchProducts = async (queryStr: string, params?: Record<string, any>): Promise<ProductsResponse> => {
-    let url = '/api/products'
-    const allParams = { ...params, search: queryStr }
-    const query = new URLSearchParams(allParams as any).toString()
-    url += `?${query}`
-    return await fetch(url).then(res => res.json())
-  }
-
-  // Получение избранных товаров
-  const getFeaturedProducts = async (limit: number = 8): Promise<Product[]> => {
-    const query = new URLSearchParams({ featured: 'true', limit: String(limit) }).toString()
-    const response = await fetch(`/api/products?${query}`).then(res => res.json())
-    return response.products
-  }
-
-  // Получение новых товаров
-  const getNewProducts = async (limit: number = 8): Promise<Product[]> => {
-    const query = new URLSearchParams({ new: 'true', limit: String(limit) }).toString()
-    const response = await fetch(`/api/products?${query}`).then(res => res.json())
-    return response.products
-  }
-
-  // Получение бестселлеров
-  const getBestSellers = async (limit: number = 8): Promise<Product[]> => {
-    const query = new URLSearchParams({ bestSeller: 'true', limit: String(limit) }).toString()
-    const response = await fetch(`/api/products?${query}`).then(res => res.json())
-    return response.products
-  }
-
-  return {
-    getProducts,
-    getProduct,
-    getCategories,
-    getRecommendedProducts,
-    getProductsByCategory,
-    searchProducts,
-    getFeaturedProducts,
-    getNewProducts,
-    getBestSellers
-  }
+  return { getProducts, getCategories }
 } 

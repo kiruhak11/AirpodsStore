@@ -1,0 +1,16 @@
+# Database connection for local development
+DATABASE_URL="mysql://user:password@localhost:3306/airpodsstore"
+
+# Alternative for root user:
+# DATABASE_URL="mysql://root:rootpassword@localhost:3306/airpodsstore"
+
+# Site configuration
+SITE_URL="http://localhost:3000"
+
+# Stripe configuration (optional for development)
+STRIPE_PUBLISHABLE_KEY=""
+STRIPE_SECRET_KEY=""
+
+# PayPal configuration (optional for development)
+PAYPAL_CLIENT_ID=""
+PAYPAL_CLIENT_SECRET="" 

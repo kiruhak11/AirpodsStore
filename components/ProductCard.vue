@@ -38,7 +38,7 @@
     <!-- Изображение товара -->
     <div class="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
       <NuxtImg
-        :src="primaryImage?.url || '/images/placeholder.jpg'"
+        :src="primaryImage?.url || 'https://placehold.co/400x400'"
         :alt="primaryImage?.alt || product.name"
         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         loading="lazy"
@@ -83,13 +83,19 @@
 
       <!-- Название товара -->
       <NuxtLink 
-        :to="`/products/${product.slug}`"
+        v-if="product.id"
+        :to="`/products/${product.id}`"
         class="block"
       >
         <h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
           {{ product.name }}
         </h3>
       </NuxtLink>
+      <div v-else class="block">
+        <h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2">
+          {{ product.name }}
+        </h3>
+      </div>
 
       <!-- Рейтинг -->
       <div class="flex items-center gap-1 mt-2">
@@ -253,5 +259,6 @@ const openQuickView = () => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 2;
 }
 </style>

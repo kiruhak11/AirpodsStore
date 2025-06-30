@@ -9,81 +9,21 @@
         <p class="hero__desc">
           Магазин премиальных наушников и аксессуаров. Ощути разницу с LexidShop.
         </p>
-        <div class="hero__actions">
-          <Button size="lg" @click="navigateToCategory('all')">Смотреть каталог</Button>
-          <Button variant="outline" size="lg" @click="scrollToFeatured">Новинки</Button>
-        </div>
       </div>
       <img class="hero__img" src="" alt="LexidShop Banner" loading="lazy" />
     </section>
-
-    <!-- Categories -->
     <section class="categories">
       <h2 class="categories__title">Категории</h2>
       <div class="categories__grid">
-        <div
-          v-for="category in categories"
-          :key="category.id"
-          class="categories__item"
-          @click="navigateToCategory(category.slug)"
-        >
-          <div class="categories__icon">
-            <Icon icon="lucide:headphones" />
-          </div>
-          <div class="categories__name">{{ category.name }}</div>
-          <div class="categories__count">{{ category._count.products }} товаров</div>
+        <div class="categories__item" v-for="category in categories" :key="category.id">
+          <h3 class="categories__name">{{ category.name }}</h3>
         </div>
       </div>
     </section>
-
-    <!-- Новинки -->
-    <section ref="featuredSection" class="showcase showcase--new">
-      <div class="showcase__header">
-        <h2>Новинки</h2>
-        <Button variant="link" @click="navigateToCategory('new')">Все новинки</Button>
-      </div>
+    <section class="showcase">
+      <h2 class="showcase__title">Популярные товары</h2>
       <div class="showcase__grid">
-        <ProductCard
-          v-for="product in newProducts"
-          :key="product.id"
-          :product="product"
-          v-motion-fade-visible
-        />
-      </div>
-    </section>
-
-    <!-- Хиты продаж -->
-    <section class="showcase showcase--hits">
-      <div class="showcase__header">
-        <h2>Хиты продаж</h2>
-        <Button variant="link" @click="navigateToCategory('bestSeller')">Все хиты</Button>
-      </div>
-      <div class="showcase__grid">
-        <ProductCard
-          v-for="product in bestSellers"
-          :key="product.id"
-          :product="product"
-          v-motion-fade-visible
-        />
-      </div>
-    </section>
-
-    <!-- Преимущества -->
-    <section class="features">
-      <div class="feature">
-        <Icon icon="lucide:truck" />
-        <h3>Быстрая доставка</h3>
-        <p>Доставим по всей России за 1-3 дня</p>
-      </div>
-      <div class="feature">
-        <Icon icon="lucide:shield-check" />
-        <h3>Гарантия качества</h3>
-        <p>Официальная гарантия на все товары</p>
-      </div>
-      <div class="feature">
-        <Icon icon="lucide:headphones" />
-        <h3>Премиум звук</h3>
-        <p>Только лучшие бренды и модели</p>
+        <ProductCard v-for="product in products" :key="product.id" :product="product" />
       </div>
     </section>
   </div>
@@ -95,7 +35,7 @@ import { useProducts } from '~/composables/useProducts'
 import { Button } from '@/components/ui/button'
 import ProductCard from '@/components/ProductCard.vue'
 import { Icon } from '@iconify/vue'
-import type { Category, Product } from '~/composables/useProducts'
+import type { Product } from '~/composables/useProducts'
 
 // SEO
 useHead({
@@ -109,27 +49,15 @@ useHead({
   ]
 })
 
-const { getProducts, getCategories, getFeaturedProducts, getNewProducts, getBestSellers } = useProducts()
+const { getProducts, getCategories } = useProducts()
+const products = ref<Product[]>([])
 const categories = ref<Category[]>([])
-const newProducts = ref<Product[]>([])
-const bestSellers = ref<Product[]>([])
-const featuredSection = ref()
 
 const loadData = async () => {
+  products.value = await getProducts()
   categories.value = await getCategories()
-  newProducts.value = await getNewProducts(8)
-  bestSellers.value = await getBestSellers(8)
-}
-
-const navigateToCategory = (slug: string) => {
-  if (slug === 'all') navigateTo('/products')
-  else if (slug === 'new') navigateTo('/products?new=true')
-  else if (slug === 'bestSeller') navigateTo('/products?bestSeller=true')
-  else navigateTo(`/products?category=${slug}`)
-}
-
-const scrollToFeatured = () => {
-  featuredSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  console.log('Все товары:', products.value)
+  console.log('Все категории:', categories.value)
 }
 
 onMounted(loadData)
