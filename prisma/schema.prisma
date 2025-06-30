@@ -59,7 +59,6 @@ model Order {
   items           OrderItem[]
 }
 
-// Элементы заказа
 model OrderItem {
   id        Int      @id @default(autoincrement())
   orderId   Int
