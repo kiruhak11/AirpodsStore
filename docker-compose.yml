@@ -9,7 +9,7 @@ services:
     ports:
       - "${PORT:-3010}:3010"
     environment:
-      DATABASE_URL: "mysql://user:password@db/airpodsstore" # Обновите учетные данные
+      DATABASE_URL: "mysql://root:rootpassword@db/airpodsstore" # Обновите учетные данные
     depends_on:
       - db
     networks:
