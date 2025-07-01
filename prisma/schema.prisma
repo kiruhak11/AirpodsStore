@@ -13,6 +13,7 @@ model category {
   name        String
   description String?
   image       String?
+  slug  String @unique
   product     product[]
 }
 
@@ -69,5 +70,6 @@ model user {
   phone        String?
   role         String   @default("customer")
   createdAt    DateTime @default(now())
+  sessionToken String? @unique
   order        order[]
 }

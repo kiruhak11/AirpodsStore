@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import type { Product } from '~/composables/useProducts'
+import { ref, watch } from 'vue'
 
 export interface CartItem {
   id: string
-  productId: string
+  productId: number
   quantity: number
   product: Product
   addedAt: Date
@@ -18,6 +19,19 @@ export const useCartStore = defineStore('cart', () => {
   // Состояние
   const items = ref<CartItem[]>([])
   const isOpen = ref(false)
+
+  // Загрузка из localStorage
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const saved = localStorage.getItem('cart_items')
+    if (saved) items.value = JSON.parse(saved)
+  }
+
+  // Сохранять корзину в localStorage
+  watch(items, (val) => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('cart_items', JSON.stringify(val))
+    }
+  }, { deep: true })
 
   // Computed свойства
   const totalItems = computed(() => 
@@ -39,7 +53,7 @@ export const useCartStore = defineStore('cart', () => {
   const isEmpty = computed(() => items.value.length === 0)
 
   // Методы
-  const addItem = (item: { productId: string; quantity: number; product: Product }) => {
+  const addItem = (item: { productId: number; quantity: number; product: Product }) => {
     const existingItem = items.value.find(i => i.productId === item.productId)
     
     if (existingItem) {
@@ -59,18 +73,15 @@ export const useCartStore = defineStore('cart', () => {
     const item = items.value.find(i => i.id === itemId)
     if (item) {
       if (quantity <= 0) {
-        removeItem(itemId)
+        removeItem(item.productId)
       } else {
         item.quantity = quantity
       }
     }
   }
 
-  const removeItem = (itemId: string) => {
-    const index = items.value.findIndex(i => i.id === itemId)
-    if (index > -1) {
-      items.value.splice(index, 1)
-    }
+  const removeItem = (productId: number) => {
+    items.value = items.value.filter(i => i.productId !== productId)
   }
 
   const clearCart = () => {
@@ -90,12 +101,12 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // Проверка наличия товара в корзине
-  const isInCart = (productId: string) => {
+  const isInCart = (productId: number) => {
     return items.value.some(item => item.productId === productId)
   }
 
   // Получение количества товара в корзине
-  const getItemQuantity = (productId: string) => {
+  const getItemQuantity = (productId: number) => {
     const item = items.value.find(i => i.productId === productId)
     return item ? item.quantity : 0
   }

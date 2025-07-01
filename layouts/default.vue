@@ -3,13 +3,24 @@
     <header class="main-header fade-in">
       <div class="header-gradient"></div>
       <div class="container header-flex">
-        <NuxtLink to="/" class="logo">LexidShop</NuxtLink>
-        <nav>
-          <NuxtLink to="/catalog" class="nav-link">Каталог</NuxtLink>
-          <NuxtLink to="/cart" class="nav-link">Корзина</NuxtLink>
-          <NuxtLink to="/profile" class="nav-link">Профиль</NuxtLink>
-          <NuxtLink to="/admin" class="nav-link">Админка</NuxtLink>
-        </nav>
+        <ClientOnly>
+          <NuxtLink to="/" class="logo">LexidShop</NuxtLink>
+          <nav>
+            <NuxtLink to="/catalog" class="nav-link">Каталог</NuxtLink>
+            <NuxtLink to="/cart" class="nav-link">Корзина</NuxtLink>
+            <NuxtLink to="/profile" class="nav-link">Профиль</NuxtLink>
+            <NuxtLink to="/admin" class="nav-link">Админка</NuxtLink>
+          </nav>
+          <template #fallback>
+            <div class="logo">LexidShop</div>
+            <nav>
+              <a href="/catalog" class="nav-link">Каталог</a>
+              <a href="/cart" class="nav-link">Корзина</a>
+              <a href="/profile" class="nav-link">Профиль</a>
+              <a href="/admin" class="nav-link">Админка</a>
+            </nav>
+          </template>
+        </ClientOnly>
       </div>
     </header>
     <main class="container">

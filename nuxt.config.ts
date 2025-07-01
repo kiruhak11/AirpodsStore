@@ -20,31 +20,14 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    '@nuxtjs/color-mode',
-    '@nuxt/ui',
     '@nuxtjs/device',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    'nuxt-swiper',
     '@nuxtjs/device',
     'shadcn-nuxt',
-    '@nuxtjs/tailwindcss',
     '@nuxt/image',
-    '@nuxtjs/google-fonts',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap',
+    '@nuxtjs/google-fonts'
   ],
-  colorMode: {
-    preference: 'system', // default value of $colorMode.preference
-    fallback: 'light', // fallback value if not system preference found
-    hid: 'nuxt-color-mode-script',
-    globalName: '__NUXT_COLOR_MODE__',
-    componentName: 'ColorScheme',
-    classPrefix: '',
-    classSuffix: '',
-    storage: 'localStorage', // or 'sessionStorage' or 'cookie'
-    storageKey: 'nuxt-color-mode',
-  },
   piniaPersistedstate: {
     cookieOptions: {
       sameSite: 'strict',
@@ -88,22 +71,5 @@ export default defineNuxtConfig({
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' }
       ]
     }
-  },
-
-  sitemap: {
-    siteUrl: process.env.SITE_URL || 'https://lexidshop.com',
-    dynamicRoutes: async () => []
-  },
-
-  robots: {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin', '/api']
-      }
-    ]
-  },
-
-  
+  },  
 });

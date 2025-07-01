@@ -46,6 +46,7 @@
     "lucide-vue-next": "^0.451.0",
     "maska": "^2.1.11",
     "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
     "nuxt": "^3.11.2",
     "nuxt-device-detect": "^1.1.5",
     "nuxt-swiper": "^1.2.2",

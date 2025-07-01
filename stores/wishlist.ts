@@ -18,15 +18,15 @@ export const useWishlistStore = defineStore('wishlist', () => {
   const addItem = (product: Product) => {
     if (!isInWishlist(product.id)) {
       items.value.push({
-        id: product.id,
+        id: `${product.id}-${Date.now()}`,
         product,
         addedAt: new Date()
       })
     }
   }
 
-  const removeItem = (productId: string) => {
-    const index = items.value.findIndex(i => i.id === productId)
+  const removeItem = (productId: number) => {
+    const index = items.value.findIndex(i => i.product.id === productId)
     if (index > -1) {
       items.value.splice(index, 1)
     }
@@ -36,8 +36,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
     items.value = []
   }
 
-  const isInWishlist = (productId: string) => {
-    return items.value.some(item => item.id === productId)
+  const isInWishlist = (productId: number) => {
+    return items.value.some(item => item.product.id === productId)
   }
 
   const toggleItem = (product: Product) => {

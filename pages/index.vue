@@ -15,27 +15,43 @@
     <section class="categories">
       <h2 class="categories__title">Категории</h2>
       <div class="categories__grid">
-        <div class="categories__item" v-for="category in categories" :key="category.id">
-          <h3 class="categories__name">{{ category.name }}</h3>
-        </div>
+        <ClientOnly>
+          <NuxtLink 
+            v-for="category in categories" 
+            :key="category.id"
+            :to="`/catalog/${category.slug}`"
+            class="categories__item"
+          >
+            <h3 class="categories__name">{{ category.name }}</h3>
+            <p class="categories__description">{{ category.description }}</p>
+          </NuxtLink>
+          <template #fallback>
+            <div 
+              v-for="category in categories" 
+              :key="category.id"
+              class="categories__item"
+            >
+              <h3 class="categories__name">{{ category.name }}</h3>
+              <p class="categories__description">{{ category.description }}</p>
+            </div>
+          </template>
+        </ClientOnly>
       </div>
     </section>
     <section class="showcase">
       <h2 class="showcase__title">Популярные товары</h2>
       <div class="showcase__grid">
-        <ProductCard v-for="product in products" :key="product.id" :product="product" />
+        <ProductCard v-for="product in groupedProducts" :key="product.id" :product="product" :colors="product.colors" :colorVariants="product.colorVariants" />
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useProducts } from '~/composables/useProducts'
-import { Button } from '@/components/ui/button'
 import ProductCard from '@/components/ProductCard.vue'
-import { Icon } from '@iconify/vue'
-import type { Product } from '~/composables/useProducts'
+import type { Product, Category } from '~/composables/useProducts'
 
 // SEO
 useHead({
@@ -61,6 +77,22 @@ const loadData = async () => {
 }
 
 onMounted(loadData)
+
+const groupedProducts = computed(() => {
+  if (!products.value) return [];
+  const map = new Map();
+  products.value.forEach(product => {
+    const key = `${product.name}_${product.categoryId}`;
+    if (!map.has(key)) {
+      map.set(key, { ...product, colors: [product.color], colorVariants: [product] });
+    } else {
+      const group = map.get(key);
+      if (!group.colors.includes(product.color)) group.colors.push(product.color);
+      group.colorVariants.push(product);
+    }
+  });
+  return Array.from(map.values());
+});
 </script>
 
 <style scoped lang="scss">
@@ -133,6 +165,9 @@ onMounted(loadData)
     text-align: center;
     cursor: pointer;
     transition: box-shadow var(--transition-main), transform var(--transition-main);
+    text-decoration: none;
+    color: inherit;
+    display: block;
     &:hover {
       box-shadow: 0 8px 32px rgba(80, 80, 120, 0.12);
       transform: translateY(-4px) scale(1.03);
@@ -147,6 +182,11 @@ onMounted(loadData)
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 6px;
+  }
+  &__description {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
   &__count {
     color: var(--color-text-secondary);

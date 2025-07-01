@@ -1,245 +1,100 @@
 <template>
-  <nuxt-layout>
-    <div class="container">
-      <h1>Профиль пользователя</h1>
-
-      <div class="user-info">
-        <label for="username">Имя пользователя</label>
-        <input v-model="username" type="text" id="username" class="input-field" />
-        <button @click="updateUsername" class="profile-button">Обновить имя</button>
+  <div class="profile-page">
+    <div v-if="loading" class="profile-loading">Загрузка...</div>
+    <div v-else-if="user" class="profile-content">
+      <h1 class="profile-title">Профиль</h1>
+      <div class="profile-info">
+        <div class="profile-row"><span class="profile-label">Email:</span> <span>{{ user.email }}</span></div>
+        <div class="profile-row"><span class="profile-label">Имя:</span> <span>{{ user.fullName || '—' }}</span></div>
+        <div class="profile-row"><span class="profile-label">Роль:</span> <span>{{ user.role }}</span></div>
       </div>
-
-      <div class="password-change">
-        <label for="current-password">Текущий пароль</label>
-        <input v-model="currentPassword" type="password" id="current-password" class="input-field" />
-
-        <label for="new-password">Новый пароль</label>
-        <input v-model="newPassword" type="password" id="new-password" class="input-field" />
-
-        <button class="profile-button" @click="updatePassword">Изменить пароль</button>
-
-        <Button class="" variant="destructive" @click="deleteAccount">Удалить аккаунт</Button>
-
-        <Button class="mt-6" @click="signOut">Выйти</Button>
-      </div>
-
-      <div class="total-spent">
-        <p>
-          Вы потратили на покупки: <strong>{{ totalSpent }} руб.</strong>
-        </p>
-      </div>
+      <button class="profile-logout" @click="logout">Выйти</button>
     </div>
-  </nuxt-layout>
+    <div v-else class="profile-unauth">
+      <h2>Вы не авторизованы</h2>
+      <NuxtLink to="/login" class="profile-login-link">Войти</NuxtLink>
+    </div>
+  </div>
 </template>
 
-<script lang="ts" setup>
-const router = useRouter();
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 
-const username = ref<string>('');
-const currentPassword = ref<string>('');
-const newPassword = ref<string>('');
-const totalSpent = ref<number>(0);
+const authStore = useAuthStore()
+const router = useRouter()
 
-const fetchTotalSpent = async () => {
-  if (!user.value || !user.value.id) {
-    console.error('Пользователь не авторизован или id пользователя отсутствует.');
-    return;
-  }
+const user = computed(() => authStore.user)
+const loading = ref(true)
 
-  try {
-    const { data, error } = await client.from('orders').select('total_price').eq('user_id', user.value.id);
+onMounted(async () => {
+  loading.value = true
+  await authStore.checkAuth()
+  loading.value = false
+})
 
-    if (error) {
-      console.error('Ошибка получения суммы покупок:', error.message);
-    } else {
-      totalSpent.value = data.reduce((sum, order) => sum + order.total_price, 0);
-    }
-  } catch (err) {
-    console.error('Ошибка при попытке получить данные покупок:', err);
-  }
-};
-
-const verifyCurrentPassword = async (): Promise<boolean> => {
-  const currentUser = user.value;
-
-  if (!currentUser || !currentUser.email) {
-    console.error('Пользователь не авторизован или email отсутствует.');
-    return false;
-  }
-
-  const { error } = await client.auth.signInWithPassword({
-    email: currentUser.email,
-    password: currentPassword.value,
-  });
-
-  if (error) {
-    console.error('Ошибка проверки текущего пароля:', error.message);
-    return false;
-  }
-
-  return true;
-};
-
-const updateUsername = async () => {
-  try {
-    const { error } = await client.auth.updateUser({
-      data: { username: username.value },
-    });
-
-    if (error) {
-      console.error('Ошибка обновления имени пользователя:', error.message);
-    } else {
-      console.log('Имя пользователя успешно обновлено');
-    }
-  } catch (err) {
-    console.error('Ошибка при попытке обновить имя пользователя:', err);
-  }
-};
-
-const updatePassword = async () => {
-  const isCurrentPasswordValid = await verifyCurrentPassword();
-  if (!isCurrentPasswordValid) {
-    alert('Текущий пароль неверен. Пожалуйста, попробуйте снова.');
-    return;
-  }
-
-  try {
-    const { error } = await client.auth.updateUser({
-      password: newPassword.value,
-    });
-
-    if (error) {
-      console.error('Ошибка смены пароля:', error.message);
-    } else {
-      console.log('Пароль успешно изменен');
-      alert('Пароль успешно изменен!');
-      currentPassword.value = '';
-      newPassword.value = '';
-    }
-  } catch (err) {
-    console.error('Ошибка при попытке изменить пароль:', err);
-  }
-};
-
-const deleteAccount = async () => {
-  try {
-    const userId = user.value?.id;
-
-    if (!userId) {
-      console.error('ID пользователя не найден.');
-      return;
-    }
-
-    const response = await $fetch('/api/delete-user', {
-      method: 'POST',
-      body: { userId },
-    });
-
-    console.log('Ответ от сервера:', response);
-
-    if (response.success) {
-      console.log('Аккаунт успешно удален');
-      await router.push('/login');
-    } else {
-      console.error('Не удалось удалить аккаунт.');
-    }
-  } catch (err) {
-    console.error('Ошибка при попытке удалить аккаунт:', err);
-  }
-};
-
-const signOut = async () => {
-  try {
-    await client.auth.signOut();
-    router.push('/');
-  } catch (err) {
-    console.error('Ошибка при попытке выйти из аккаунта:', err);
-  }
-};
-
-onMounted(() => {
-  if (user.value) {
-    fetchTotalSpent();
-  }
-});
+function logout() {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
-<style lang="scss" scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+<style scoped>
+.profile-page {
+  max-width: 500px;
+  margin: 3rem auto;
   padding: 2rem;
-  min-height: 100vh;
-  background-color: var(--background-color-cart);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  background: var(--color-card, #fff);
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
 }
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 1.5rem;
+.profile-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-text, #222);
 }
-
-.user-info,
-.password-change,
-.total-spent {
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 1.5rem;
+.profile-info {
+  margin-bottom: 2rem;
 }
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 16px;
-  color: var(--color-text);
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.75rem;
+.profile-row {
+  display: flex;
+  gap: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  font-size: 1.1rem;
 }
-
-.profile-button,
-.signout-button {
-  width: 100%;
-  padding: 0.75rem;
+.profile-label {
+  font-weight: 500;
+  color: var(--color-primary, #0070f3);
+}
+.profile-logout {
+  background: var(--color-error, #e53e3e);
+  color: #fff;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s;
 }
-
-.profile-button {
-  background-color: #007bff;
-  color: white;
-
-  &:hover {
-    background-color: #0056b3;
-  }
+.profile-logout:hover {
+  background: #c53030;
 }
-
-.delete-button {
-  background-color: #ff4d4d;
-  color: white;
-
-  &:hover {
-    background-color: #cc0000;
-  }
+.profile-unauth {
+  text-align: center;
+  padding: 2rem 0;
 }
-
-.signout-button {
-  background-color: #666;
-  color: white;
-
-  &:hover {
-    background-color: #333;
-  }
+.profile-login-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--color-primary, #0070f3);
+  text-decoration: underline;
+  font-weight: 500;
+}
+.profile-loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary, #888);
 }
 </style>

@@ -2,10 +2,27 @@ import { prisma } from '~/server/utils/prisma'
 
 export default defineEventHandler(async (event) => {
   try {
-    const query = getQuery(event)
-    const categorySlug = query.category as string
+    const slug = getRouterParam(event, 'slug')
+    
+    if (!slug) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Product slug is required'
+      })
+    }
 
-    let sqlQuery = `
+    // Функция для генерации slug из названия (должна совпадать с той, что в products.get.ts)
+    const generateSlug = (name: string) => {
+      return name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim()
+    }
+
+    // Получаем все товары и ищем по slug
+    const products = await prisma.$queryRawUnsafe(`
       SELECT 
         p.id,
         p.name,
@@ -26,28 +43,24 @@ export default defineEventHandler(async (event) => {
         c.slug as category_slug
       FROM product p
       LEFT JOIN category c ON p.categoryId = c.id
-    `
+      ORDER BY p.id DESC
+    `) as any[]
 
-    if (categorySlug) {
-      sqlQuery += ` WHERE c.slug = '${categorySlug}'`
+    // Ищем товар по slug
+    const product = products.find((p: any) => {
+      const productSlug = generateSlug(p.name)
+      return productSlug === slug
+    })
+
+    if (!product) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Product not found'
+      })
     }
 
-    sqlQuery += ` ORDER BY p.id DESC`
-
-    const products = await prisma.$queryRawUnsafe(sqlQuery) as any[]
-
-    // Функция для генерации slug из названия
-    const generateSlug = (name: string) => {
-      return name
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim()
-    }
-
-    // Приводим id и categoryId к числу, если это BigInt
-    const formattedProducts = products.map((product: any) => ({
+    // Форматируем товар
+    const formattedProduct = {
       id: typeof product.id === 'bigint' ? Number(product.id) : Number(product.id),
       name: product.name,
       description: product.description,
@@ -68,11 +81,19 @@ export default defineEventHandler(async (event) => {
         image: product.category_image,
         slug: product.category_slug
       } : null
-    }))
+    }
 
-    return formattedProducts
+    return formattedProduct
   } catch (error) {
-    console.error('Error fetching products:', error)
-    return []
+    console.error('Error fetching product by slug:', error)
+    
+    if (error && typeof error === 'object' && 'statusCode' in error) {
+      throw error
+    }
+    
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal server error'
+    })
   }
 }) 

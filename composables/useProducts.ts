@@ -1,143 +1,107 @@
-export interface Product {
-  id: string
+export interface Category {
+  id: number
   name: string
-  slug: string
-  description: string
-  shortDescription?: string
-  price: number
-  comparePrice?: number
-  costPrice?: number
-  sku?: string
-  barcode?: string
-  weight?: number
-  dimensions?: string
-  stockQuantity: number
-  isActive: boolean
-  isFeatured: boolean
-  isNew: boolean
-  isBestSeller: boolean
-  sortOrder: number
-  categoryId: string
-  createdAt: string
-  updatedAt: string
-  category: Category
-  images: ProductImage[]
-  variants: ProductVariant[]
-  specifications: ProductSpecification[]
-  reviews: Review[]
-  productDiscounts: ProductDiscount[]
-  _count: {
-    reviews: number
-  }
+  description?: string | null
+  image?: string | null
+  slug?: string | null
 }
 
-export interface Category {
-  id: string
+export interface Product {
+  id: number
   name: string
-  slug: string
-  description?: string
-  image?: string
-  parentId?: string
-  sortOrder: number
-  isActive: boolean
+  description?: string | null
+  price: number
+  image?: string | null
+  additionalImages?: any // JSON
+  categoryId?: number | null
+  color?: string | null
+  model?: string | null
+  inStock: boolean
+  specs?: any // JSON
   createdAt: string
-  updatedAt: string
-  parent?: Category
-  children: Category[]
-  _count: {
-    products: number
+  
+  // Additional properties for UI
+  isNew?: boolean
+  isFeatured?: boolean
+  isBestSeller?: boolean
+  comparePrice?: number | null
+  slug?: string | null
+  
+  // Related data (populated when needed)
+  category?: Category
+  images?: ProductImage[]
+  reviews?: ProductReview[]
+  productDiscounts?: ProductDiscount[]
+  _count?: {
+    reviews?: number
   }
 }
 
 export interface ProductImage {
-  id: string
+  id: number
   url: string
-  alt?: string
-  sortOrder: number
-  isPrimary: boolean
-  productId: string
-  createdAt: string
+  alt?: string | null
+  isPrimary?: boolean
+  order?: number
 }
 
-export interface ProductVariant {
-  id: string
-  name: string
-  value: string
-  price?: number
-  sku?: string
-  stockQuantity: number
-  productId: string
-  createdAt: string
-  updatedAt: string
-}
-
-export interface ProductSpecification {
-  id: string
-  name: string
-  value: string
-  productId: string
-  sortOrder: number
-}
-
-export interface Review {
-  id: string
-  userId: string
-  productId: string
+export interface ProductReview {
+  id: number
   rating: number
-  title?: string
-  comment?: string
-  isVerified: boolean
-  isActive: boolean
+  comment?: string | null
+  userId: number
+  productId: number
   createdAt: string
-  updatedAt: string
-  user: {
-    id: string
-    name?: string
-    avatar?: string
-  }
 }
 
 export interface ProductDiscount {
-  id: string
-  productId: string
-  discountId: string
-  createdAt: string
-  discount: Discount
+  id: number
+  productId: number
+  discountId: number
+  discount?: Discount
 }
 
 export interface Discount {
-  id: string
+  id: number
   name: string
-  code?: string
-  type: 'PERCENTAGE' | 'FIXED_AMOUNT' | 'BUY_X_GET_Y' | 'BLACK_FRIDAY'
-  value: number
-  minAmount?: number
-  maxUses?: number
-  usedCount: number
-  startsAt?: string
-  endsAt?: string
+  description?: string | null
+  percentage: number
   isActive: boolean
-  isAutomatic: boolean
+  startDate: string
+  endDate: string
+}
+
+export interface User {
+  id: number
+  email: string
+  passwordHash: string
+  fullName?: string | null
+  phone?: string | null
+  role: string
   createdAt: string
-  updatedAt: string
 }
 
-export interface ProductsResponse {
-  products: Product[]
-  pagination: {
-    page: number
-    limit: number
-    total: number
-    pages: number
-  }
+export interface Order {
+  id: number
+  userId?: number | null
+  totalAmount: number
+  status: string
+  deliveryAddress?: string | null
+  createdAt: string
 }
 
-export interface ProductDetailResponse {
-  product: Product & {
-    averageRating: number
-  }
-  recommendedProducts: Product[]
+export interface OrderItem {
+  id: number
+  orderId: number
+  productId: number
+  quantity: number
+  price: number
 }
+
+// Вспомогательные связи (foreign keys)
+export type ProductWithCategory = Product & { category?: Category }
+export type OrderWithItems = Order & { items?: OrderItem[] }
+export type OrderItemWithProduct = OrderItem & { product?: Product }
 
 export const useProducts = () => {
   // Получение списка товаров

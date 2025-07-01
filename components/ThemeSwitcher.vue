@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useColorMode } from '@vueuse/core'
-import Switch from '@/components/ui/switch/Switch.vue'
 
 const colorMode = useColorMode({
   selector: 'html',
