@@ -31,25 +31,25 @@
         <!-- Main Image -->
         <div class="product-gallery__main">
           <NuxtImg
-            :src="currentImage?.url || 'https://placehold.co/600x600'"
-            :alt="currentImage?.alt || product?.name"
+            :src="currentImage || product.image || 'https://placehold.co/600x600'"
+            :alt="product?.name"
             class="product-gallery__main-image"
             loading="lazy"
           />
         </div>
 
-        <!-- Thumbnails -->
-        <div v-if="product?.images && product?.images.length > 1" class="product-gallery__thumbnails">
+        <!-- Thumbnails for additionalImages -->
+        <div v-if="galleryImages.length > 1" class="product-gallery__thumbnails">
           <button
-            v-for="image in product?.images"
-            :key="image.id"
-            @click="currentImage = image"
+            v-for="(img, idx) in galleryImages"
+            :key="idx"
+            @click="currentImage = img"
             class="product-gallery__thumbnail"
-            :class="{ 'product-gallery__thumbnail--active': currentImage?.id === image.id }"
+            :class="{ 'product-gallery__thumbnail--active': currentImage === img }"
           >
             <NuxtImg
-              :src="image.url"
-              :alt="image.alt || product?.name"
+              :src="img"
+              :alt="`${product?.name} фото ${idx+1}`"
               class="product-gallery__thumbnail-image"
               loading="lazy"
             />
@@ -244,7 +244,7 @@ useHead({
 })
 
 // State
-const currentImage = ref<any>(null)
+const currentImage = ref<string | null>(null)
 
 // Computed
 const averageRating = computed(() => {
@@ -310,10 +310,24 @@ const toggleWishlist = () => {
   }
 }
 
-// Set initial image
+// Обработка additionalImages (строка или массив)
+const galleryImages = computed(() => {
+  if (!product.value) return []
+  let images: string[] = []
+  if (product.value.image) images.push(product.value.image)
+  let additional = product.value.additionalImages
+  if (typeof additional === 'string') {
+    try { additional = JSON.parse(additional) } catch { additional = [] }
+  }
+  if (Array.isArray(additional)) {
+    images.push(...additional.filter(Boolean))
+  }
+  return images
+})
+
 watchEffect(() => {
-  if (product.value?.images && product.value.images.length > 0) {
-    currentImage.value = product.value.images.find(img => !!img.isPrimary) || product.value.images[0]
+  if (galleryImages.value.length > 0) {
+    currentImage.value = galleryImages.value[0]
   }
 })
 </script>

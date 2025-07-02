@@ -10,7 +10,7 @@
     <nav v-if="!device.isMobile">
       <ul>
         <li><nuxt-link to="/">Главная</nuxt-link></li>
-        <li><nuxt-link to="/products">Каталог</nuxt-link></li>
+        <li><nuxt-link to="/catalog">Каталог</nuxt-link></li>
         <li>
           <nuxt-link to="/cart">Корзина ({{ formatPrice(cartStore.total) }} руб.)</nuxt-link>
         </li>
@@ -40,11 +40,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from '@iconify/vue';
-import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
-import { useAuthStore } from '@/stores/auth'
-
-const colorMode = useColorMode();
 const cartStore = useCartStore();
 const device = useDevice();
 const route = useRoute();
@@ -65,7 +60,7 @@ const formatPrice = (price: number) => {
 .header {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;

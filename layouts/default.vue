@@ -1,30 +1,10 @@
 <template>
-  <div>
-    <header class="main-header fade-in">
-      <div class="header-gradient"></div>
-      <div class="container header-flex">
-        <ClientOnly>
-          <NuxtLink to="/" class="logo">LexidShop</NuxtLink>
-          <nav>
-            <NuxtLink to="/catalog" class="nav-link">Каталог</NuxtLink>
-            <NuxtLink to="/cart" class="nav-link">Корзина</NuxtLink>
-            <NuxtLink to="/profile" class="nav-link">Профиль</NuxtLink>
-            <NuxtLink to="/admin" class="nav-link">Админка</NuxtLink>
-          </nav>
-          <template #fallback>
-            <div class="logo">LexidShop</div>
-            <nav>
-              <a href="/catalog" class="nav-link">Каталог</a>
-              <a href="/cart" class="nav-link">Корзина</a>
-              <a href="/profile" class="nav-link">Профиль</a>
-              <a href="/admin" class="nav-link">Админка</a>
-            </nav>
-          </template>
-        </ClientOnly>
+  <div class="layout-wrapper">
+    <TheHeader />
+    <main class="main-content">
+      <div class="container">
+        <slot />
       </div>
-    </header>
-    <main class="container">
-      <slot />
     </main>
     <footer class="main-footer fade-in">
       <div class="footer-gradient"></div>
@@ -40,6 +20,12 @@
 </template>
 
 <style scoped>
+.layout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .fade-in {
   animation: fadeInUp 0.8s cubic-bezier(.23,1.02,.32,1) both;
 }
@@ -47,6 +33,7 @@
   0% { opacity: 0; transform: translateY(-24px) scale(0.98); }
   100% { opacity: 1; transform: none; }
 }
+
 .main-header {
   background: rgba(255,255,255,0.85);
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
@@ -55,6 +42,12 @@
   top: 0;
   z-index: 100;
   backdrop-filter: blur(12px);
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 0;
 }
 .header-gradient {
   height: 4px;
@@ -113,10 +106,11 @@ nav {
   color: var(--color-muted);
   text-align: center;
   padding: 38px 0 22px 0;
-  margin-top: 64px;
   font-size: 1.08rem;
   border-top: 1px solid #eee;
   position: relative;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 .footer-gradient {
   height: 3px;
@@ -154,5 +148,18 @@ nav {
 }
 .footer-icon svg {
   display: block;
+}
+
+/* Dark mode adjustments */
+:global(.dark) {
+  .main-header {
+    background: rgba(17, 24, 39, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .main-footer {
+    background: rgba(17, 24, 39, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 </style>

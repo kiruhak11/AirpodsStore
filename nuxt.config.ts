@@ -26,7 +26,8 @@ export default defineNuxtConfig({
     '@nuxtjs/device',
     'shadcn-nuxt',
     '@nuxt/image',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    'nuxt-file-storage'
   ],
   piniaPersistedstate: {
     cookieOptions: {

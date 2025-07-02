@@ -49,6 +49,7 @@
     "mysql2": "^3.14.1",
     "nuxt": "^3.11.2",
     "nuxt-device-detect": "^1.1.5",
+    "nuxt-file-storage": "^0.3.0",
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.6",
     "pinia-plugin-persistedstate": "^3.2.1",

@@ -25,7 +25,7 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 const cartStore = useCartStore();
-const totalPrice = computed(() => cartStore.totalPrice);
+const totalPrice = computed(() => cartStore.total);
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center; /* Центрируем контент */
   align-items: center; /* Центрируем контент */
-  z-index: 2; /* Обеспечьте, чтобы меню было выше остальных элементов */
+  z-index: 1000; /* Обеспечьте, чтобы меню было выше остальных элементов, но ниже модальных окон */
   transition: opacity 0.3s ease; /* Плавный переход для видимости */
 }
 

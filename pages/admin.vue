@@ -28,70 +28,20 @@
               <button class="btn small danger" @click="deleteProduct(product.id)">🗑️</button>
             </li>
           </ul>
-          <div v-if="showAddProduct" class="modal">
-            <div class="modal-content card">
-              <h3>Добавить товар</h3>
-              <input v-model="newProduct.name" placeholder="Название" class="input" />
-              <input v-model="newProduct.price" type="number" placeholder="Цена" class="input" />
-              <div class="file-upload">
-                <label>Изображение товара</label>
-                <input type="file" @change="onProductImageUpload($event, 'add')" />
-                <img v-if="newProduct.image" :src="newProduct.image" class="preview-img" />
-              </div>
-              <select v-model="newProduct.categoryId" class="input">
-                <option value="">Категория</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-              </select>
-              <input v-model="newProduct.color" placeholder="Цвет" class="input" />
-              <input v-model="newProduct.model" placeholder="Модель" class="input" />
-              <label class="checkbox-label">
-                <input type="checkbox" v-model="newProduct.inStock" /> В наличии
-              </label>
-              <textarea v-model="newProduct.description" placeholder="Описание" class="input"></textarea>
-              <textarea v-model="newProduct.additionalImages" placeholder='Доп. изображения (JSON: ["url1","url2"])' class="input"></textarea>
-              <textarea v-model="newProduct.specs" placeholder='Характеристики (JSON: [{"key":"Bluetooth","value":"5.0"}])' class="input"></textarea>
-              <div class="modal-actions">
-                <button class="btn primary" @click="addProduct">Добавить</button>
-                <button class="btn" @click="showAddProduct = false">Отмена</button>
-              </div>
-            </div>
-          </div>
-          <div v-if="showEditProduct" class="modal">
-            <div class="modal-content card wide-modal">
-              <h3>Редактировать товар</h3>
-              <input v-model="editProduct.name" placeholder="Название" class="input" />
-              <input v-model="editProduct.price" type="number" placeholder="Цена" class="input" />
-              <div class="file-upload">
-                <label>Изображение товара</label>
-                <input type="file" @change="onProductImageUpload($event, 'edit')" />
-                <img v-if="editProduct.image" :src="editProduct.image" class="preview-img" />
-              </div>
-              <select v-model="editProduct.categoryId" class="input">
-                <option value="">Категория</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-              </select>
-              <input v-model="editProduct.color" placeholder="Цвет" class="input" />
-              <input v-model="editProduct.model" placeholder="Модель" class="input" />
-              <label class="checkbox-label">
-                <input type="checkbox" v-model="editProduct.inStock" /> В наличии
-              </label>
-              <textarea v-model="editProduct.description" placeholder="Описание" class="input"></textarea>
-              <textarea v-model="editProduct.additionalImages" placeholder='Доп. изображения (JSON: ["url1","url2"])' class="input"></textarea>
-              <div class="specs-list">
-                <label>Характеристики</label>
-                <div v-for="(spec, i) in editSpecs" :key="i" class="spec-row">
-                  <input v-model="spec.key" placeholder="Характеристика" class="input spec-input" />
-                  <input v-model="spec.value" placeholder="Значение" class="input spec-input" />
-                  <button class="btn small danger" @click="removeSpec(i)">✕</button>
-                </div>
-                <button class="btn small" @click="addSpec">+ Добавить характеристику</button>
-              </div>
-              <div class="modal-actions">
-                <button class="btn primary" @click="updateProduct">Сохранить</button>
-                <button class="btn" @click="showEditProduct = false">Отмена</button>
-              </div>
-            </div>
-          </div>
+          <ProductModal
+            v-if="showAddProduct"
+            :categories="categories"
+            @close="showAddProduct = false"
+            @submit="handleAddProduct"
+          />
+            <ProductModal
+              v-if="showEditProduct"
+              :product="editProduct"
+              :categories="categories"
+              :is-edit="true"
+              @close="showEditProduct = false"
+              @submit="handleUpdateProduct"
+            />
         </div>
         <div v-if="tab === 'categories'" class="admin-categories">
           <div class="admin-header">
@@ -148,6 +98,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
+import ProductModal from '~/components/admin/ProductModal.vue';
 const isAuth = ref(false);
 const email = ref('');
 const password = ref('');
@@ -286,6 +237,35 @@ watch(
   { immediate: true }
 );
 
+const handleAddProduct = async (data: any) => {
+  const res = await fetch(`/api/admin/products?token=${token.value}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (res.ok) {
+    showAddProduct.value = false;
+    fetchProducts();
+  } else {
+    alert('Ошибка добавления товара');
+  }
+};
+
+const handleUpdateProduct = async (data: any) => {
+  const res = await fetch(`/api/admin/products?token=${token.value}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (res.ok) {
+    showEditProduct.value = false;
+    editProduct.value = null;
+    fetchProducts();
+  } else {
+    alert('Ошибка обновления товара');
+  }
+};
+
 const addProduct = async () => {
   if (!newProduct.value.name || !newProduct.value.price) return;
   let specs = newProduct.value.specs;
@@ -320,8 +300,8 @@ const addProduct = async () => {
 const startEditProduct = (product: any) => {
   editProduct.value = {
     ...product,
-    specs: product.specs ? JSON.stringify(product.specs) : '',
-    additionalImages: product.additionalImages ? JSON.stringify(product.additionalImages) : ''
+    specs: product.specs || [],
+    additionalImages: product.additionalImages || []
   };
   showEditProduct.value = true;
 };
@@ -576,7 +556,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 999999;
+  padding: 1rem;
 }
 .modal-content {
   background: #fff;
@@ -629,13 +610,43 @@ onMounted(() => {
   .admin-section, .admin-panel {
     padding: 12px 2vw;
   }
+  .modal {
+    padding: 0;
+  }
   .modal-content {
     min-width: 0;
     padding: 18px 6px 12px 6px;
+    border-radius: 0;
+    max-height: 100vh;
+    overflow-y: auto;
   }
   .wide-modal {
     min-width: 0;
-    max-width: 98vw;
+    max-width: 100vw;
+  }
+}
+
+/* Dark mode adjustments */
+:global(.dark) {
+  .admin-panel {
+    background: var(--color-card, #1f2937);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .modal-content {
+    background: var(--color-card, #1f2937);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .input {
+    background: var(--color-bg, #374151);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text, #f9fafb);
+  }
+  
+  .product-row {
+    background: var(--color-bg, #374151);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 </style>
