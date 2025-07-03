@@ -37,12 +37,10 @@
 
     <!-- Изображение товара -->
     <div class="product-card__image-container">
-      <PlaceholderImage
+      <ProductImage
         :src="primaryImage?.url || product.image"
         :alt="primaryImage?.alt || product.name"
-        :width="400"
-        :height="400"
-        image-class="product-card__image"
+        class="product-card__image"
       />
       
       <!-- Overlay с кнопками действий -->

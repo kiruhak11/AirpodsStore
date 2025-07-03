@@ -30,8 +30,8 @@
       <div class="product-gallery">
         <!-- Main Image -->
         <div class="product-gallery__main">
-          <NuxtImg
-            :src="currentImage || product.image || 'https://placehold.co/600x600'"
+          <ProductImage
+            :src="currentImage || product.image"
             :alt="product?.name"
             class="product-gallery__main-image"
             loading="lazy"
@@ -47,7 +47,7 @@
             class="product-gallery__thumbnail"
             :class="{ 'product-gallery__thumbnail--active': currentImage === img }"
           >
-            <NuxtImg
+            <ProductImage
               :src="img"
               :alt="`${product?.name} фото ${idx+1}`"
               class="product-gallery__thumbnail-image"

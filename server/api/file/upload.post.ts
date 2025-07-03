@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
       uploadedFiles.push({
         originalName: file.filename,
         filename: newFilename,
-        url: `/uploads/${newFilename}`,
+        url: `/api/file/${newFilename}`,
         size: file.data.length,
         type: file.type
       })

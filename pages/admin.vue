@@ -19,7 +19,7 @@
           </div>
           <ul class="product-list">
             <li v-for="product in products" :key="product.id" class="product-row card">
-              <img :src="product.image || placeholderImg(product.name)" :alt="product.name" class="product-img" />
+              <ProductImage :src="product.image || placeholderImg(product.name)" :alt="product.name" class="product-img" />
               <div class="product-info">
                 <span class="product-title">{{ product.name }}</span>
                 <span class="product-price">{{ product.price }} ₽</span>
@@ -82,7 +82,7 @@
               <div class="file-upload">
                 <label>Изображение категории</label>
                 <input type="file" @change="onCategoryImageUpload($event, 'edit')" />
-                <img v-if="editCategory.image" :src="editCategory.image" class="preview-img" />
+                <ProductImage v-if="editCategory.image" :src="editCategory.image" class="preview-img" />
               </div>
               <textarea v-model="editCategory.description" placeholder="Описание" class="input"></textarea>
               <div class="modal-actions">
@@ -130,14 +130,14 @@ function autoSlug(mode: 'add' | 'edit') {
 async function uploadFile(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
-  // Путь может отличаться, если nuxt-file-storage настроен иначе
   const res = await fetch('/api/file/upload', {
     method: 'POST',
     body: formData
   });
   if (!res.ok) throw new Error('Ошибка загрузки файла');
   const data = await res.json();
-  return data.url || data.path || '';
+  // Возвращаем URL файла, который теперь будет через API
+  return data.files?.[0]?.url || data.url || '';
 }
 
 async function onProductImageUpload(e: Event, mode: 'add' | 'edit') {

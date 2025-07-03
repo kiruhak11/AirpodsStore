@@ -21,36 +21,71 @@ export default defineEventHandler(async (event) => {
         .trim()
     }
 
-    // Получаем все товары и ищем по slug
-    const products = await prisma.$queryRawUnsafe(`
-      SELECT 
-        p.id,
-        p.name,
-        p.description,
-        p.price,
-        p.image,
-        p.additionalImages,
-        p.categoryId,
-        p.color,
-        p.model,
-        p.inStock,
-        p.specs,
-        p.createdAt,
-        c.id as category_id,
-        c.name as category_name,
-        c.description as category_description,
-        c.image as category_image,
-        c.slug as category_slug
-      FROM product p
-      LEFT JOIN category c ON p.categoryId = c.id
-      ORDER BY p.id DESC
-    `) as any[]
+    // Проверяем, является ли slug числом (ID)
+    const isNumericId = !isNaN(Number(slug)) && Number.isInteger(Number(slug))
 
-    // Ищем товар по slug
-    const product = products.find((p: any) => {
-      const productSlug = generateSlug(p.name)
-      return productSlug === slug
-    })
+    let product: any = null
+
+    if (isNumericId) {
+      // Если slug - это число, ищем по ID
+      const products = await prisma.$queryRawUnsafe(`
+        SELECT 
+          p.id,
+          p.name,
+          p.description,
+          p.price,
+          p.image,
+          p.additionalImages,
+          p.categoryId,
+          p.color,
+          p.model,
+          p.inStock,
+          p.specs,
+          p.createdAt,
+          c.id as category_id,
+          c.name as category_name,
+          c.description as category_description,
+          c.image as category_image,
+          c.slug as category_slug
+        FROM product p
+        LEFT JOIN category c ON p.categoryId = c.id
+        WHERE p.id = ${Number(slug)}
+        ORDER BY p.id DESC
+      `) as any[]
+      
+      product = products[0]
+    } else {
+      // Если slug - это строка, ищем по сгенерированному slug
+      const products = await prisma.$queryRawUnsafe(`
+        SELECT 
+          p.id,
+          p.name,
+          p.description,
+          p.price,
+          p.image,
+          p.additionalImages,
+          p.categoryId,
+          p.color,
+          p.model,
+          p.inStock,
+          p.specs,
+          p.createdAt,
+          c.id as category_id,
+          c.name as category_name,
+          c.description as category_description,
+          c.image as category_image,
+          c.slug as category_slug
+        FROM product p
+        LEFT JOIN category c ON p.categoryId = c.id
+        ORDER BY p.id DESC
+      `) as any[]
+
+      // Ищем товар по slug
+      product = products.find((p: any) => {
+        const productSlug = generateSlug(p.name)
+        return productSlug === slug
+      })
+    }
 
     if (!product) {
       throw createError({

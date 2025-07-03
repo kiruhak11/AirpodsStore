@@ -33,5 +33,8 @@ ENV PORT=$PORT
 
 COPY --from=build /app /app
 
+# Создаем папку для загрузок, если её нет
+RUN mkdir -p /app/public/uploads
+
 # Применение миграций при запуске контейнера
 CMD ["sh", "-c", "npx prisma migrate deploy && node .output/server/index.mjs"]

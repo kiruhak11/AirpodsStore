@@ -10,11 +10,10 @@
               :to="`/catalog/${cat.slug}`"
               class="categories-list__item"
             >
-              <img 
+              <ProductImage
                 :src="cat.image || `https://placehold.co/120x90/6b7280/ffffff?text=${encodeURIComponent(cat.name)}`" 
                 :alt="cat.name" 
                 class="categories-list__img"
-                @error="handleCategoryImageError"
               />
               <div class="categories-list__name">{{ cat.name }}</div>
               <div class="categories-list__desc">{{ cat.description }}</div>
@@ -24,11 +23,10 @@
                 :href="`/catalog/${cat.slug}`"
                 class="categories-list__item"
               >
-                <img 
+                <ProductImage
                   :src="cat.image || `https://placehold.co/120x90/6b7280/ffffff?text=${encodeURIComponent(cat.name)}`" 
                   :alt="cat.name" 
                   class="categories-list__img"
-                  @error="handleCategoryImageError"
                 />
                 <div class="categories-list__name">{{ cat.name }}</div>
                 <div class="categories-list__desc">{{ cat.description }}</div>
@@ -44,18 +42,7 @@
 import type { Category } from '~/composables/useProducts'
 const {getCategories } = useProducts()
 const categories = ref<Category[]>([])
-const handleCategoryImageError = (event: string | Event) => {
-  if (
-    event instanceof Event &&
-    event.target &&
-    (event.target as HTMLElement).tagName === 'IMG'
-  ) {
-    const target = event.target as HTMLImageElement
-    const categoryName = target.alt || 'Категория'
-    if (target.src.includes('placehold.co')) return
-    target.src = `https://placehold.co/120x90/6b7280/ffffff?text=${encodeURIComponent(categoryName)}`
-  }
-}
+
 
 
 const loadData = async () => {
