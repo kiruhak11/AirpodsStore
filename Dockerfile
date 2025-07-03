@@ -20,10 +20,11 @@ WORKDIR /app
 # Build
 FROM base as build
 
+# Copy package files first for better caching
 COPY package*.json ./
 
 # Install all dependencies (including dev dependencies for build)
-RUN npm ci
+RUN npm ci --only=production=false
 
 COPY . .
 
