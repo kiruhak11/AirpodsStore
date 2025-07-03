@@ -17,7 +17,7 @@ FROM base as build
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --production=false
 
 COPY . .
 
