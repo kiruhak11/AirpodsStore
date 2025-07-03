@@ -2,9 +2,14 @@ ARG NODE_VERSION=18.18.2
 
 FROM node:${NODE_VERSION}-slim as base
 
+# Install system dependencies including build tools for native modules
 RUN apt-get update && apt-get install -y \
   openssl \
-  libssl-dev
+  libssl-dev \
+  python3 \
+  make \
+  g++ \
+  && rm -rf /var/lib/apt/lists/*
 
 ARG PORT=3010
 
@@ -17,14 +22,15 @@ FROM base as build
 
 COPY package*.json ./
 
-RUN npm install --production=false
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
 
 COPY . .
 
 COPY prisma ./prisma
 RUN npx prisma generate
 RUN npm run build
-RUN npm prune
+RUN npm prune --production
 
 # Run
 FROM base
