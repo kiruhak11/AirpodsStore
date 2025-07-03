@@ -30,7 +30,7 @@
       <div class="product-gallery">
         <!-- Main Image -->
         <div class="product-gallery__main">
-          <ProductImage
+          <img
             :src="currentImage || product.image"
             :alt="product?.name"
             class="product-gallery__main-image"
@@ -47,7 +47,7 @@
             class="product-gallery__thumbnail"
             :class="{ 'product-gallery__thumbnail--active': currentImage === img }"
           >
-            <ProductImage
+            <img
               :src="img"
               :alt="`${product?.name} фото ${idx+1}`"
               class="product-gallery__thumbnail-image"

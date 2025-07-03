@@ -1,16 +1,9 @@
 <template>
   <div 
-    class="product-card"
+    class="product-card scroll-reveal"
     :class="{ 'product-card--in-cart': isInCart }"
   >
-    <!-- Badge для новинок/скидок -->
     <div class="product-card__badges">
-      <div 
-        v-if="product.isNew" 
-        class="product-card__badge product-card__badge--new"
-      >
-        NEW
-      </div>
       <div 
         v-if="product.isFeatured" 
         class="product-card__badge product-card__badge--featured"
@@ -31,17 +24,21 @@
         @click="openQuickView"
         class="product-card__quick-view-btn"
       >
-        <Icon name="lucide:eye" class="product-card__quick-view-icon" />
+        <Icon icon="lucide:eye" class="product-card__quick-view-icon" />
       </button>
     </div>
 
     <!-- Изображение товара -->
     <div class="product-card__image-container">
-      <ProductImage
-        :src="primaryImage?.url || product.image"
-        :alt="primaryImage?.alt || product.name"
+      <img
+        :src="String(primaryImage?.url || product.image || '')"
+        :alt="altText"
         class="product-card__image"
       />
+      <!-- NEW badge поверх картинки -->
+      <div v-if="product.isNew" class="product-card__badge-new">
+        <Icon icon="lucide:sparkles" class="badge-icon" /> NEW
+      </div>
       
       <!-- Overlay с кнопками действий -->
       <div class="product-card__overlay">
@@ -53,7 +50,7 @@
             :class="{ 'product-card__action-btn--disabled': isInCart }"
           >
             <Icon 
-              :name="isInCart ? 'lucide:check' : 'lucide:shopping-cart'" 
+              :icon="isInCart ? 'lucide:check' : 'lucide:shopping-cart'" 
               class="product-card__action-icon" 
             />
           </button>
@@ -63,7 +60,7 @@
             :class="{ 'product-card__action-btn--active': isInWishlist }"
           >
             <Icon 
-              :name="isInWishlist ? 'lucide:heart' : 'lucide:heart'" 
+              :icon="isInWishlist ? 'lucide:heart' : 'lucide:heart'" 
               class="product-card__action-icon"
             />
           </button>
@@ -121,7 +118,7 @@
           <Icon 
             v-for="star in 5" 
             :key="star"
-            :name="star <= averageRating ? 'lucide:star' : 'lucide:star'" 
+            :icon="star <= averageRating ? 'lucide:star' : 'lucide:star'" 
             class="product-card__star"
             :class="{ 'product-card__star--filled': star <= averageRating }"
           />
@@ -176,7 +173,7 @@
 
 <script setup lang="ts">
 import type { Product } from '~/composables/useProducts'
-import PlaceholderImage from '~/components/ui/PlaceholderImage.vue'
+import { Icon } from '@iconify/vue'
 
 interface Props {
   product: Product
@@ -190,6 +187,12 @@ const props = defineProps<Props>()
 const primaryImage = computed(() => {
   if (!props.product.images || !Array.isArray(props.product.images) || props.product.images.length === 0) return null
   return props.product.images.find((img: any) => img.isPrimary) || props.product.images[0]
+})
+
+const altText = computed(() => {
+  if (primaryImage.value?.alt) return String(primaryImage.value.alt)
+  if (props.product.name) return String(props.product.name)
+  return ''
 })
 
 const averageRating = computed(() => {
@@ -282,307 +285,204 @@ const openQuickView = () => {
   modalStore.open('quick-view', { product: props.product })
 }
 </script>
-
 <style scoped lang="scss">
 .product-card {
+  background: rgba(255,255,255,0.18);
+  border-radius: 2.2em;
+  box-shadow: 0 12px 36px rgba(56,249,215,0.10), 0 2px 12px rgba(67,233,123,0.08);
+  padding: 2.2em 1.7em 2em 1.7em;
+  margin-bottom: 2.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
   position: relative;
-  background: var(--color-card);
-  border-radius: 1rem;
-  box-shadow: var(--color-shadow);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  transition: all var(--transition-main);
-  
+  transition: box-shadow 0.28s, transform 0.28s, border 0.28s;
+  backdrop-filter: blur(18px);
   &:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    transform: translateY(-5px);
+    box-shadow: 0 18px 48px rgba(56,249,215,0.13), 0 4px 24px rgba(67,233,123,0.13);
+    transform: translateY(-7px) scale(1.035);
+    z-index: 2;
   }
-  
-  &--in-cart {
-    box-shadow: 0 0 0 2px var(--color-primary);
-  }
-  
-  &__badges {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  &__badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    
-    &--new {
-      background: var(--color-success);
-    }
-    
-    &--featured {
-      background: var(--color-warning);
-    }
-    
-    &--best-seller {
-      background: var(--color-primary);
-    }
-  }
-  
-  &__quick-view {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 10;
-    opacity: 0;
-    transition: opacity var(--transition-main);
-  }
-  
-  &__quick-view-btn {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 0.5rem;
-    border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: none;
-    cursor: pointer;
-    transition: all var(--transition-main);
-    
-    &:hover {
-      background: rgba(255, 255, 255, 1);
-      transform: scale(1.1);
-    }
-  }
-  
-  &__quick-view-icon {
-    width: 1rem;
-    height: 1rem;
-    color: var(--color-text);
-  }
-  
   &__image-container {
-    position: relative;
-    aspect-ratio: 1;
+    border-radius: 1.5em;
     overflow: hidden;
-    background: var(--color-bg);
+    box-shadow: 0 4px 18px rgba(56,249,215,0.10);
+    margin-bottom: 1.2em;
   }
-  
   &__image {
     width: 100%;
-    height: 100%;
+    height: 180px;
     object-fit: cover;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1.5em;
+    background: var(--color-bg-secondary);
+    box-shadow: 0 2px 8px #38f9d733;
+    transition: filter 0.18s;
   }
-  
-  &__overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0);
-    transition: background-color var(--transition-main);
+  &__badges, &__badge, &__badge-new {
+    filter: drop-shadow(0 0 8px #38f9d7cc);
+    font-size: 1.01em;
+    font-weight: 700;
+    border-radius: 1.2em;
+    padding: 0.3em 1.1em;
+    background: linear-gradient(90deg, #667eea 0%, #38f9d7 100%);
+    color: #fff;
+    box-shadow: 0 0 8px #38f9d7cc, 0 2px 8px #38f9d722;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5em;
+    animation: fadeInPro 0.7s;
+  }
+  &__quick-view-btn {
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  &__actions {
-    display: flex;
-    gap: 0.5rem;
-    opacity: 0;
-    transition: opacity var(--transition-main);
-  }
-  
-  &__action-btn {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 0.75rem;
-    border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: none;
-    cursor: pointer;
-    transition: all var(--transition-main);
-    
+    box-shadow: 0 2px 8px #38f9d733;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
     &:hover {
-      background: rgba(255, 255, 255, 1);
-      transform: scale(1.1);
+      background: #38f9d7;
+      color: #fff;
+      transform: scale(1.08);
     }
-    
+  }
+  &__action-btn {
+    background: linear-gradient(90deg, #667eea 0%, #38f9d7 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 3.1em;
+    height: 3.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    box-shadow: 0 2px 8px rgba(56,249,215,0.10);
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+    margin-right: 0.7em;
+    &:hover {
+      background: linear-gradient(90deg, #38f9d7 0%, #667eea 100%);
+      box-shadow: 0 4px 16px rgba(56,249,215,0.13);
+      transform: translateY(-2px) scale(1.13);
+    }
     &--disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       cursor: not-allowed;
-      
-      &:hover {
-        transform: none;
-      }
     }
-    
     &--active {
-      .product-card__action-icon {
-        color: var(--color-error);
-        fill: var(--color-error);
-      }
+      background: linear-gradient(90deg, #ff4d4d 0%, #ffb347 100%);
+      color: #fff;
     }
   }
-  
   &__action-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--color-text);
-    transition: color var(--transition-main);
+    font-size: 1.3em;
+    filter: drop-shadow(0 0 8px #38f9d7cc);
   }
-  
   &__content {
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    padding-top: 0.5em;
   }
-  
-  &__category {
-    font-size: 0.75rem;
-    color: var(--color-primary);
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  &__title-link {
-    display: block;
-    text-decoration: none;
-  }
-  
-  &__title-container {
-    display: block;
-  }
-  
   &__title {
-    font-weight: 600;
-    color: var(--color-text);
-    font-size: 0.875rem;
-    line-height: 1.4;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    transition: color var(--transition-main);
-  }
-  
-  &__title-link:hover &__title {
+    font-size: 1.25em;
+    font-weight: 800;
+    margin-bottom: 0.2em;
     color: var(--color-primary);
   }
-  
-  &__rating {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    margin-top: 0.5rem;
-  }
-  
-  &__stars {
-    display: flex;
-  }
-  
-  &__star {
-    width: 0.75rem;
-    height: 0.75rem;
-    color: #d1d5db;
-    transition: color var(--transition-main);
-    
-    &--filled {
-      color: #fbbf24;
-      fill: #fbbf24;
-    }
-  }
-  
-  &__reviews-count {
-    font-size: 0.75rem;
+  &__category {
+    font-size: 1em;
     color: var(--color-text-secondary);
+    margin-bottom: 0.2em;
   }
-  
   &__price {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
-  }
-  
-  &__current-price {
-    font-size: 1.125rem;
+    font-size: 1.18em;
     font-weight: 700;
-    color: var(--color-text);
+    color: #667eea;
+    margin-bottom: 0.3em;
   }
-  
   &__compare-price {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
+    color: #b0b0b0;
+    font-size: 1em;
+    margin-left: 0.7em;
     text-decoration: line-through;
   }
-  
   &__discount-badge {
-    font-size: 0.75rem;
-    background: var(--color-error);
-    color: white;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
+    background: linear-gradient(90deg, #ff4d4d 0%, #ffb347 100%);
+    color: #fff;
+    border-radius: 1em;
+    padding: 0.2em 0.8em;
+    font-size: 0.95em;
+    margin-left: 0.7em;
+    font-weight: 700;
+    animation: fadeInPro 0.7s;
   }
-  
-  &__discounts {
-    margin-top: 0.5rem;
-  }
-  
-  &__discount-tag {
-    font-size: 0.75rem;
-    background: var(--color-success);
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    display: inline-block;
-    margin-right: 0.25rem;
-    font-weight: 500;
-  }
-  
-  &__stock {
-    margin-top: 0.5rem;
-  }
-  
   &__stock-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    background: var(--color-error);
-    color: white;
-    font-weight: 500;
-    
-    &--available {
-      background: var(--color-success);
-      color: white;
+    background: linear-gradient(90deg, #22c55e 0%, #38f9d7 100%);
+    color: #fff;
+    border-radius: 1em;
+    padding: 0.2em 0.8em;
+    font-size: 0.95em;
+    font-weight: 700;
+    margin-top: 0.3em;
+    animation: fadeInPro 0.7s;
+  }
+  &__stars {
+    display: flex;
+    gap: 0.1em;
+    margin-bottom: 0.2em;
+  }
+  &__star {
+    font-size: 1.1em;
+    color: #ffd700;
+    filter: drop-shadow(0 0 6px #ffd70099);
+    &--filled {
+      color: #ffd700;
     }
   }
-
+  &__reviews-count {
+    font-size: 0.95em;
+    color: var(--color-text-secondary);
+    margin-left: 0.4em;
+  }
   &__colors {
     display: flex;
-    gap: 0.5rem;
-    margin: 0.5rem 0 0.25rem 0;
+    gap: 0.5em;
+    margin-bottom: 0.3em;
   }
   &__color-dot {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.3em;
+    height: 1.3em;
     border-radius: 50%;
-    border: 2px solid var(--color-border);
+    border: 2.5px solid #fff;
+    box-shadow: 0 0 8px #38f9d7cc;
     cursor: pointer;
-    transition: border 0.2s;
-    outline: none;
-    box-shadow: 0 0 0 1px var(--color-border);
-    &:hover,
+    transition: border 0.18s, transform 0.18s;
     &--active {
-      border: 2px solid var(--color-primary);
-      box-shadow: 0 0 0 2px var(--color-primary-light);
+      border: 2.5px solid #38f9d7;
+      transform: scale(1.15);
     }
   }
+  &__discounts {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 0.3em;
+  }
+  &__discount-tag {
+    background: linear-gradient(90deg, #ffb347 0%, #38f9d7 100%);
+    color: #fff;
+    border-radius: 1em;
+    padding: 0.2em 0.8em;
+    font-size: 0.95em;
+    font-weight: 700;
+    animation: fadeInPro 0.7s;
+  }
+}
+@keyframes fadeInPro {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
 }
 
 // Hover effects
@@ -645,5 +545,35 @@ const openQuickView = () => {
       }
     }
   }
+}
+
+.product-card__badge-new {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  background: linear-gradient(90deg, #667eea 0%, #38f9d7 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.93em;
+  border-radius: 999px;
+  padding: 0.32em 1.2em 0.32em 0.9em;
+  box-shadow: 0 0 12px #38f9d7cc, 0 2px 8px #38f9d722;
+  z-index: 3;
+  letter-spacing: 0.13em;
+  filter: drop-shadow(0 0 8px #38f9d7cc);
+  border: 1.5px solid #fff3;
+  text-transform: uppercase;
+  animation: badgePulse 1.6s infinite alternate;
+}
+.product-card__badge-new .badge-icon {
+  font-size: 1.1em;
+  margin-right: 0.2em;
+}
+@keyframes badgePulse {
+  0% { box-shadow: 0 0 12px #38f9d7cc, 0 2px 8px #38f9d722; }
+  100% { box-shadow: 0 0 24px #38f9d7cc, 0 4px 16px #38f9d744; }
 }
 </style>

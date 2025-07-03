@@ -54,7 +54,7 @@
         :key="index"
         class="image-uploader__image-item"
       >
-        <ProductImage
+        <img
           :src="image.url" 
           :alt="image.originalName"
           class="image-uploader__image"

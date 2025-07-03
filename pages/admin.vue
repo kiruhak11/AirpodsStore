@@ -19,7 +19,7 @@
           </div>
           <ul class="product-list">
             <li v-for="product in products" :key="product.id" class="product-row card">
-              <ProductImage :src="product.image || placeholderImg(product.name)" :alt="product.name" class="product-img" />
+              <img :src="product.image || placeholderImg(product.name)" :alt="product.name" class="product-img" />
               <div class="product-info">
                 <span class="product-title">{{ product.name }}</span>
                 <span class="product-price">{{ product.price }} ₽</span>
@@ -82,7 +82,7 @@
               <div class="file-upload">
                 <label>Изображение категории</label>
                 <input type="file" @change="onCategoryImageUpload($event, 'edit')" />
-                <ProductImage v-if="editCategory.image" :src="editCategory.image" class="preview-img" />
+                <img v-if="editCategory.image" :src="editCategory.image" class="preview-img" />
               </div>
               <textarea v-model="editCategory.description" placeholder="Описание" class="input"></textarea>
               <div class="modal-actions">
@@ -140,7 +140,7 @@ async function uploadFile(file: File): Promise<string> {
   return data.files?.[0]?.url || data.url || '';
 }
 
-async function onProductImageUpload(e: Event, mode: 'add' | 'edit') {
+async function onimgUpload(e: Event, mode: 'add' | 'edit') {
   const file = (e.target as HTMLInputElement).files?.[0];
   if (!file) return;
   const url = await uploadFile(file);

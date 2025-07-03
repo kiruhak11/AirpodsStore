@@ -12,19 +12,24 @@
     <div class="category-page__content">
       <!-- Sidebar -->
       <aside class="category-page__sidebar">
-        <div class="sidebar-card">
-          <h2 class="sidebar-title">Фильтры</h2>
-          
+        <div class="sidebar-card modern-filters">
+          <h2 class="sidebar-title">
+            <Icon icon="lucide:filter" class="sidebar-title__icon" />
+            Фильтры
+          </h2>
           <!-- Price Filter -->
           <div class="filter-group">
-            <label class="filter-label">Цена до</label>
+            <label class="filter-label">
+              <Icon icon="lucide:tag" class="filter-label__icon" />
+              Цена до
+            </label>
             <div class="price-input">
               <input 
                 type="number" 
                 v-model="maxPrice" 
                 min="0" 
                 max="100000"
-                class="price-field"
+                class="price-field modern-input"
                 placeholder="Макс. цена"
               />
               <span class="price-currency">₽</span>
@@ -33,25 +38,30 @@
 
           <!-- Stock Filter -->
           <div class="filter-group">
-            <label class="filter-checkbox">
+            <label class="filter-checkbox modern-checkbox">
               <input type="checkbox" v-model="onlyInStock" />
               <span class="checkmark"></span>
+              <Icon icon="lucide:check-circle" class="filter-checkbox__icon" />
               Только в наличии
             </label>
           </div>
 
           <!-- Sort -->
           <div class="filter-group">
-            <label class="filter-label">Сортировка</label>
-            <select v-model="sortBy" class="sort-select">
+            <label class="filter-label">
+              <Icon icon="lucide:sort-desc" class="filter-label__icon" />
+              Сортировка
+            </label>
+            <select v-model="sortBy" class="sort-select modern-input">
               <option value="name">По названию</option>
-              <option value="price-asc">По цене (возрастание)</option>
-              <option value="price-desc">По цене (убывание)</option>
+              <option value="price-asc">Сначала дешёвые</option>
+              <option value="price-desc">Сначала дорогие</option>
               <option value="newest">Сначала новые</option>
             </select>
           </div>
 
-          <button @click="resetFilters" class="reset-btn">
+          <button class="reset-btn modern-reset" @click="resetFilters">
+            <Icon icon="lucide:rotate-ccw" class="reset-btn__icon" />
             Сбросить фильтры
           </button>
         </div>
@@ -295,32 +305,25 @@ const resetFilters = () => {
 }
 
 .price-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
   position: relative;
-  
   .price-field {
     width: 100%;
-    padding: 0.75rem;
-    padding-right: 2rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.5rem;
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-size: 0.875rem;
-    
-    &:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.1);
-    }
+    min-width: 0;
+    box-sizing: border-box;
+    padding-right: 2.2em;
   }
-  
   .price-currency {
     position: absolute;
-    right: 0.75rem;
+    right: 1em;
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-secondary);
-    font-size: 0.875rem;
+    font-size: 0.95em;
+    pointer-events: none;
   }
 }
 
@@ -586,6 +589,131 @@ const resetFilters = () => {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
+  }
+}
+
+.modern-filters {
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 8px 32px rgba(56,249,215,0.10);
+  border: 1.5px solid var(--color-border);
+  border-radius: 1.2rem;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-primary);
+  &__icon {
+    font-size: 1.3em;
+    color: var(--color-primary);
+  }
+}
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+  &__icon {
+    font-size: 1.1em;
+    color: var(--color-primary);
+  }
+}
+.modern-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1.5px solid var(--color-border);
+  border-radius: 0.7em;
+  padding: 0.7em 1em;
+  font-size: 1em;
+  background: #f7fafc;
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.13);
+    outline: none;
+    background: #fff;
+  }
+  &:hover {
+    border-color: var(--color-primary);
+    background: #f0f4ff;
+  }
+}
+.modern-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1em;
+  color: var(--color-text);
+  cursor: pointer;
+  input[type="checkbox"] {
+    display: none;
+  }
+  .checkmark {
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid var(--color-border);
+    border-radius: 0.3em;
+    background: #fff;
+    margin-right: 0.5em;
+    position: relative;
+    transition: border 0.2s, background 0.2s;
+  }
+  input:checked + .checkmark {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    &::after {
+      content: '\2713';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+  }
+  .filter-checkbox__icon {
+    color: var(--color-primary);
+    font-size: 1.1em;
+    margin-right: 0.2em;
+  }
+}
+.modern-reset {
+  margin-top: 1.5em;
+  width: 100%;
+  padding: 0.8em 0;
+  background: linear-gradient(90deg, #667eea 0%, #38f9d7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.7em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  box-shadow: 0 2px 12px rgba(56,249,215,0.08);
+  transition: background 0.18s, box-shadow 0.18s;
+  &:hover {
+    background: linear-gradient(90deg, #38f9d7 0%, #667eea 100%);
+    box-shadow: 0 4px 16px rgba(56,249,215,0.13);
+  }
+  .reset-btn__icon {
+    font-size: 1.2em;
   }
 }
 </style> 

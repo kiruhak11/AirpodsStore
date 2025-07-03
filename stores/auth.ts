@@ -97,4 +97,9 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return { user, token, loading, error, isAuth, isAdmin, login, register, logout, checkAuth }
+}, {
+  persist: {
+    storage: persistedState.localStorage,
+    paths: ['user', 'token']
+  }
 }) 

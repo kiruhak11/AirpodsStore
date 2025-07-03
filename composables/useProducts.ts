@@ -29,7 +29,7 @@ export interface Product {
   
   // Related data (populated when needed)
   category?: Category
-  images?: ProductImage[]
+  images?: img[]
   reviews?: ProductReview[]
   productDiscounts?: ProductDiscount[]
   _count?: {
@@ -37,7 +37,7 @@ export interface Product {
   }
 }
 
-export interface ProductImage {
+export interface img {
   id: number
   url: string
   alt?: string | null
